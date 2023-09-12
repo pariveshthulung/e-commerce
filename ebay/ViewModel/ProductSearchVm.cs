@@ -3,7 +3,7 @@ using ebay.Models;
 
 namespace ebay.ViewModel
 {
-	public class ProductSearch
+	public class ProductSearchVm
 	{
 		public string? Name { get; set; }
 		public List<Product>? Data { get; set; }

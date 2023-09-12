@@ -2,7 +2,7 @@
 
 namespace ebay.ViewModel
 {
-    public class ProductAdd
+    public class ProductAddVm
 	{
 		public string? Name { get; set; }
         [Required]

@@ -22,7 +22,7 @@ namespace ebay.Controllers
             _context = context;
         }
         // GET: /<controller>/
-        public async Task<IActionResult> Index(ProductSearch vm)
+        public async Task<IActionResult> Index(ProductSearchVm vm)
         {
             vm.Data = await _context.Products
           .Where(x =>
@@ -39,7 +39,7 @@ namespace ebay.Controllers
             return View();
         }
         [HttpPost]
-        public async Task<IActionResult> Add(ProductAdd vm)
+        public async Task<IActionResult> Add(ProductAddVm vm)
         {
             try
             {
