@@ -264,9 +264,10 @@ namespace ebay.Migrations
                         new
                         {
                             id = 1,
+                            Brand = "Iphone",
                             Color = "red",
                             Description = "This is nice phone.",
-                            Name = "Iphone",
+                            Name = "Iphone 11",
                             Price = 10000,
                             Quantity = 100,
                             Sold = 0
@@ -274,9 +275,10 @@ namespace ebay.Migrations
                         new
                         {
                             id = 2,
+                            Brand = "Samsung",
                             Color = "Green",
                             Description = "This is nice Samsung.",
-                            Name = "SamSung",
+                            Name = "SamSung Galaxy",
                             Price = 50000,
                             Quantity = 100,
                             Sold = 0
@@ -284,9 +286,10 @@ namespace ebay.Migrations
                         new
                         {
                             id = 3,
+                            Brand = "Poco",
                             Color = "Blue",
                             Description = "This is nice POCO.",
-                            Name = "PoCO",
+                            Name = "PoCO X3",
                             Price = 30000,
                             Quantity = 100,
                             Sold = 0

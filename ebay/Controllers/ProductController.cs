@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using ebay.Data;
+using ebay.Models;
 using ebay.ViewModel;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -21,17 +22,7 @@ namespace ebay.Controllers
             _context = context;
         }
         // GET: /<controller>/
-        public IActionResult Index()
-        {
-            return View();
-        }
-
-        public IActionResult Add()
-        {
-            return View();
-        }
-
-        public async Task<IActionResult> Search(ProductSearch vm)
+        public async Task<IActionResult> Index(ProductSearch vm)
         {
             vm.Data = await _context.Products
           .Where(x =>
@@ -39,8 +30,47 @@ namespace ebay.Controllers
           ).ToListAsync();
             return View(vm);
 
-  
+
         }
+        
+        public IActionResult Add()
+        {
+
+            return View();
+        }
+        [HttpPost]
+        public async Task<IActionResult> Add(ProductAdd vm)
+        {
+            try
+            {
+                var items = new Product();
+                items.Name = vm.Name;
+                items.Description = vm.Description;
+                items.Price = vm.Price;
+                items.Brand = vm.Brand;
+                items.Color = vm.Color;
+                items.Quantity = vm.Quantity;
+
+                _context.Products.Add(items);
+                await _context.SaveChangesAsync();
+
+                return RedirectToAction("Index");
+
+            }
+            catch
+            {
+                return RedirectToAction("Index");
+            }
+
+            
+        }
+
+        public IActionResult Edit()
+        {
+            return View();
+        }
+
+
     }
 }
 

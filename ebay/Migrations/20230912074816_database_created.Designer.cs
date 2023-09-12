@@ -12,8 +12,8 @@ using ebay.Data;
 namespace ebay.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20230910094946_create_db")]
-    partial class create_db
+    [Migration("20230912074816_database_created")]
+    partial class database_created
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -262,6 +262,41 @@ namespace ebay.Migrations
                     b.HasKey("id");
 
                     b.ToTable("Products");
+
+                    b.HasData(
+                        new
+                        {
+                            id = 1,
+                            Brand = "Iphone",
+                            Color = "red",
+                            Description = "This is nice phone.",
+                            Name = "Iphone 11",
+                            Price = 10000,
+                            Quantity = 100,
+                            Sold = 0
+                        },
+                        new
+                        {
+                            id = 2,
+                            Brand = "Samsung",
+                            Color = "Green",
+                            Description = "This is nice Samsung.",
+                            Name = "SamSung Galaxy",
+                            Price = 50000,
+                            Quantity = 100,
+                            Sold = 0
+                        },
+                        new
+                        {
+                            id = 3,
+                            Brand = "Poco",
+                            Color = "Blue",
+                            Description = "This is nice POCO.",
+                            Name = "PoCO X3",
+                            Price = 30000,
+                            Quantity = 100,
+                            Sold = 0
+                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

@@ -3,10 +3,12 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
+#pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
+
 namespace ebay.Migrations
 {
     /// <inheritdoc />
-    public partial class create_db : Migration
+    public partial class database_created : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -173,6 +175,16 @@ namespace ebay.Migrations
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.InsertData(
+                table: "Products",
+                columns: new[] { "id", "Brand", "Color", "Description", "Name", "Price", "Quantity", "Sold" },
+                values: new object[,]
+                {
+                    { 1, "Iphone", "red", "This is nice phone.", "Iphone 11", 10000, 100, 0 },
+                    { 2, "Samsung", "Green", "This is nice Samsung.", "SamSung Galaxy", 50000, 100, 0 },
+                    { 3, "Poco", "Blue", "This is nice POCO.", "PoCO X3", 30000, 100, 0 }
                 });
 
             migrationBuilder.CreateIndex(
