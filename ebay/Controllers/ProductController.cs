@@ -57,7 +57,7 @@ namespace ebay.Controllers
                 return RedirectToAction("Index");
 
             }
-            catch
+            catch(Exception e)
             {
                 return RedirectToAction("Index");
             }
@@ -65,9 +65,45 @@ namespace ebay.Controllers
             
         }
 
-        public IActionResult Edit()
+        public async Task<IActionResult> Edit(int? id)
         {
-            return View();
+            try
+            {
+                var item = await _context.Products.Where(x => x.id == id)
+                .FirstOrDefaultAsync();
+
+                if (id == 0 || id == null)
+                {
+                    throw new Exception("Item not found");
+                }
+
+                return View(item);
+            }
+            catch(Exception e )
+            {
+                return RedirectToAction("Index");
+            }
+            
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Edit(Product items)
+        {
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    _context.Products.Update(items);
+                    await _context.SaveChangesAsync();
+                    TempData["success"] = "Product updated successfully";
+                    return RedirectToAction("Index");
+                }
+                return View();
+            }
+            catch (Exception e)
+            {
+                return RedirectToAction("Index");
+            }
         }
 
 
