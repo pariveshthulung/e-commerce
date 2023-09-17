@@ -5,6 +5,7 @@
 
 <div class="container">
     <form method="post">
+        
         <div class="mb-3 row">
             <label asp-for="Name" class="form-label"></label>
             <input asp-for="Name" class="form-control" id="CategoryName">
@@ -14,38 +15,38 @@
             <label asp-for="Description" class="form-label"></label>
             <input asp-for="Description" class="form-control" id="DisplayOrder">
             <span asp-validation-for="Description" class="text-danger"></span>
-            <div class="mb-3 row">
-                <label asp-for="Brand" class="form-label"></label>
-                <input asp-for="Brand" class="form-control" id="CategoryName">
-                <span asp-validation-for="Brand" class="text-danger"></span>
-            </div>
-            <div class="mb-3 row">
-                <label asp-for="Price" class="form-label"></label>
-                <input asp-for="Price" class="form-control" id="DisplayOrder">
-                <span asp-validation-for="Price" class="text-danger"></span>
-                <div class="mb-3 row">
-                    <label asp-for="Quantity" class="form-label"></label>
-                    <input asp-for="Quantity" class="form-control" id="CategoryName">
-                    <span asp-validation-for="Quantity" class="text-danger"></span>
-                </div>
-                <div class="mb-3 row">
-                    <label asp-for="Color" class="form-label"></label>
-                    <input asp-for="Color" class="form-control" id="DisplayOrder">
-                    <span asp-validation-for="Color" class="text-danger"></span>
+        </div>
+        <div class="mb-3 row">
+            <label asp-for="Brand" class="form-label"></label>
+            <input asp-for="Brand" class="form-control" id="CategoryName">
+            <span asp-validation-for="Brand" class="text-danger"></span>
+        </div>
+        <div class="mb-3 row">
+            <label asp-for="Price" class="form-label"></label>
+            <input asp-for="Price" class="form-control" id="DisplayOrder">
+            <span asp-validation-for="Price" class="text-danger"></span>
+        </div>
+        <div class="mb-3 row">
+            <label asp-for="Quantity" class="form-label"></label>
+            <input asp-for="Quantity" class="form-control" id="CategoryName">
+            <span asp-validation-for="Quantity" class="text-danger"></span>
+        </div>
+        <div class="mb-3 row">
+            <label asp-for="Color" class="form-label"></label>
+            <input asp-for="Color" class="form-control" id="DisplayOrder">
+            <span asp-validation-for="Color" class="text-danger"></span>
 
-                </div>
-                <div class="row">
-                    <div class="col-6 col-md-3">
-                        <button type="submit" class="btn btn-primary form-control">Add</button>
-                    </div>
-                    <div class="col-6 col-md-3">
-                        <a asp-controller="Category" asp-action="index" class="btn btn-secondary border form-control">
-                            Back
-                        </a>
-                    </div>
-                </div>
-              </div>
+        </div>
+        <div class="row">
+            <div class="col-6 col-md-3">
+                <button type="submit" class="btn btn-primary form-control">Add</button>
             </div>
+            <div class="col-6 col-md-3">
+                <a asp-controller="Product" asp-action="Index" class="btn btn-secondary border form-control">
+                    Back
+                </a>
+            </div>
+        </div>
 
-</form>
+    </form>
 </div>
