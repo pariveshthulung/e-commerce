@@ -106,6 +106,25 @@ namespace ebay.Controllers
             }
         }
 
+        public async Task<IActionResult> Delete(int? id)
+        {
+            try{
+                  if (id == null || id == 0)
+            {
+                return NotFound();
+            }
+            var res = await _context.Products.Where(x=> x.id == id).FirstOrDefaultAsync();
+            _context.Products.Remove(res);
+            _context.SaveChanges();
+             return RedirectToAction("Index");
+            }
+            catch(Exception)
+            {
+                return RedirectToAction("Index");
+            }
+        }
+        
+
 
     }
 }

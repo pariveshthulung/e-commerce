@@ -101,7 +101,7 @@
                             <a class="btn btn-primary mx-2" asp-controller="Product" asp-action="Edit" asp-route-id="@data.id">
                                 <i class="bi bi-pencil"></i>&nbsp; Edit
                             </a>
-                            <a class="btn btn-danger mx-2" asp-controller="Product" asp-action="Delete" asp-route-id="@data.id">
+                            <a  href="@Url.Action("Delete",new {@data.id})" class="btn btn-danger mx-2" >
                                 <i class="bi bi-trash"></i>&nbsp; Delete
                             </a>
 
