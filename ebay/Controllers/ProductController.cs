@@ -2,35 +2,39 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AspNetCoreHero.ToastNotification.Abstractions;
 using ebay.Data;
 using ebay.Models;
 using ebay.ViewModel;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Build.Framework;
 using Microsoft.EntityFrameworkCore;
 
 // For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace ebay.Controllers
 {
+ 
     public class ProductController : Controller
     {
-
+        
+        public INotyfService _notifyService { get; }
         private readonly ApplicationDbContext _context;
 
-        public ProductController(ApplicationDbContext context)
+        public ProductController(ApplicationDbContext context,INotyfService notifyService)
         {
             _context = context;
+            _notifyService = notifyService;
         }
         // GET: /<controller>/
         public async Task<IActionResult> Index(ProductSearchVm vm)
         {
+            _notifyService.Success("This is a Success Notification");
             vm.Data = await _context.Products
           .Where(x =>
               string.IsNullOrEmpty(vm.Name) || x.Name.Contains(vm.Name)
           ).ToListAsync();
             return View(vm);
-
-
         }
         
         public IActionResult Add()
@@ -53,8 +57,9 @@ namespace ebay.Controllers
 
                 _context.Products.Add(items);
                 await _context.SaveChangesAsync();
-
+              
                 return RedirectToAction("Index");
+                
 
             }
             catch(Exception e)
