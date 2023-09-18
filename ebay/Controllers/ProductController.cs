@@ -26,7 +26,7 @@ namespace ebay.Controllers
         {
             vm.Data = await _context.Products
           .Where(x =>
-              string.IsNullOrEmpty(vm.Name) || x.Name.Contains(vm.Name)
+              string.IsNullOrEmpty(vm.Name) ||  x.Name.Contains(vm.Name)
           ).ToListAsync();
             return View(vm);
 
@@ -57,7 +57,7 @@ namespace ebay.Controllers
                 return RedirectToAction("Index");
 
             }
-            catch(Exception e)
+            catch(Exception)
             {
                 return RedirectToAction("Index");
             }
@@ -79,7 +79,7 @@ namespace ebay.Controllers
 
                 return View(item);
             }
-            catch(Exception e )
+            catch(Exception)
             {
                 return RedirectToAction("Index");
             }
@@ -100,7 +100,7 @@ namespace ebay.Controllers
                 }
                 return View();
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 return RedirectToAction("Index");
             }
@@ -108,15 +108,16 @@ namespace ebay.Controllers
 
         public async Task<IActionResult> Delete(int? id)
         {
-            try{
-                  if (id == null || id == 0)
+            try
             {
-                return NotFound();
-            }
-            var res = await _context.Products.Where(x=> x.id == id).FirstOrDefaultAsync();
-            _context.Products.Remove(res);
-            _context.SaveChanges();
-             return RedirectToAction("Index");
+                if (id == null || id == 0)
+                {
+                    return NotFound();
+                }
+                var res = await _context.Products.Where(x=> x.id == id).FirstOrDefaultAsync();
+                _context.Products.Remove(res);
+                _context.SaveChanges();
+                return RedirectToAction("Index");
             }
             catch(Exception)
             {
