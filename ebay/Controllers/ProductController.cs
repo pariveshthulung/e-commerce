@@ -2,11 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Transactions;
 using ebay.Data;
 using ebay.Models;
 using ebay.ViewModel;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Identity.Client;
 
 // For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -43,16 +45,22 @@ namespace ebay.Controllers
         {
             try
             {
-                var items = new Product();
-                items.Name = vm.Name;
-                items.Description = vm.Description;
-                items.Price = vm.Price;
-                items.Brand = vm.Brand;
-                items.Color = vm.Color;
-                items.Quantity = vm.Quantity;
+                //adding transactioScope for data integrity
+                using (var tx= new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
+                {
+                    var items = new Product();
+                    items.Name = vm.Name;
+                    items.Description = vm.Description;
+                    items.Price = vm.Price;
+                    items.Brand = vm.Brand;
+                    items.Color = vm.Color;
+                    items.Quantity = vm.Quantity;
 
-                _context.Products.Add(items);
-                await _context.SaveChangesAsync();
+                    _context.Products.Add(items);
+                    await _context.SaveChangesAsync();
+
+                    tx.Complete();
+                }
 
                 return RedirectToAction("Index");
 
@@ -76,6 +84,7 @@ namespace ebay.Controllers
                 {
                     throw new Exception("Item not found");
                 }
+                
 
                 return View(item);
             }
@@ -93,9 +102,14 @@ namespace ebay.Controllers
             {
                 if (ModelState.IsValid)
                 {
-                    _context.Products.Update(items);
-                    await _context.SaveChangesAsync();
-                    TempData["success"] = "Product updated successfully";
+                    using (var tx= new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
+                    {
+                        _context.Products.Update(items);
+                        await _context.SaveChangesAsync();
+                        
+                        tx.Complete(); 
+                    }
+
                     return RedirectToAction("Index");
                 }
                 return View();
@@ -114,9 +128,14 @@ namespace ebay.Controllers
                 {
                     return NotFound();
                 }
-                var res = await _context.Products.Where(x=> x.id == id).FirstOrDefaultAsync();
-                _context.Products.Remove(res);
-                _context.SaveChanges();
+                using(var tx = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
+                {
+                    var res = await _context.Products.Where(x=> x.id == id).FirstOrDefaultAsync();
+                    
+                    _context.Products.Remove(res);
+                    _context.SaveChanges();
+                    tx.Complete();
+                }
                 return RedirectToAction("Index");
             }
             catch(Exception)
