@@ -96,15 +96,23 @@ namespace ebay.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Edit(Product items)
+        public async Task<IActionResult> Edit(int id ,ProductionUpdateVm vm)
         {
             try
             {
+                var items = await _context.Products.Where(x => x.id == id)
+                    .FirstOrDefaultAsync();
                 if (ModelState.IsValid)
                 {
+                    
                     using (var tx= new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
                     {
-                        _context.Products.Update(items);
+                        items.Name = vm.Name;
+                        items.Description = vm.Description;
+                        items.Price = vm.Price;
+                        items.Brand = vm.Brand;
+                        items.Color = vm.Color;
+                        items.Quantity = vm.Quantity;
                         await _context.SaveChangesAsync();
                         
                         tx.Complete(); 
