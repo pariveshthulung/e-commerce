@@ -12,8 +12,8 @@ using ebay.Data;
 namespace ebay.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20230912074816_database_created")]
-    partial class database_created
+    [Migration("20230925073132_initialDb")]
+    partial class initialDb
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -227,6 +227,49 @@ namespace ebay.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("ebay.Models.Category", b =>
+                {
+                    b.Property<int>("id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("id"));
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("id");
+
+                    b.ToTable("Categories");
+
+                    b.HasData(
+                        new
+                        {
+                            id = 1,
+                            Name = "Electronics"
+                        },
+                        new
+                        {
+                            id = 2,
+                            Name = "Auto Parts"
+                        },
+                        new
+                        {
+                            id = 3,
+                            Name = "Softwares"
+                        },
+                        new
+                        {
+                            id = 4,
+                            Name = "Books"
+                        },
+                        new
+                        {
+                            id = 5,
+                            Name = "Sports"
+                        });
+                });
+
             modelBuilder.Entity("ebay.Models.Product", b =>
                 {
                     b.Property<int>("id")
@@ -237,6 +280,9 @@ namespace ebay.Migrations
 
                     b.Property<string>("Brand")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("CategoryId")
+                        .HasColumnType("int");
 
                     b.Property<string>("Color")
                         .IsRequired()
@@ -261,6 +307,8 @@ namespace ebay.Migrations
 
                     b.HasKey("id");
 
+                    b.HasIndex("CategoryId");
+
                     b.ToTable("Products");
 
                     b.HasData(
@@ -268,6 +316,7 @@ namespace ebay.Migrations
                         {
                             id = 1,
                             Brand = "Iphone",
+                            CategoryId = 1,
                             Color = "red",
                             Description = "This is nice phone.",
                             Name = "Iphone 11",
@@ -279,6 +328,7 @@ namespace ebay.Migrations
                         {
                             id = 2,
                             Brand = "Samsung",
+                            CategoryId = 1,
                             Color = "Green",
                             Description = "This is nice Samsung.",
                             Name = "SamSung Galaxy",
@@ -290,6 +340,7 @@ namespace ebay.Migrations
                         {
                             id = 3,
                             Brand = "Poco",
+                            CategoryId = 1,
                             Color = "Blue",
                             Description = "This is nice POCO.",
                             Name = "PoCO X3",
@@ -348,6 +399,17 @@ namespace ebay.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("ebay.Models.Product", b =>
+                {
+                    b.HasOne("ebay.Models.Category", "Category")
+                        .WithMany()
+                        .HasForeignKey("CategoryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Category");
                 });
 #pragma warning restore 612, 618
         }

@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace ebay.Migrations
 {
     /// <inheritdoc />
-    public partial class database_created : Migration
+    public partial class initialDb : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -53,22 +53,16 @@ namespace ebay.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Products",
+                name: "Categories",
                 columns: table => new
                 {
                     id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Price = table.Column<int>(type: "int", nullable: false),
-                    Brand = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Quantity = table.Column<int>(type: "int", nullable: false),
-                    Sold = table.Column<int>(type: "int", nullable: false),
-                    Color = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Products", x => x.id);
+                    table.PrimaryKey("PK_Categories", x => x.id);
                 });
 
             migrationBuilder.CreateTable(
@@ -177,14 +171,52 @@ namespace ebay.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "Products",
+                columns: table => new
+                {
+                    id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Price = table.Column<int>(type: "int", nullable: false),
+                    Brand = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Quantity = table.Column<int>(type: "int", nullable: false),
+                    Sold = table.Column<int>(type: "int", nullable: false),
+                    Color = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CategoryId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Products", x => x.id);
+                    table.ForeignKey(
+                        name: "FK_Products_Categories_CategoryId",
+                        column: x => x.CategoryId,
+                        principalTable: "Categories",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
             migrationBuilder.InsertData(
-                table: "Products",
-                columns: new[] { "id", "Brand", "Color", "Description", "Name", "Price", "Quantity", "Sold" },
+                table: "Categories",
+                columns: new[] { "id", "Name" },
                 values: new object[,]
                 {
-                    { 1, "Iphone", "red", "This is nice phone.", "Iphone 11", 10000, 100, 0 },
-                    { 2, "Samsung", "Green", "This is nice Samsung.", "SamSung Galaxy", 50000, 100, 0 },
-                    { 3, "Poco", "Blue", "This is nice POCO.", "PoCO X3", 30000, 100, 0 }
+                    { 1, "Electronics" },
+                    { 2, "Auto Parts" },
+                    { 3, "Softwares" },
+                    { 4, "Books" },
+                    { 5, "Sports" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "Products",
+                columns: new[] { "id", "Brand", "CategoryId", "Color", "Description", "Name", "Price", "Quantity", "Sold" },
+                values: new object[,]
+                {
+                    { 1, "Iphone", 1, "red", "This is nice phone.", "Iphone 11", 10000, 100, 0 },
+                    { 2, "Samsung", 1, "Green", "This is nice Samsung.", "SamSung Galaxy", 50000, 100, 0 },
+                    { 3, "Poco", 1, "Blue", "This is nice POCO.", "PoCO X3", 30000, 100, 0 }
                 });
 
             migrationBuilder.CreateIndex(
@@ -225,6 +257,11 @@ namespace ebay.Migrations
                 column: "NormalizedUserName",
                 unique: true,
                 filter: "[NormalizedUserName] IS NOT NULL");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Products_CategoryId",
+                table: "Products",
+                column: "CategoryId");
         }
 
         /// <inheritdoc />
@@ -253,6 +290,9 @@ namespace ebay.Migrations
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");
+
+            migrationBuilder.DropTable(
+                name: "Categories");
         }
     }
 }
