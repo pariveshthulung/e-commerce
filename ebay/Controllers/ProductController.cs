@@ -7,6 +7,7 @@ using ebay.Data;
 using ebay.Models;
 using ebay.ViewModel;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Identity.Client;
 
@@ -37,17 +38,25 @@ namespace ebay.Controllers
         
         public IActionResult Add()
         {
-
-            return View();
+            ProductAddVm vm = new(){
+            CategoryList= _context.Categories.Select(x=> new SelectListItem{
+                        Text=x.Name,
+                        Value=x.id.ToString()
+                    })
+            };
+            return View(vm);
         }
         [HttpPost]
         public async Task<IActionResult> Add(ProductAddVm vm)
         {
             try
             {
+
+                if(ModelState.IsValid){
                 //adding transactioScope for data integrity
                 using (var tx= new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
                 {
+                    
                     var items = new Product();
                     items.Name = vm.Name;
                     items.Description = vm.Description;
@@ -55,6 +64,8 @@ namespace ebay.Controllers
                     items.Brand = vm.Brand;
                     items.Color = vm.Color;
                     items.Quantity = vm.Quantity;
+                    items.CategoryId = vm.CategoryId;
+                    
 
                     _context.Products.Add(items);
                     await _context.SaveChangesAsync();
@@ -63,6 +74,16 @@ namespace ebay.Controllers
                 }
 
                 return RedirectToAction("Index");
+                }
+                else{
+                     
+                        vm.CategoryList= _context.Categories.Select(x=> new SelectListItem{
+                        Text=x.Name,
+                        Value=x.id.ToString()
+                        });
+                        return View(vm);
+                    
+                }
 
             }
             catch(Exception)
@@ -151,8 +172,6 @@ namespace ebay.Controllers
                 return RedirectToAction("Index");
             }
         }
-        
-
 
     }
 }
