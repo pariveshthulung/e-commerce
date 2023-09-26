@@ -7,6 +7,7 @@ using ebay.Data;
 using ebay.Models;
 using ebay.ViewModel;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Identity.Client;
 
@@ -30,39 +31,62 @@ namespace ebay.Controllers
           .Where(x =>
               string.IsNullOrEmpty(vm.Name) ||  x.Name.Contains(vm.Name)
           ).ToListAsync();
+
+            vm.ProductCategory =await _context.Products
+                .Where(x=> string.IsNullOrEmpty(vm.Name) || x.Name.Contains(vm.Name))
+                .Select(x=> new ProductCategoryVm(){
+                    id = x.id,
+                    Name = x.Name
+                }).ToListAsync();
+            
             return View(vm);
 
 
         }
         
-        public IActionResult Add()
+        public async Task<IActionResult> Add()
         {
-
-            return View();
+            var vm = new ProductAddVm();
+            vm.Categories = await _context.Categories.ToListAsync();
+        
+            return View(vm);
         }
         [HttpPost]
         public async Task<IActionResult> Add(ProductAddVm vm)
         {
             try
             {
+
+                if(ModelState.IsValid){
                 //adding transactioScope for data integrity
-                using (var tx= new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
-                {
-                    var items = new Product();
-                    items.Name = vm.Name;
-                    items.Description = vm.Description;
-                    items.Price = vm.Price;
-                    items.Brand = vm.Brand;
-                    items.Color = vm.Color;
-                    items.Quantity = vm.Quantity;
+                    using (var tx= new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
+                    {
+                    
+                        var items = new Product();
+                        items.Name = vm.Name;
+                        items.Description = vm.Description;
+                        items.Price = vm.Price;
+                        items.Brand = vm.Brand;
+                        items.Color = vm.Color;
+                        items.Quantity = vm.Quantity;
+                      
+                        items.Category = await _context.Categories.Where(x => x.id == vm.CategoryId).FirstOrDefaultAsync();
+                    
 
-                    _context.Products.Add(items);
-                    await _context.SaveChangesAsync();
+                        _context.Products.Add(items);
+                        await _context.SaveChangesAsync();
 
-                    tx.Complete();
+                        tx.Complete();
+                    }
+
+                    return RedirectToAction("Index");
                 }
-
-                return RedirectToAction("Index");
+                else{
+                     
+                     vm.Categories = await _context.Categories.ToListAsync();
+                     return View(vm);
+                    
+                }
 
             }
             catch(Exception)
@@ -151,8 +175,6 @@ namespace ebay.Controllers
                 return RedirectToAction("Index");
             }
         }
-        
-
 
     }
 }
