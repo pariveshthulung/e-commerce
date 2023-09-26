@@ -7,7 +7,7 @@ namespace ebay.ViewModel
 	{
 		public string? Name { get; set; }
 		public List<Product>? Data { get; set; }
-		public List<ProductCategoryVm> ProductCategory { get; set; }
+
 	}
 }
 

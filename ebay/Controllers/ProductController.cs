@@ -31,13 +31,6 @@ namespace ebay.Controllers
           .Where(x =>
               string.IsNullOrEmpty(vm.Name) ||  x.Name.Contains(vm.Name)
           ).ToListAsync();
-
-            vm.ProductCategory =await _context.Products
-                .Where(x=> string.IsNullOrEmpty(vm.Name) || x.Name.Contains(vm.Name))
-                .Select(x=> new ProductCategoryVm(){
-                    id = x.id,
-                    Name = x.Name
-                }).ToListAsync();
             
             return View(vm);
 
