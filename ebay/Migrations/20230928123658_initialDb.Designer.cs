@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ebay.Data;
 
@@ -11,9 +12,11 @@ using ebay.Data;
 namespace ebay.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230928123658_initialDb")]
+    partial class initialDb
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -373,25 +376,25 @@ namespace ebay.Migrations
                         {
                             id = 1,
                             OrderDetailsId = 1,
-                            ProductId = 1
+                            ProductId = 2001
                         },
                         new
                         {
                             id = 2,
                             OrderDetailsId = 2,
-                            ProductId = 2
+                            ProductId = 2002
                         },
                         new
                         {
                             id = 3,
                             OrderDetailsId = 2,
-                            ProductId = 2
+                            ProductId = 2002
                         },
                         new
                         {
                             id = 4,
                             OrderDetailsId = 3,
-                            ProductId = 3
+                            ProductId = 2003
                         });
                 });
 
