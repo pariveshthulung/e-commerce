@@ -30,7 +30,7 @@ namespace ebay.Controllers
             vm.Data = await _context.Products
           .Where(x =>
               string.IsNullOrEmpty(vm.Name) ||  x.Name.Contains(vm.Name)
-          ).ToListAsync();
+          ).Include(x=>x.Category).ToListAsync();
             
             return View(vm);
 
