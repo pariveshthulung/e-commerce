@@ -76,9 +76,9 @@ public class ApplicationDbContext : IdentityDbContext
 
         modelBuilder.Entity<OrderItems>().HasData(
             new OrderItems { id=1, OrderDetailsId= 1 ,ProductId= 1},
-            new OrderItems { id=2, OrderDetailsId= 2 ,ProductId= 2},
-            new OrderItems { id=3, OrderDetailsId= 2 ,ProductId= 2},
-            new OrderItems { id=4, OrderDetailsId= 3 ,ProductId= 3}
+            new OrderItems { id=2, OrderDetailsId= 2 ,ProductId= 4},
+            new OrderItems { id=3, OrderDetailsId= 3 ,ProductId= 5},
+            new OrderItems { id=4, OrderDetailsId= 4 ,ProductId= 6}
         );
     }
 }

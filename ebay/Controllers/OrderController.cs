@@ -18,17 +18,21 @@ namespace ebay.Controllers{
                 .Include(x=>x.OrderDetails)
                 .ThenInclude(x=>x.Customer)
                 .Include(x=>x.Product)
+                .ThenInclude(x=>x.Category)
                 .ToList();
             return Json(order.Select(x=>new 
             {
-                Id= x.id,
-                product = x.Product.Select(y=> new{
-                    id=y.id,
-                    name= y.Name,
-                    customer=y.Category
-                }),
+                Id= x.OrderDetails.CustomerId,
+                // product = x.Product.Select(y=> new{
+                //     id=y.id,
+                //     name= y.Name,
+                //     customer=y.Category
+                // }),
                 firstName = x.OrderDetails.Customer.FirstName,
                 lastName =x.OrderDetails.Customer.LastName,
+                productName=x.Product.Name,
+                productPrice=x.Product.Price,
+                productCategory=x.Product.Category.Name
                 
             }));
         }

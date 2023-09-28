@@ -6,7 +6,7 @@
         public int OrderDetailsId { get; set; }
         public virtual OrderDetails OrderDetails { get; set; }
         public int ProductId { get; set; }
-        public virtual List<Product> Product { get; set; } = new List<Product>();
+        public virtual Product Product { get; set; }
 
     }
 }
