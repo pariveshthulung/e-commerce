@@ -65,6 +65,11 @@
                 </td>
                 <td>
                     <h3>
+                        Category
+                    </h3>
+                </td>
+                <td>
+                    <h3>
                         Action
                     </h3>
                 </td>
@@ -97,11 +102,14 @@
                         @data.Color
                     </td>
                     <td>
+                        @data.Category.Name
+                    </td>
+                    <td>
                         <div class="w-75 btn-group" role="group">
                             <a class="btn btn-primary mx-2" asp-controller="Product" asp-action="Edit" asp-route-id="@data.id">
                                 <i class="bi bi-pencil"></i>&nbsp; Edit
                             </a>
-                            <a  href="@Url.Action("Delete",new {@data.id})" class="btn btn-danger mx-2" >
+                            <a href="@Url.Action("Delete",new {@data.id})" class="btn btn-danger mx-2">
                                 <i class="bi bi-trash"></i>&nbsp; Delete
                             </a>
 

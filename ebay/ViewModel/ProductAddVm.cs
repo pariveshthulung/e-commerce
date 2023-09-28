@@ -1,4 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using ebay.Models;
+using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace ebay.ViewModel
 {
@@ -16,6 +19,19 @@ namespace ebay.ViewModel
         public int Sold { get; set; }
         [Required]
         public string? Color { get; set; }
+        public int CategoryId { get; set; }
+        [ValidateNever]
+        public List<Category> Categories { get; set; }
+
+
+        public SelectList CategoryList(){
+            return new SelectList(
+                Categories,
+                nameof(Category.id),
+                nameof(Category.Name)
+            );
+            
+        }
     }
 }
 
