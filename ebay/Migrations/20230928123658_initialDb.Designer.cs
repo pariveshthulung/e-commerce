@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ebay.Data;
 
@@ -11,9 +12,11 @@ using ebay.Data;
 namespace ebay.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230928123658_initialDb")]
+    partial class initialDb
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -366,8 +369,6 @@ namespace ebay.Migrations
 
                     b.HasIndex("OrderDetailsId");
 
-                    b.HasIndex("ProductId");
-
                     b.ToTable("OrderItems");
 
                     b.HasData(
@@ -375,25 +376,25 @@ namespace ebay.Migrations
                         {
                             id = 1,
                             OrderDetailsId = 1,
-                            ProductId = 1
+                            ProductId = 2001
                         },
                         new
                         {
                             id = 2,
                             OrderDetailsId = 2,
-                            ProductId = 4
+                            ProductId = 2002
                         },
                         new
                         {
                             id = 3,
-                            OrderDetailsId = 3,
-                            ProductId = 5
+                            OrderDetailsId = 2,
+                            ProductId = 2002
                         },
                         new
                         {
                             id = 4,
-                            OrderDetailsId = 4,
-                            ProductId = 6
+                            OrderDetailsId = 3,
+                            ProductId = 2003
                         });
                 });
 
@@ -423,6 +424,9 @@ namespace ebay.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int?>("OrderItemsid")
+                        .HasColumnType("int");
+
                     b.Property<int>("Price")
                         .HasColumnType("int");
 
@@ -435,6 +439,8 @@ namespace ebay.Migrations
                     b.HasKey("id");
 
                     b.HasIndex("CategoryId");
+
+                    b.HasIndex("OrderItemsid");
 
                     b.ToTable("Products");
 
@@ -547,15 +553,7 @@ namespace ebay.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("ebay.Models.Product", "Product")
-                        .WithMany()
-                        .HasForeignKey("ProductId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.Navigation("OrderDetails");
-
-                    b.Navigation("Product");
                 });
 
             modelBuilder.Entity("ebay.Models.Product", b =>
@@ -566,7 +564,16 @@ namespace ebay.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("ebay.Models.OrderItems", null)
+                        .WithMany("Product")
+                        .HasForeignKey("OrderItemsid");
+
                     b.Navigation("Category");
+                });
+
+            modelBuilder.Entity("ebay.Models.OrderItems", b =>
+                {
+                    b.Navigation("Product");
                 });
 #pragma warning restore 612, 618
         }

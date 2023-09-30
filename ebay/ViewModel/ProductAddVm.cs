@@ -21,7 +21,7 @@ namespace ebay.ViewModel
         public string? Color { get; set; }
         public int CategoryId { get; set; }
         [ValidateNever]
-        public List<Category> Categories { get; set; }
+        public List<Category>? Categories { get; set; }
 
 
         public SelectList CategoryList(){
