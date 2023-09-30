@@ -14,7 +14,7 @@ public class ApplicationDbContext : IdentityDbContext
     public DbSet<Product> Products { get; set; }
     public DbSet<Category> Categories { get; set; }
     public DbSet<Customer> Customers { get; set; }
-    public DbSet<OrderDetails> OrderDetails { get; set; }
+    public DbSet<Order> Order { get; set; }
     public DbSet<OrderItems> OrderItems { get; set; }
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -67,11 +67,11 @@ public class ApplicationDbContext : IdentityDbContext
             new Customer { id=3, FirstName ="Shyam",LastName="Limbu"}
         );
 
-        modelBuilder.Entity<OrderDetails>().HasData(
-            new OrderDetails { id=1, CustomerId=1},
-            new OrderDetails { id=2, CustomerId=1},
-            new OrderDetails { id=3, CustomerId=3},
-            new OrderDetails { id=4, CustomerId=2}
+        modelBuilder.Entity<Order>().HasData(
+            new Order { id=1, CustomerId=1},
+            new Order { id=2, CustomerId=1},
+            new Order { id=3, CustomerId=3},
+            new Order { id=4, CustomerId=2}
         );
 
         modelBuilder.Entity<OrderItems>().HasData(

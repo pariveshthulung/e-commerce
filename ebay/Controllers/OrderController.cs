@@ -15,21 +15,21 @@ namespace ebay.Controllers{
         public IActionResult Index()
         {
             var order = _db.OrderItems
-                .Include(x=>x.OrderDetails)
+                .Include(x=>x.Order)
                 .ThenInclude(x=>x.Customer)
                 .Include(x=>x.Product)
                 .ThenInclude(x=>x.Category)
                 .ToList();
             return Json(order.Select(x=>new 
             {
-                Id= x.OrderDetails.CustomerId,
+                Id= x.Order.CustomerId,
                 // product = x.Product.Select(y=> new{
                 //     id=y.id,
                 //     name= y.Name,
                 //     customer=y.Category
                 // }),
-                firstName = x.OrderDetails.Customer.FirstName,
-                lastName =x.OrderDetails.Customer.LastName,
+                firstName = x.Order.Customer.FirstName,
+                lastName =x.Order.Customer.LastName,
                 productName=x.Product.Name,
                 productPrice=x.Product.Price,
                 productCategory=x.Product.Category.Name

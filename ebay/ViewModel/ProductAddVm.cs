@@ -28,7 +28,8 @@ namespace ebay.ViewModel
             return new SelectList(
                 Categories,
                 nameof(Category.id),
-                nameof(Category.Name)
+                nameof(Category.Name),
+                CategoryId
             );
             
         }

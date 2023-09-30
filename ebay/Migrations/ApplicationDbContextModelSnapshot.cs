@@ -276,11 +276,9 @@ namespace ebay.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("id"));
 
                     b.Property<string>("FirstName")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("LastName")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("id");
@@ -308,7 +306,7 @@ namespace ebay.Migrations
                         });
                 });
 
-            modelBuilder.Entity("ebay.Models.OrderDetails", b =>
+            modelBuilder.Entity("ebay.Models.Order", b =>
                 {
                     b.Property<int>("id")
                         .ValueGeneratedOnAdd()
@@ -323,7 +321,7 @@ namespace ebay.Migrations
 
                     b.HasIndex("CustomerId");
 
-                    b.ToTable("OrderDetails");
+                    b.ToTable("Order");
 
                     b.HasData(
                         new
@@ -359,12 +357,15 @@ namespace ebay.Migrations
                     b.Property<int>("OrderDetailsId")
                         .HasColumnType("int");
 
+                    b.Property<int?>("Orderid")
+                        .HasColumnType("int");
+
                     b.Property<int>("ProductId")
                         .HasColumnType("int");
 
                     b.HasKey("id");
 
-                    b.HasIndex("OrderDetailsId");
+                    b.HasIndex("Orderid");
 
                     b.HasIndex("ProductId");
 
@@ -528,7 +529,7 @@ namespace ebay.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("ebay.Models.OrderDetails", b =>
+            modelBuilder.Entity("ebay.Models.Order", b =>
                 {
                     b.HasOne("ebay.Models.Customer", "Customer")
                         .WithMany()
@@ -541,11 +542,9 @@ namespace ebay.Migrations
 
             modelBuilder.Entity("ebay.Models.OrderItems", b =>
                 {
-                    b.HasOne("ebay.Models.OrderDetails", "OrderDetails")
+                    b.HasOne("ebay.Models.Order", "Order")
                         .WithMany()
-                        .HasForeignKey("OrderDetailsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("Orderid");
 
                     b.HasOne("ebay.Models.Product", "Product")
                         .WithMany()
@@ -553,7 +552,7 @@ namespace ebay.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("OrderDetails");
+                    b.Navigation("Order");
 
                     b.Navigation("Product");
                 });

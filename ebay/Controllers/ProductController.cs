@@ -104,7 +104,7 @@ namespace ebay.Controllers
 
                 if (id == 0 || id == null)
                 {
-                    throw new Exception("Item not found");
+                    _notifyService.Error("No data found.");
                 }
                 
 
@@ -120,7 +120,7 @@ namespace ebay.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Edit(int id ,ProductionUpdateVm vm)
+        public async Task<IActionResult> Edit(int id ,ProductUpdateVm vm)
         {
             try
             {
@@ -137,6 +137,8 @@ namespace ebay.Controllers
                         items.Brand = vm.Brand;
                         items.Color = vm.Color;
                         items.Quantity = vm.Quantity;
+                        items.Category = await _context.Categories.Where(x => x.id == vm.CategoryId).FirstOrDefaultAsync();
+
                         await _context.SaveChangesAsync();
                         _notifyService.Success("Product edited successfully.");
                         tx.Complete(); 
@@ -144,7 +146,10 @@ namespace ebay.Controllers
 
                     return RedirectToAction("Index");
                 }
-                return View();
+                else{
+                        vm.Categories = await _context.Categories.ToListAsync();
+                        return View(vm);
+                }
             }
             catch (Exception)
             {
