@@ -2,13 +2,14 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using AspNetCoreHero.ToastNotification.Abstractions;
+using System.Transactions;
 using ebay.Data;
 using ebay.Models;
 using ebay.ViewModel;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Build.Framework;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Identity.Client;
 
 // For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -32,38 +33,59 @@ namespace ebay.Controllers
             _notifyService.Success("This is a Success Notification");
             vm.Data = await _context.Products
           .Where(x =>
-              string.IsNullOrEmpty(vm.Name) || x.Name.Contains(vm.Name)
-          ).ToListAsync();
+              string.IsNullOrEmpty(vm.Name) ||  x.Name.Contains(vm.Name)
+          ).Include(x=>x.Category).ToListAsync();
+            
             return View(vm);
         }
         
-        public IActionResult Add()
+        public async Task<IActionResult> Add()
         {
-
-            return View();
+            var vm = new ProductAddVm();
+            vm.Categories = await _context.Categories.ToListAsync();
+        
+            return View(vm);
         }
         [HttpPost]
         public async Task<IActionResult> Add(ProductAddVm vm)
         {
             try
             {
-                var items = new Product();
-                items.Name = vm.Name;
-                items.Description = vm.Description;
-                items.Price = vm.Price;
-                items.Brand = vm.Brand;
-                items.Color = vm.Color;
-                items.Quantity = vm.Quantity;
 
-                _context.Products.Add(items);
-                _notifyService.Success("This is a Success Notification");
-                await _context.SaveChangesAsync();
-              
-                return RedirectToAction("Index");
-                
+                if(ModelState.IsValid){
+                //adding transactioScope for data integrity
+                    using (var tx= new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
+                    {
+                    
+                        var items = new Product();
+                        items.Name = vm.Name;
+                        items.Description = vm.Description;
+                        items.Price = vm.Price;
+                        items.Brand = vm.Brand;
+                        items.Color = vm.Color;
+                        items.Quantity = vm.Quantity;
+                      
+                        items.Category = await _context.Categories.Where(x => x.id == vm.CategoryId).FirstOrDefaultAsync();
+                    
+
+                        _context.Products.Add(items);
+                        await _context.SaveChangesAsync();
+                        _notifyService.Success("This is a Success Notification");
+
+                        tx.Complete();
+                    }
+
+                    return RedirectToAction("Index");
+                }
+                else{
+                     
+                     vm.Categories = await _context.Categories.ToListAsync();
+                     return View(vm);
+                    
+                }
 
             }
-            catch(Exception e)
+            catch(Exception)
             {
                 return RedirectToAction("Index");
             }
@@ -82,10 +104,11 @@ namespace ebay.Controllers
                 {
                     throw new Exception("Item not found");
                 }
+                
 
                 return View(item);
             }
-            catch(Exception e )
+            catch(Exception)
             {
                 return RedirectToAction("Index");
             }
@@ -93,26 +116,61 @@ namespace ebay.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Edit(Product items)
+        public async Task<IActionResult> Edit(int id ,ProductionUpdateVm vm)
         {
             try
             {
+                var items = await _context.Products.Where(x => x.id == id)
+                    .FirstOrDefaultAsync();
                 if (ModelState.IsValid)
                 {
-                    _context.Products.Update(items);
-                    await _context.SaveChangesAsync();
-                    TempData["success"] = "Product updated successfully";
-                    _notifyService.Success("This is a Success Notification");
+                    
+                    using (var tx= new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
+                    {
+                        items.Name = vm.Name;
+                        items.Description = vm.Description;
+                        items.Price = vm.Price;
+                        items.Brand = vm.Brand;
+                        items.Color = vm.Color;
+                        items.Quantity = vm.Quantity;
+                        await _context.SaveChangesAsync();
+                        
+                        tx.Complete(); 
+                    }
+
                     return RedirectToAction("Index");
                 }
                 return View();
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 return RedirectToAction("Index");
             }
         }
 
+        public async Task<IActionResult> Delete(int? id)
+        {
+            try
+            {
+                if (id == null || id == 0)
+                {
+                    return NotFound();
+                }
+                using(var tx = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
+                {
+                    var res = await _context.Products.Where(x=> x.id == id).FirstOrDefaultAsync();
+                    
+                    _context.Products.Remove(res);
+                    _context.SaveChanges();
+                    tx.Complete();
+                }
+                return RedirectToAction("Index");
+            }
+            catch(Exception)
+            {
+                return RedirectToAction("Index");
+            }
+        }
 
     }
 }

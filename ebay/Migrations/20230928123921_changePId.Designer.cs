@@ -12,8 +12,8 @@ using ebay.Data;
 namespace ebay.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20230912074816_database_created")]
-    partial class database_created
+    [Migration("20230928123921_changePId")]
+    partial class changePId
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -227,6 +227,177 @@ namespace ebay.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("ebay.Models.Category", b =>
+                {
+                    b.Property<int>("id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("id"));
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("id");
+
+                    b.ToTable("Categories");
+
+                    b.HasData(
+                        new
+                        {
+                            id = 1,
+                            Name = "Electronics"
+                        },
+                        new
+                        {
+                            id = 2,
+                            Name = "Auto Parts"
+                        },
+                        new
+                        {
+                            id = 3,
+                            Name = "Softwares"
+                        },
+                        new
+                        {
+                            id = 4,
+                            Name = "Books"
+                        },
+                        new
+                        {
+                            id = 5,
+                            Name = "Sports"
+                        });
+                });
+
+            modelBuilder.Entity("ebay.Models.Customer", b =>
+                {
+                    b.Property<int>("id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("id"));
+
+                    b.Property<string>("FirstName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("LastName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("id");
+
+                    b.ToTable("Customers");
+
+                    b.HasData(
+                        new
+                        {
+                            id = 1,
+                            FirstName = "Ram",
+                            LastName = "Rai"
+                        },
+                        new
+                        {
+                            id = 2,
+                            FirstName = "Hari",
+                            LastName = "Magar"
+                        },
+                        new
+                        {
+                            id = 3,
+                            FirstName = "Shyam",
+                            LastName = "Limbu"
+                        });
+                });
+
+            modelBuilder.Entity("ebay.Models.OrderDetails", b =>
+                {
+                    b.Property<int>("id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("id"));
+
+                    b.Property<int>("CustomerId")
+                        .HasColumnType("int");
+
+                    b.HasKey("id");
+
+                    b.HasIndex("CustomerId");
+
+                    b.ToTable("OrderDetails");
+
+                    b.HasData(
+                        new
+                        {
+                            id = 1,
+                            CustomerId = 1
+                        },
+                        new
+                        {
+                            id = 2,
+                            CustomerId = 1
+                        },
+                        new
+                        {
+                            id = 3,
+                            CustomerId = 3
+                        },
+                        new
+                        {
+                            id = 4,
+                            CustomerId = 2
+                        });
+                });
+
+            modelBuilder.Entity("ebay.Models.OrderItems", b =>
+                {
+                    b.Property<int>("id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("id"));
+
+                    b.Property<int>("OrderDetailsId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ProductId")
+                        .HasColumnType("int");
+
+                    b.HasKey("id");
+
+                    b.HasIndex("OrderDetailsId");
+
+                    b.ToTable("OrderItems");
+
+                    b.HasData(
+                        new
+                        {
+                            id = 1,
+                            OrderDetailsId = 1,
+                            ProductId = 1
+                        },
+                        new
+                        {
+                            id = 2,
+                            OrderDetailsId = 2,
+                            ProductId = 2
+                        },
+                        new
+                        {
+                            id = 3,
+                            OrderDetailsId = 2,
+                            ProductId = 2
+                        },
+                        new
+                        {
+                            id = 4,
+                            OrderDetailsId = 3,
+                            ProductId = 3
+                        });
+                });
+
             modelBuilder.Entity("ebay.Models.Product", b =>
                 {
                     b.Property<int>("id")
@@ -237,6 +408,9 @@ namespace ebay.Migrations
 
                     b.Property<string>("Brand")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("CategoryId")
+                        .HasColumnType("int");
 
                     b.Property<string>("Color")
                         .IsRequired()
@@ -250,6 +424,9 @@ namespace ebay.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int?>("OrderItemsid")
+                        .HasColumnType("int");
+
                     b.Property<int>("Price")
                         .HasColumnType("int");
 
@@ -261,6 +438,10 @@ namespace ebay.Migrations
 
                     b.HasKey("id");
 
+                    b.HasIndex("CategoryId");
+
+                    b.HasIndex("OrderItemsid");
+
                     b.ToTable("Products");
 
                     b.HasData(
@@ -268,6 +449,7 @@ namespace ebay.Migrations
                         {
                             id = 1,
                             Brand = "Iphone",
+                            CategoryId = 1,
                             Color = "red",
                             Description = "This is nice phone.",
                             Name = "Iphone 11",
@@ -279,6 +461,7 @@ namespace ebay.Migrations
                         {
                             id = 2,
                             Brand = "Samsung",
+                            CategoryId = 1,
                             Color = "Green",
                             Description = "This is nice Samsung.",
                             Name = "SamSung Galaxy",
@@ -290,6 +473,7 @@ namespace ebay.Migrations
                         {
                             id = 3,
                             Brand = "Poco",
+                            CategoryId = 1,
                             Color = "Blue",
                             Description = "This is nice POCO.",
                             Name = "PoCO X3",
@@ -348,6 +532,48 @@ namespace ebay.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("ebay.Models.OrderDetails", b =>
+                {
+                    b.HasOne("ebay.Models.Customer", "Customer")
+                        .WithMany()
+                        .HasForeignKey("CustomerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Customer");
+                });
+
+            modelBuilder.Entity("ebay.Models.OrderItems", b =>
+                {
+                    b.HasOne("ebay.Models.OrderDetails", "OrderDetails")
+                        .WithMany()
+                        .HasForeignKey("OrderDetailsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("OrderDetails");
+                });
+
+            modelBuilder.Entity("ebay.Models.Product", b =>
+                {
+                    b.HasOne("ebay.Models.Category", "Category")
+                        .WithMany()
+                        .HasForeignKey("CategoryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("ebay.Models.OrderItems", null)
+                        .WithMany("Product")
+                        .HasForeignKey("OrderItemsid");
+
+                    b.Navigation("Category");
+                });
+
+            modelBuilder.Entity("ebay.Models.OrderItems", b =>
+                {
+                    b.Navigation("Product");
                 });
 #pragma warning restore 612, 618
         }

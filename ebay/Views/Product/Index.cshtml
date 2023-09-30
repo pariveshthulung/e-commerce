@@ -11,17 +11,17 @@
             <div class="col-6">
                 <h1 class="text-primary">Product List</h1>
             </div>
-            <div class="col-3">
+            <div class="col-2">
                 <input asp-for="Name" type="text" placeholder="e.g. Iphone" class="form-control">
             </div>
             <div class="col-1">
                 <button class="btn btn-primary">
-                    Search
+                    <i class="bi bi-search"></i>&nbsp;Search
                 </button>
             </div>
-            <div class="col-2">
+            <div class="col-3">
                 <a asp-controller="Product" asp-action="Add" class="btn btn-primary">
-                    <i class="bi bi-plus-circle"></i> Add New Product
+                    <i class="bi bi-plus-circle"></i>&nbsp;Add New Product
                 </a>
             </div>
         </div>
@@ -32,41 +32,46 @@
 
             <tr>
                 <td>
-                    <h5>
+                    <h3>
                         Product Name
-                    </h5>
+                    </h3>
                 </td>
                 <td>
-                    <h5>
+                    <h3>
                         Description
-                    </h5>
+                    </h3>
                 </td>
 
                 <td>
-                    <h5>
+                    <h3>
                         Price
-                    </h5>
+                    </h3>
                 </td>
                 <td>
-                    <h5>
+                    <h3>
                         Brand
-                    </h5>
+                    </h3>
                 </td>
 
                 <td>
-                    <h5>
+                    <h3>
                         Quantity
-                    </h5>
+                    </h3>
                 </td>
                 <td>
-                    <h5>
+                    <h3>
                         Color
-                    </h5>
+                    </h3>
                 </td>
                 <td>
-                    <h5>
+                    <h3>
+                        Category
+                    </h3>
+                </td>
+                <td>
+                    <h3>
                         Action
-                    </h5>
+                    </h3>
                 </td>
             </tr>
         </thead>
@@ -97,12 +102,15 @@
                         @data.Color
                     </td>
                     <td>
+                        @data.Category.Name
+                    </td>
+                    <td>
                         <div class="w-75 btn-group" role="group">
                             <a class="btn btn-primary mx-2" asp-controller="Product" asp-action="Edit" asp-route-id="@data.id">
-                                <i class="bi bi-pencil"></i> Edit
+                                <i class="bi bi-pencil"></i>&nbsp; Edit
                             </a>
-                            <a class="btn btn-danger mx-2" asp-controller="Product" asp-action="Delete" asp-route-id="@data.id">
-                                <i class="bi bi-trash"></i> Delete
+                            <a href="@Url.Action("Delete",new {@data.id})" class="btn btn-danger mx-2">
+                                <i class="bi bi-trash"></i>&nbsp; Delete
                             </a>
 
                         </div>
