@@ -56,6 +56,7 @@ namespace ebay.Controllers
                 items.Quantity = vm.Quantity;
 
                 _context.Products.Add(items);
+                _notifyService.Success("This is a Success Notification");
                 await _context.SaveChangesAsync();
               
                 return RedirectToAction("Index");
@@ -101,6 +102,7 @@ namespace ebay.Controllers
                     _context.Products.Update(items);
                     await _context.SaveChangesAsync();
                     TempData["success"] = "Product updated successfully";
+                    _notifyService.Success("This is a Success Notification");
                     return RedirectToAction("Index");
                 }
                 return View();
