@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Transactions;
+using AspNetCoreHero.ToastNotification.Abstractions;
 using ebay.Data;
 using ebay.Models;
 using ebay.ViewModel;
@@ -19,10 +20,12 @@ namespace ebay.Controllers
     {
 
         private readonly ApplicationDbContext _context;
+        public INotyfService _notifyService { get; }
 
-        public ProductController(ApplicationDbContext context)
+        public ProductController(ApplicationDbContext context,INotyfService notifyService)
         {
             _context = context;
+            _notifyService = notifyService;
         }
         // GET: /<controller>/
         public async Task<IActionResult> Index(ProductSearchVm vm)
@@ -68,7 +71,7 @@ namespace ebay.Controllers
 
                         _context.Products.Add(items);
                         await _context.SaveChangesAsync();
-
+                        _notifyService.Success("Product added successfully.");
                         tx.Complete();
                     }
 
@@ -84,6 +87,8 @@ namespace ebay.Controllers
             }
             catch(Exception)
             {
+                _notifyService.Error("Operation failed.");
+
                 return RedirectToAction("Index");
             }
 
@@ -107,6 +112,8 @@ namespace ebay.Controllers
             }
             catch(Exception)
             {
+                _notifyService.Error("Operation failed.");
+
                 return RedirectToAction("Index");
             }
             
@@ -131,7 +138,7 @@ namespace ebay.Controllers
                         items.Color = vm.Color;
                         items.Quantity = vm.Quantity;
                         await _context.SaveChangesAsync();
-                        
+                        _notifyService.Success("Product edited successfully.");
                         tx.Complete(); 
                     }
 
@@ -141,6 +148,8 @@ namespace ebay.Controllers
             }
             catch (Exception)
             {
+                _notifyService.Error("Operation failed.");
+
                 return RedirectToAction("Index");
             }
         }
@@ -159,12 +168,14 @@ namespace ebay.Controllers
                     
                     _context.Products.Remove(res);
                     _context.SaveChanges();
+                    _notifyService.Success("Product deleted successfully.");
                     tx.Complete();
                 }
                 return RedirectToAction("Index");
             }
             catch(Exception)
             {
+                _notifyService.Error("Operation failed.");
                 return RedirectToAction("Index");
             }
         }
