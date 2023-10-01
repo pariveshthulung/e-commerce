@@ -22,7 +22,7 @@ namespace ebay.Controllers
         private readonly ApplicationDbContext _context;
         public INotyfService _notifyService { get; }
 
-        public ProductController(ApplicationDbContext context,INotyfService notifyService)
+        public ProductController(ApplicationDbContext context, INotyfService notifyService)
         {
             _context = context;
             _notifyService = notifyService;
@@ -32,19 +32,19 @@ namespace ebay.Controllers
         {
             vm.Data = await _context.Products
           .Where(x =>
-              string.IsNullOrEmpty(vm.Name) ||  x.Name.Contains(vm.Name)
-          ).Include(x=>x.Category).ToListAsync();
-            
+              string.IsNullOrEmpty(vm.Name) || x.Name.Contains(vm.Name)
+          ).Include(x => x.Category).ToListAsync();
+
             return View(vm);
 
 
         }
-        
+
         public async Task<IActionResult> Add()
         {
             var vm = new ProductAddVm();
             vm.Categories = await _context.Categories.ToListAsync();
-        
+
             return View(vm);
         }
         [HttpPost]
@@ -53,11 +53,12 @@ namespace ebay.Controllers
             try
             {
 
-                if(ModelState.IsValid){
-                //adding transactioScope for data integrity
-                    using (var tx= new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
+                if (ModelState.IsValid)
+                {
+                    //adding transactioScope for data integrity
+                    using (var tx = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
                     {
-                    
+
                         var items = new Product();
                         items.Name = vm.Name;
                         items.Description = vm.Description;
@@ -65,9 +66,9 @@ namespace ebay.Controllers
                         items.Brand = vm.Brand;
                         items.Color = vm.Color;
                         items.Quantity = vm.Quantity;
-                      
+
                         items.Category = await _context.Categories.Where(x => x.id == vm.CategoryId).FirstOrDefaultAsync();
-                    
+
 
                         _context.Products.Add(items);
                         await _context.SaveChangesAsync();
@@ -77,50 +78,60 @@ namespace ebay.Controllers
 
                     return RedirectToAction("Index");
                 }
-                else{
-                     
-                     vm.Categories = await _context.Categories.ToListAsync();
-                     return View(vm);
-                    
+                else
+                {
+
+                    vm.Categories = await _context.Categories.ToListAsync();
+                    return View(vm);
+
                 }
 
             }
-            catch(Exception)
+            catch (Exception)
             {
                 _notifyService.Error("Operation failed.");
 
                 return RedirectToAction("Index");
             }
 
-            
+
         }
 
         public async Task<IActionResult> Edit(int? id)
         {
             try
             {
-                var item = await _context.Products.Where(x => x.id == id)
+                var vm = await _context.Products.Where(x => x.id == id)
                 .FirstOrDefaultAsync();
+                var items = new ProductUpdateVm();
+
+                items.Name = vm.Name;
+                items.Description = vm.Description;
+                items.Price = vm.Price;
+                items.Brand = vm.Brand;
+                items.Color = vm.Color;
+                items.Quantity = vm.Quantity;
+                items.CategoryId = vm.CategoryId;
+                items.Categories = await _context.Categories.ToListAsync();
+
 
                 if (id == 0 || id == null)
                 {
-                    throw new Exception("Item not found");
+                    _notifyService.Error("No data found.");
                 }
-                
-
-                return View(item);
+                return View(items);
             }
-            catch(Exception)
+            catch (Exception)
             {
                 _notifyService.Error("Operation failed.");
 
                 return RedirectToAction("Index");
             }
-            
+
         }
 
         [HttpPost]
-        public async Task<IActionResult> Edit(int id ,ProductionUpdateVm vm)
+        public async Task<IActionResult> Edit(int id, ProductUpdateVm vm)
         {
             try
             {
@@ -128,8 +139,8 @@ namespace ebay.Controllers
                     .FirstOrDefaultAsync();
                 if (ModelState.IsValid)
                 {
-                    
-                    using (var tx= new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
+
+                    using (var tx = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
                     {
                         items.Name = vm.Name;
                         items.Description = vm.Description;
@@ -137,14 +148,20 @@ namespace ebay.Controllers
                         items.Brand = vm.Brand;
                         items.Color = vm.Color;
                         items.Quantity = vm.Quantity;
+                        items.Category = await _context.Categories.Where(x => x.id == vm.CategoryId).FirstOrDefaultAsync();
+
                         await _context.SaveChangesAsync();
                         _notifyService.Success("Product edited successfully.");
-                        tx.Complete(); 
+                        tx.Complete();
                     }
 
                     return RedirectToAction("Index");
                 }
-                return View();
+                else
+                {
+                    vm.Categories = await _context.Categories.ToListAsync();
+                    return View(vm);
+                }
             }
             catch (Exception)
             {
@@ -162,10 +179,10 @@ namespace ebay.Controllers
                 {
                     return NotFound();
                 }
-                using(var tx = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
+                using (var tx = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
                 {
-                    var res = await _context.Products.Where(x=> x.id == id).FirstOrDefaultAsync();
-                    
+                    var res = await _context.Products.Where(x => x.id == id).FirstOrDefaultAsync();
+
                     _context.Products.Remove(res);
                     _context.SaveChanges();
                     _notifyService.Success("Product deleted successfully.");
@@ -173,7 +190,7 @@ namespace ebay.Controllers
                 }
                 return RedirectToAction("Index");
             }
-            catch(Exception)
+            catch (Exception)
             {
                 _notifyService.Error("Operation failed.");
                 return RedirectToAction("Index");

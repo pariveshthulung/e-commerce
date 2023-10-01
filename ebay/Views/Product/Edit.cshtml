@@ -1,5 +1,5 @@
-﻿@using ebay.ViewModel
-@model Product
+﻿
+@model ebay.ViewModel.ProductUpdateVm
 
 
 <h1>This is Update page</h1>
@@ -10,6 +10,12 @@
             <label asp-for="Name" class="form-label"></label>
             <input asp-for="Name" class="form-control" id="CategoryName">
             <span asp-validation-for="Name" class="text-danger"></span>
+        </div>
+        <div class="mb-3 row">
+            <label asp-for="CategoryId" class="form-lable"></label>
+            <select class="form-select" asp-for="CategoryId" asp-items="@Model.CategoryList()">
+                <option disabled selected>--SELECT CATEGORY--</option>
+            </select>
         </div>
         <div class="mb-3 row">
             <label asp-for="Description" class="form-label"></label>
