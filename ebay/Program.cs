@@ -5,6 +5,8 @@ using AspNetCoreHero.ToastNotification;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using ebay.Manager;
 using ebay.Manager.Interface;
+using ebay.Provider.Interface;
+using ebay.Provider;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddRazorPages()
@@ -24,6 +26,7 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
     .AddCookie(x=> {x.LoginPath = "/Auth/LogIn";});
 
 builder.Services.AddScoped<IAuthManager,AuthManager>();
+builder.Services.AddScoped<ICurrentUserProvider,CurrentUserProvider>();
 
 var app = builder.Build();
 

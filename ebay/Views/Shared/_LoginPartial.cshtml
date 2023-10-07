@@ -1,27 +1,18 @@
-﻿@using Microsoft.AspNetCore.Identity
-@inject SignInManager<IdentityUser> SignInManager
-@inject UserManager<IdentityUser> UserManager
-
-<ul class="navbar-nav">
-@if (SignInManager.IsSignedIn(User))
-{
-    <li class="nav-item">
-        <a  class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Hello @User.Identity?.Name!</a>
-    </li>
-    <li class="nav-item">
-        <form  class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
-            <button  type="submit" class="nav-link btn btn-link text-dark">Logout</button>
-        </form>
-    </li>
+﻿@using ebay.Provider.Interface
+@inject ICurrentUserProvider _currentUserProvider
+@{
+    var currentUser = await _currentUserProvider.GetCurrentUser();
 }
-else
-{
-    <li class="nav-item">
-        <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Register">Register</a>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Login">Login</a>
-    </li>
-}
-</ul>
 
+@if(_currentUserProvider.IsLoggedIn())
+{
+    <div class="d-flex gap-2 align-items-center justify-content-center">
+        @* <span>
+            Logged in as @currentUser?.FirstName
+        </span>
+        <a asp-action="LogOut" asp-controller="Auth" class= "btn btn-danger">
+            Logout
+        </a> *@
+        @* <a asp-action="LogOut" asp-controller="Auth" class="dropdown-item">Logout</a> *@
+    </div>
+}

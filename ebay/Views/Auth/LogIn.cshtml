@@ -1,14 +1,7 @@
- 
-@model ebay.ViewModel.AuthSignInVm;
+@model ebay.ViewModel.AuthSignInVm
 <div class="row">
     <div class="col-4">
-        @* @if (!string.IsNullOrEmpty(Model.ErrorMessage))
-        {
-            <div class="alert alert-danger">
-                @Model.ErrorMessage
-            </div>
-        } *@
-        <form method="post" class="card">
+        <form method="post" class="card page page-center">
             <div class="card-header">
                 <h5 class="card-title">
                     Login
@@ -28,7 +21,10 @@
             </div>
             <div class="card-footer">
                 <button class="btn btn-block btn-success">
-                    Login!
+                    Sign in!
+                </button>
+                <button class="btn btn-block btn-success">
+                    Sign up!
                 </button>
             </div>
         </form>
