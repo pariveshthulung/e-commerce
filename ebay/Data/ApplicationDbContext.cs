@@ -1,4 +1,5 @@
-﻿using ebay.Models;
+﻿using ebay.Entity;
+using ebay.Models;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
@@ -16,6 +17,7 @@ public class ApplicationDbContext : IdentityDbContext
     public DbSet<Customer> Customers { get; set; }
     public DbSet<Order> Order { get; set; }
     public DbSet<OrderItems> OrderItems { get; set; }
+    public DbSet<User> Users { get; set; }
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
