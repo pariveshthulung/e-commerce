@@ -60,21 +60,10 @@ public class AuthController : Controller
             var userExit = await _context.Users.AnyAsync(x => x.Email == vm.Email);
             if (!userExit)
             {
-                using (var tx = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
-                {
-                    var Users = new User();
-                    Users.FirstName = vm.FirstName;
-                    Users.LastName = vm.LastName;
-                    Users.Email = vm.Email;
-                    Users.PasswordHash = BCrypt.Net.BCrypt.HashPassword(vm.Password);
-                    await _context.Users.AddAsync(Users);
-                    await _context.SaveChangesAsync();
-                    _notifyService.Success("User registered successfully.");
-                    tx.Complete();
-                }
+                await _authManger.Register(vm);
                 return RedirectToAction("LogIn", "Auth");
             }
-            _notifyService.Error("User already exits");
+            _notifyService.Error("User already exits with same Email !!!");
             return RedirectToAction("Registration", "Auth");
 
         }

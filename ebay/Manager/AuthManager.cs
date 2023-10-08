@@ -1,9 +1,11 @@
 ﻿using System.Collections.Specialized;
 using System.Security.Claims;
+using System.Transactions;
 using AspNetCoreHero.ToastNotification.Abstractions;
 using ebay.Data;
 using ebay.Entity;
 using ebay.Manager.Interface;
+using ebay.ViewModel;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
@@ -30,12 +32,10 @@ public class AuthManager : IAuthManager
             if (user == null)
             {
                 _notifyService.Error("Invalid username.");
-                throw new Exception("Invalid username");
             }
             if (!BCrypt.Net.BCrypt.Verify(Password, user.PasswordHash))
             {
                 _notifyService.Error("Invalid username and password.");
-                throw new Exception("Username and password do not match");
             }
             var httpContext = _contextAccessor.HttpContext;
             var claim = new List<Claim>
@@ -56,4 +56,21 @@ public class AuthManager : IAuthManager
     {
         await _contextAccessor.HttpContext.SignOutAsync();
     }
+
+    public async Task Register(AuthRegisterVm vm)
+    {
+        using (var tx = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
+                {
+                    var Users = new User();
+                    Users.FirstName = vm.FirstName;
+                    Users.LastName = vm.LastName;
+                    Users.Email = vm.Email;
+                    Users.PasswordHash = BCrypt.Net.BCrypt.HashPassword(vm.Password);
+                    await _context.Users.AddAsync(Users);
+                    await _context.SaveChangesAsync();
+                    _notifyService.Success("User registered successfully.");
+                    tx.Complete();
+                }
+    }
+
 }
