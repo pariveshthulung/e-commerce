@@ -16,6 +16,8 @@ using Microsoft.Identity.Client;
 
 namespace ebay.Controllers
 {
+    [Route("api/[controller]")]
+    [ApiController]
     public class ProductController : Controller
     {
 
