@@ -7,12 +7,12 @@
 @if(_currentUserProvider.IsLoggedIn())
 {
     <div class="d-flex gap-2 align-items-center justify-content-center">
-        @* <span>
-            Logged in as @currentUser?.FirstName
+        <span>
+            @currentUser?.FirstName
         </span>
-        <a asp-action="LogOut" asp-controller="Auth" class= "btn btn-danger">
+        @* <a asp-action="LogOut" asp-controller="Auth" class= "btn btn-danger">
             Logout
-        </a> *@
-        @* <a asp-action="LogOut" asp-controller="Auth" class="dropdown-item">Logout</a> *@
+        </a> 
+         <a asp-action="LogOut" asp-controller="Auth" class="dropdown-item">Logout</a> *@
     </div>
 }
