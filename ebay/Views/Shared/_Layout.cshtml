@@ -1,4 +1,6 @@
-﻿<!doctype html>
+﻿@using ebay.Provider.Interface
+@inject ICurrentUserProvider _currentUserProvider
+<!doctype html>
 <!--
 * Tabler - Premium and Open Source dashboard template with responsive and high quality UI.
 * @@version 1.0.0-beta19
@@ -174,7 +176,17 @@
                             <a href="#" class="dropdown-item">Feedback</a>
                             <div class="dropdown-divider"></div>
                             <a href="./settings.html" class="dropdown-item">Settings</a>
-                            <a asp-action="LogOut" asp-controller="Auth" class="dropdown-item">Logout</a>
+                            @{ var currentUser = await _currentUserProvider.GetCurrentUser();
+                                if(currentUser==null){
+                                  <a asp-action="LogIn" asp-controller="Auth" class="dropdown-item">Log-in</a>
+
+                                }
+                                else{
+
+                                 <a asp-action="LogOut" asp-controller="Auth" class="dropdown-item">Log-out</a>
+                                }
+
+                            }
                         </div>
                     </div>
                 </div>
