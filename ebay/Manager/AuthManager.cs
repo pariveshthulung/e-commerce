@@ -32,10 +32,14 @@ public class AuthManager : IAuthManager
             if (user == null)
             {
                 _notifyService.Error("Invalid username.");
+                throw new Exception("Invalid username");
+
             }
             if (!BCrypt.Net.BCrypt.Verify(Password, user.PasswordHash))
             {
                 _notifyService.Error("Invalid username and password.");
+                throw new Exception("Username and password do not match");
+
             }
             var httpContext = _contextAccessor.HttpContext;
             var claim = new List<Claim>

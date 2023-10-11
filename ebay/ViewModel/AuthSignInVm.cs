@@ -11,5 +11,6 @@ public class AuthSignInVm
     public string? Username { get; set; }
     [Required]
     public string? Password { get; set; }
+    public string? ErrorMessage;
 
 }
