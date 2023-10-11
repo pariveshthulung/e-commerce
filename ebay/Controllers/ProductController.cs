@@ -56,26 +56,26 @@ namespace ebay.Controllers
 
                 if (ModelState.IsValid)
                 {
-                    //adding transactioScope for data integrity
-                    using (var tx = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
-                    {
+                    // //adding transactioScope for data integrity
+                    // using (var tx = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
+                    // {
 
-                        var items = new Product();
-                        items.Name = vm.Name;
-                        items.Description = vm.Description;
-                        items.Price = vm.Price;
-                        items.Brand = vm.Brand;
-                        items.Color = vm.Color;
-                        items.Quantity = vm.Quantity;
+                    //     var items = new Product();
+                    //     items.Name = vm.Name;
+                    //     items.Description = vm.Description;
+                    //     items.Price = vm.Price;
+                    //     items.Brand = vm.Brand;
+                    //     items.Color = vm.Color;
+                    //     items.Quantity = vm.Quantity;
 
-                        items.Category = await _context.Categories.Where(x => x.id == vm.CategoryId).FirstOrDefaultAsync();
+                    //     items.Category = await _context.Categories.Where(x => x.id == vm.CategoryId).FirstOrDefaultAsync();
 
 
-                        _context.Products.Add(items);
-                        await _context.SaveChangesAsync();
-                        _notifyService.Success("Product added successfully.");
-                        tx.Complete();
-                    }
+                    //     _context.Products.Add(items);
+                    //     await _context.SaveChangesAsync();
+                    //     _notifyService.Success("Product added successfully.");
+                    //     tx.Complete();
+                    // }
 
                     return RedirectToAction("Index");
                 }
