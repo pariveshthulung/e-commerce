@@ -2,7 +2,7 @@
 
 namespace ebay.Repository.IRepository;
 
-public interface IProduction : IRepository<Product>
+public interface IProductRepository : IRepository<Product>
 {
     void Update(Product obj);
 }

@@ -8,6 +8,7 @@ using ebay.Manager.Interface;
 using ebay.ViewModel;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace ebay.Manager;
@@ -38,7 +39,9 @@ public class AuthManager : IAuthManager
             if (!BCrypt.Net.BCrypt.Verify(Password, user.PasswordHash))
             {
                 _notifyService.Error("Invalid username and password.");
+                return RedirectToAction("LogIn", "Auth");
                 throw new Exception("Username and password do not match");
+
 
             }
             var httpContext = _contextAccessor.HttpContext;
