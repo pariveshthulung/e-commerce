@@ -15,10 +15,6 @@ public class Repository<T> : IRepository<T> where T : class
         _context = context;
         this.dbset = _context.Set<T>(); //dbset == _context.products
     }
-    public void Add(T entity)
-    {
-        dbset.Add(entity);
-    }
     public T Get(Expression<Func<T, bool>> filter)
     {
         IQueryable<T> query = dbset;
