@@ -32,14 +32,12 @@ public class ProductRepository : Repository<Product> , IProductRepository
                         items.Category = await _context.Categories.Where(x => x.id == vm.CategoryId).FirstOrDefaultAsync();
 
 
-                        _context.Products.Add(items);
-                        await _context.SaveChangesAsync();
-                        _notifyService.Success("Product added successfully.");
+                        await _context.Products.AddAsync(items);
                         tx.Complete();
                     }
     }
 
-    public void Update(ProductUpdateVm vm)
+    public Task Update(ProductUpdateVm vm)
     {
         throw new NotImplementedException();
     }

@@ -15,18 +15,18 @@ public class Repository<T> : IRepository<T> where T : class
         _context = context;
         this.dbset = _context.Set<T>(); //dbset == _context.products
     }
-    public T Get(Expression<Func<T, bool>> filter)
+
+    public async Task<T> Get(Expression<Func<T, bool>> filter)
     {
         IQueryable<T> query = dbset;
         query = query.Where(filter);
-        return query.First();
-
+        return await query.FirstAsync();
     }
 
-    public IEnumerable<T> GetAll()
+    public async Task<IEnumerable<T>> GetAll()
     {
         IQueryable<T> query = dbset;
-        return query.ToList();
+        return await query.ToListAsync();
     }
 
     public void Remove(T entity)
