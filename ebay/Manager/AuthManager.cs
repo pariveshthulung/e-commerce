@@ -27,18 +27,18 @@ public class AuthManager : IAuthManager
     }
     public async Task LogIn(string Username, string Password)
     {
-        
-            var user = await _context.Users.FirstOrDefaultAsync(x => x.Email == Username);
-            if (user == null)
-            {
-                _notifyService.Error("Invalid username.");
-                throw new Exception("Invalid username");
 
-            }
-            if (!BCrypt.Net.BCrypt.Verify(Password, user.PasswordHash))
-            {
-                _notifyService.Error("Invalid username and password.");
-                throw new Exception("Username and password do not match");
+
+        var user = await _context.Users.FirstOrDefaultAsync(x => x.Email == Username);
+        if (user == null)
+        {
+            throw new Exception("Invalid username");
+
+
+        }
+        if (!BCrypt.Net.BCrypt.Verify(Password, user.PasswordHash))
+        {
+            throw new Exception("Username and password do not match");
 
 
             }
@@ -54,6 +54,7 @@ public class AuthManager : IAuthManager
         
 
 
+
     public async Task LogOut()
     {
         await _contextAccessor.HttpContext.SignOutAsync();
@@ -62,17 +63,17 @@ public class AuthManager : IAuthManager
     public async Task Register(AuthRegisterVm vm)
     {
         using (var tx = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
-                {
-                    var Users = new User();
-                    Users.FirstName = vm.FirstName;
-                    Users.LastName = vm.LastName;
-                    Users.Email = vm.Email;
-                    Users.PasswordHash = BCrypt.Net.BCrypt.HashPassword(vm.Password);
-                    await _context.Users.AddAsync(Users);
-                    await _context.SaveChangesAsync();
-                    _notifyService.Success("User registered successfully.");
-                    tx.Complete();
-                }
+        {
+            var Users = new User();
+            Users.FirstName = vm.FirstName;
+            Users.LastName = vm.LastName;
+            Users.Email = vm.Email;
+            Users.PasswordHash = BCrypt.Net.BCrypt.HashPassword(vm.Password);
+            await _context.Users.AddAsync(Users);
+            await _context.SaveChangesAsync();
+            _notifyService.Success("User registered successfully.");
+            tx.Complete();
+        }
     }
 
 }

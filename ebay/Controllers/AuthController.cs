@@ -41,10 +41,10 @@ public class AuthController : Controller
             await _authManger.LogIn(vm.Username, vm.Password);
             return RedirectToAction("Index", "Public");
         }
-        catch
+        catch(Exception e)
         {
-
-            return RedirectToAction("LogIn", "Auth");
+            vm.ErrorMessage=e.Message;
+            return View(vm);
 
         }
     }

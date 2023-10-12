@@ -70,6 +70,7 @@ namespace ebay.Controllers
                         _notifyService.Success("Product added successfully.");
                         tx.Complete();
                     }
+
                     return RedirectToAction("Index");
                 }
                 else
