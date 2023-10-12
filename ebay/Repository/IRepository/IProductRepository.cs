@@ -5,6 +5,7 @@ namespace ebay.Repository.IRepository;
 
 public interface IProductRepository : IRepository<Product>
 {
-    void Update(ProductUpdateVm vm);
-    void Task<AddAsync> (ProductAddVm vm);
+    ProductUpdateVm UpdateDisplay(int? id);
+    Task AddAsync (ProductAddVm vm);
+    Task Update(int id,ProductUpdateVm vm);
 }

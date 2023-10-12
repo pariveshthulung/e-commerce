@@ -6,6 +6,8 @@ using System.Transactions;
 using AspNetCoreHero.ToastNotification.Abstractions;
 using ebay.Data;
 using ebay.Models;
+using ebay.Repository;
+using ebay.Repository.IRepository;
 using ebay.ViewModel;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -16,17 +18,19 @@ using Microsoft.Identity.Client;
 
 namespace ebay.Controllers
 {
-    
+
     public class ProductController : Controller
     {
 
+        private readonly IUnitOfWork _unitOfWork;
         private readonly ApplicationDbContext _context;
         public INotyfService _notifyService { get; }
 
-        public ProductController(ApplicationDbContext context, INotyfService notifyService)
+        public ProductController(IUnitOfWork unitOfWork, INotyfService notifyService, ApplicationDbContext context)
         {
-            _context = context;
+            _unitOfWork = unitOfWork;
             _notifyService = notifyService;
+            _context = context;
         }
         // GET: /<controller>/
         public async Task<IActionResult> Index(ProductSearchVm vm)
@@ -45,7 +49,7 @@ namespace ebay.Controllers
         {
             var vm = new ProductAddVm();
             vm.Categories = await _context.Categories.ToListAsync();
-
+            // vm.Categories = await _unitOfWork.CategoryRepo.GetAll();
             return View(vm);
         }
         [HttpPost]
@@ -56,76 +60,44 @@ namespace ebay.Controllers
 
                 if (ModelState.IsValid)
                 {
-                    //adding transactioScope for data integrity
+
+
+                    // adding transactioScope for data integrity
                     using (var tx = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
                     {
-
-                        var items = new Product();
-                        items.Name = vm.Name;
-                        items.Description = vm.Description;
-                        items.Price = vm.Price;
-                        items.Brand = vm.Brand;
-                        items.Color = vm.Color;
-                        items.Quantity = vm.Quantity;
-
-                        items.Category = await _context.Categories.Where(x => x.id == vm.CategoryId).FirstOrDefaultAsync();
-
-
-                        _context.Products.Add(items);
-                        await _context.SaveChangesAsync();
+                        await _unitOfWork.ProductRepo.AddAsync(vm);
+                        await _unitOfWork.Save();
                         _notifyService.Success("Product added successfully.");
                         tx.Complete();
                     }
-
                     return RedirectToAction("Index");
                 }
                 else
                 {
-
                     vm.Categories = await _context.Categories.ToListAsync();
                     return View(vm);
-
                 }
 
             }
             catch (Exception)
             {
                 _notifyService.Error("Operation failed.");
-
                 return RedirectToAction("Index");
             }
 
 
         }
 
-        public async Task<IActionResult> Edit(int? id)
+        public IActionResult Edit(int id)
         {
             try
             {
-                var vm = await _context.Products.Where(x => x.id == id)
-                .FirstOrDefaultAsync();
-                var items = new ProductUpdateVm();
-
-                items.Name = vm.Name;
-                items.Description = vm.Description;
-                items.Price = vm.Price;
-                items.Brand = vm.Brand;
-                items.Color = vm.Color;
-                items.Quantity = vm.Quantity;
-                items.CategoryId = vm.CategoryId;
-                items.Categories = await _context.Categories.ToListAsync();
-
-
-                if (id == 0 || id == null)
-                {
-                    _notifyService.Error("No data found.");
-                }
+                var items = _unitOfWork.ProductRepo.UpdateDisplay(id);
                 return View(items);
             }
             catch (Exception)
             {
                 _notifyService.Error("Operation failed.");
-
                 return RedirectToAction("Index");
             }
 
@@ -136,23 +108,14 @@ namespace ebay.Controllers
         {
             try
             {
-                var items = await _context.Products.Where(x => x.id == id)
-                    .FirstOrDefaultAsync();
                 if (ModelState.IsValid)
                 {
 
                     using (var tx = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
                     {
-                        items.Name = vm.Name;
-                        items.Description = vm.Description;
-                        items.Price = vm.Price;
-                        items.Brand = vm.Brand;
-                        items.Color = vm.Color;
-                        items.Quantity = vm.Quantity;
-                        items.Category = await _context.Categories.Where(x => x.id == vm.CategoryId).FirstOrDefaultAsync();
-
-                        await _context.SaveChangesAsync();
-                        _notifyService.Success("Product edited successfully.");
+                        await _unitOfWork.ProductRepo.Update(id, vm);
+                        await _unitOfWork.Save();
+                        _notifyService.Success("Product updated successfully.");
                         tx.Complete();
                     }
 
@@ -167,7 +130,6 @@ namespace ebay.Controllers
             catch (Exception)
             {
                 _notifyService.Error("Operation failed.");
-
                 return RedirectToAction("Index");
             }
         }
@@ -182,10 +144,11 @@ namespace ebay.Controllers
                 }
                 using (var tx = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
                 {
-                    var res = await _context.Products.Where(x => x.id == id).FirstOrDefaultAsync();
+                    // var res = await _context.Products.Where(x => x.id == id).FirstOrDefaultAsync();
+                    var res = await _unitOfWork.ProductRepo.Get(x => x.id == id);
 
-                    _context.Products.Remove(res);
-                    _context.SaveChanges();
+                    _unitOfWork.ProductRepo.Remove(res);
+                    await _unitOfWork.Save();
                     _notifyService.Success("Product deleted successfully.");
                     tx.Complete();
                 }

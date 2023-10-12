@@ -27,8 +27,7 @@ public class AuthManager : IAuthManager
     }
     public async Task LogIn(string Username, string Password)
     {
-        try
-        {
+        
             var user = await _context.Users.FirstOrDefaultAsync(x => x.Email == Username);
             if (user == null)
             {
@@ -39,7 +38,6 @@ public class AuthManager : IAuthManager
             if (!BCrypt.Net.BCrypt.Verify(Password, user.PasswordHash))
             {
                 _notifyService.Error("Invalid username and password.");
-                return RedirectToAction("LogIn", "Auth");
                 throw new Exception("Username and password do not match");
 
 
@@ -53,11 +51,8 @@ public class AuthManager : IAuthManager
             await httpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme,
                 new ClaimsPrincipal(claimsIdentity));
         }
-        catch
-        {
-            
-        }
-    }
+        
+
 
     public async Task LogOut()
     {
