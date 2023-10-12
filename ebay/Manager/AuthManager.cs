@@ -8,6 +8,7 @@ using ebay.Manager.Interface;
 using ebay.ViewModel;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace ebay.Manager;
@@ -27,27 +28,32 @@ public class AuthManager : IAuthManager
     public async Task LogIn(string Username, string Password)
     {
 
+
         var user = await _context.Users.FirstOrDefaultAsync(x => x.Email == Username);
         if (user == null)
         {
             throw new Exception("Invalid username");
+
 
         }
         if (!BCrypt.Net.BCrypt.Verify(Password, user.PasswordHash))
         {
             throw new Exception("Username and password do not match");
 
-        }
-        var httpContext = _contextAccessor.HttpContext;
-        var claim = new List<Claim>
+
+            }
+            var httpContext = _contextAccessor.HttpContext;
+            var claim = new List<Claim>
             {
                 new ("Id" , user.Id.ToString())
             };
-        var claimsIdentity = new ClaimsIdentity(claim, CookieAuthenticationDefaults.AuthenticationScheme);
-        await httpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme,
-            new ClaimsPrincipal(claimsIdentity));
+            var claimsIdentity = new ClaimsIdentity(claim, CookieAuthenticationDefaults.AuthenticationScheme);
+            await httpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme,
+                new ClaimsPrincipal(claimsIdentity));
+        }
+        
 
-    }
+
 
     public async Task LogOut()
     {

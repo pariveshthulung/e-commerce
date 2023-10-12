@@ -7,6 +7,8 @@ using ebay.Manager;
 using ebay.Manager.Interface;
 using ebay.Provider.Interface;
 using ebay.Provider;
+using ebay.Repository.IRepository;
+using ebay.Repository;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddRazorPages()
@@ -27,6 +29,7 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
 
 builder.Services.AddScoped<IAuthManager,AuthManager>();
 builder.Services.AddScoped<ICurrentUserProvider,CurrentUserProvider>();
+builder.Services.AddScoped<IUnitOfWork,UnitOfWork>();
 
 var app = builder.Build();
 
