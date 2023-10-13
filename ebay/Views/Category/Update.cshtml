@@ -1,0 +1,25 @@
+﻿@model ebay.ViewModel.CategoryAddVm
+
+<div class="row">
+    <h2 class="text-center"></h2>Update Category</h2>
+</div>
+<div class="container">
+    <form method="post">
+
+        <div class="mb-3 row">
+            <label asp-for="Name" class="form-label"></label>
+            <input asp-for="Name" class="form-control">
+            <span asp-validation-for="Name" class="text-danger"></span>
+        </div>
+        <div class="row">
+            <div class="col-6 col-md-3">
+                    <button type="submit" class="btn btn-primary form-control">Update</button>
+            </div>
+            <div class="col-6 col-md-3">
+                <a asp-controller="Category" asp-action="Index" class="btn btn-secondary border form-control">
+                    Back
+                </a>
+            </div>
+        </div>
+    </form>
+</div>

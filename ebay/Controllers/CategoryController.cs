@@ -5,6 +5,7 @@ using ebay.Models;
 using ebay.ViewModel;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace ebay.Controllers;
 
@@ -20,7 +21,7 @@ public class CategoryController : Controller
     }
     public async Task<IActionResult> Index(CategoryVm vm)
     {
-        vm.Cate = await _context.Categories.ToListAsync();
+        vm.Display = await _context.Categories.ToListAsync();
         return View(vm);
     }
 
@@ -29,53 +30,74 @@ public class CategoryController : Controller
         return View();
     }
     [HttpPost]
-    public async Task<IActionResult> Upsert(int? id, CategoryVm vm)
+    public async Task<IActionResult> Add(CategoryAddVm vm)
     {
         try
         {
-
-            using (var tx = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
+            if (ModelState.IsValid)
             {
-                if (id != null)
-                {
-                    var items = await _context.Categories.FirstOrDefaultAsync(x => x.id == id);
-                    items.Name = vm.Name;
-                    await _context.Categories.AddAsync(items);
-                    _notifyService.Success("Category updated successfully");
-                    await _context.SaveChangesAsync();
-
-                }
-                var dataExist = await _context.Categories.AnyAsync(x => x.Name.ToLower() == vm.Name.ToLower());
-                if (!dataExist)
+                using (var tx = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
                 {
                     var items = new Category();
                     items.Name = vm.Name;
                     await _context.Categories.AddAsync(items);
-                    _notifyService.Success("Category added successfully");
                     await _context.SaveChangesAsync();
+                    _notifyService.Success("Category added successfully.");
+                    tx.Complete();
                 }
-                else
-                {
-                    _notifyService.Error("Category exist already!!!");
-                    return RedirectToAction("Index", "Category");
-                }
-                tx.Complete();
+
                 return RedirectToAction("Index", "Category");
             }
+            _notifyService.Error("Invalid data.");
+            return View(vm);
         }
         catch (Exception e)
         {
-            _notifyService.Error("operation fail!!!");
-            throw new Exception(e.Message);
+            _notifyService.Error(e.Message);
+            return RedirectToAction("Index", "Category");
+        }
+    }
+    public async Task<IActionResult> Update(int id)
+    {
+        var vm = new CategoryAddVm();
+        var dataSelected = await _context.Categories.FirstOrDefaultAsync(x => x.id == id);
+        vm.Name = dataSelected.Name;
+        return View(vm);
+    }
+    [HttpPost]
+    public async Task<IActionResult> Update(int id, CategoryAddVm vm)
+    {
+        try
+        {
+            if (!ModelState.IsValid)
+            {
+                _notifyService.Error("Invalid data selected.");
+                return View(vm);
+            }
+            var selectedData = await _context.Categories.FirstOrDefaultAsync(x => x.id == id);
+            using (var tx = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
+            {
+                selectedData.Name = vm.Name;
+                await _context.SaveChangesAsync();
+                _notifyService.Success("Category updated successfully.");
+                tx.Complete();
+            }
+            return RedirectToAction("Index", "Category");
 
+        }
+        catch (Exception e)
+        {
+            _notifyService.Error(e.Message);
+            return RedirectToAction("Index", "Category");
         }
     }
 
     public async Task<IActionResult> Delete(int id)
     {
-        var data = await _context.Categories.FirstOrDefaultAsync(x=>x.id==id);
+        var data = await _context.Categories.FirstOrDefaultAsync(x => x.id == id);
         _context.Categories.Remove(data);
         await _context.SaveChangesAsync();
+        _notifyService.Success("Category deleted successfully.");
         return RedirectToAction("Index", "Category");
     }
 

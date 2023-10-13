@@ -20,8 +20,8 @@
                 </button>
             </div>
             <div class="col-1">
-                <a asp-controller="Category" asp-action="Upsert" class="btn btn-primary">
-                    <i class="bi bi-plus-circle"></i>&nbsp;Add New Product
+                <a asp-controller="Category" asp-action="Add" class="btn btn-primary">
+                    <i class="bi bi-plus-circle"></i>&nbsp;Add New Category
                 </a>
             </div>
         </div>
@@ -44,7 +44,7 @@
         </thead>
 
         <tbody>
-            @foreach (var data in Model.Cate)
+            @foreach (var data in Model.Display)
             {
                 <tr>
                     <td>
@@ -52,11 +52,11 @@
                     </td>
                     <td>
                         <div class="w-75 btn-group" role="group">
-                            <a class="btn btn-primary mx-2" asp-controller="Product" asp-action="Upsert" asp-route-id="@data.id">
+                            <a class="btn btn-primary mx-2" asp-controller="Category" asp-action="Update" asp-route-id="@data.id">
                                 <i class="bi bi-pencil"></i>&nbsp; Edit
                             </a>
                             
-                             <button asp-action="Delete" asp-controller="Product" asp-route-id="@data.id" class="btn btn-danger mx-2">
+                             <button asp-action="Delete" asp-controller="Category" asp-route-id="@data.id" class="btn btn-danger mx-2">
                                  <i class="bi bi-trash"></i>&nbsp; Delete
                             </button>
 
