@@ -23,11 +23,22 @@ public class Repository<T> : IRepository<T> where T : class
         return await query.FirstAsync();
     }
 
-    public async Task<IEnumerable<T>> GetAll()
+    public async Task<List<T>> GetAll()
     {
         IQueryable<T> query = dbset;
         return await query.ToListAsync();
     }
+
+    // public IQueryable<T> GetQueryable()
+    // {
+    //     return dbset;
+    // }
+
+    // public  Task<T> Include(Expression<Func<T, bool>> filter)
+    // {
+    //     IQueryable<T> query = dbset;
+    //     return  query.Include();
+    // }
 
     public void Remove(T entity)
     {
