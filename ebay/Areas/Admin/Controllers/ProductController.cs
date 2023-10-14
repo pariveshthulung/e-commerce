@@ -16,8 +16,9 @@ using Microsoft.Identity.Client;
 
 // For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
-namespace ebay.Controllers
+namespace ebay.Areas.Admin.Controllers
 {
+    [Area("Admin")]
 
     public class ProductController : Controller
     {

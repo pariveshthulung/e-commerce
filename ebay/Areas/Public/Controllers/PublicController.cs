@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace ebay.Controllers;
-
+namespace ebay.Areas.Public.Controllers;
+[Area("Public")]
 [AllowAnonymous]
 public class PublicController :Controller
 {

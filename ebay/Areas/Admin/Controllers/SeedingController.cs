@@ -6,8 +6,10 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
-namespace ebay.Controllers;
+namespace ebay.Areas.Admin.Controllers;
 [AllowAnonymous]
+[Area("Admin")]
+
 public class SeedingController : Controller
 {
     private readonly ApplicationDbContext _context;

@@ -7,7 +7,9 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
-namespace ebay.Controllers;
+namespace ebay.Areas.Admin.Controllers;
+
+[Area("Admin")]
 
 public class CategoryController : Controller
 {

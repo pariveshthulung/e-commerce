@@ -10,8 +10,10 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
-namespace ebay.Controllers;
+namespace ebay.Areas.Admin.Controllers;
 [AllowAnonymous]
+[Area("Admin")]
+
 public class AuthController : Controller
 {
     private readonly ApplicationDbContext _context;
@@ -39,11 +41,11 @@ public class AuthController : Controller
         try
         {
             await _authManger.LogIn(vm.Username, vm.Password);
-            return RedirectToAction("Index", "Public");
+            return RedirectToAction("Index", "Public", new { area = "Public" });
         }
-        catch(Exception e)
+        catch (Exception e)
         {
-            vm.ErrorMessage=e.Message;
+            vm.ErrorMessage = e.Message;
             return View(vm);
 
         }
@@ -77,6 +79,6 @@ public class AuthController : Controller
     public async Task<IActionResult> LogOut()
     {
         await _authManger.LogOut();
-        return RedirectToAction("Index", "Public");
+        return RedirectToAction("Index", "Public", new { area = "Public" });
     }
 }

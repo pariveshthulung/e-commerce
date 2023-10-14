@@ -69,12 +69,12 @@
 								<a href="./settings.html" class="dropdown-item">Settings</a>
 								@{ var currentUser = await _currentUserProvider.GetCurrentUser();
 									if(currentUser==null){
-									<a asp-action="LogIn" asp-controller="Auth" class="dropdown-item">Log-in</a>
+									<a asp-action="LogIn" asp-controller="Auth" asp-area="Admin" class="dropdown-item">Log-in</a>
 
 									}
 									else{
 
-									<a asp-action="LogOut" asp-controller="Auth" class="dropdown-item">Log-out</a>
+									<a asp-action="LogOut" asp-controller="Auth" asp-area="Admin" class="dropdown-item">Log-out</a>
 									}
 								}
 							</div>

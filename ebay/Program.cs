@@ -19,17 +19,17 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
-builder.Services.AddNotyf(config=> { config.DurationInSeconds = 10;config.IsDismissable = true;config.Position = NotyfPosition.BottomRight; });
+builder.Services.AddNotyf(config => { config.DurationInSeconds = 10; config.IsDismissable = true; config.Position = NotyfPosition.BottomRight; });
 
 // builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
 //     .AddEntityFrameworkStores<ApplicationDbContext>();
 builder.Services.AddControllersWithViews();
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-    .AddCookie(x=> {x.LoginPath = "/Auth/LogIn";});
+    .AddCookie(x => { x.LoginPath = "/Auth/LogIn"; });
 
-builder.Services.AddScoped<IAuthManager,AuthManager>();
-builder.Services.AddScoped<ICurrentUserProvider,CurrentUserProvider>();
-builder.Services.AddScoped<IUnitOfWork,UnitOfWork>();
+builder.Services.AddScoped<IAuthManager, AuthManager>();
+builder.Services.AddScoped<ICurrentUserProvider, CurrentUserProvider>();
+builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
 var app = builder.Build();
 
@@ -54,7 +54,10 @@ app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Public}/{action=Index}/{id?}").RequireAuthorization();
+    pattern: "{area=Public}/{controller=Public}/{action=Index}/{id?}").RequireAuthorization();
+app.MapControllerRoute(
+    name: "Admin",
+    pattern: "{area=Admin}/{controller=Auth}/{action=LogIn}/{id?}").RequireAuthorization();
 app.MapRazorPages();
 
 app.Run();

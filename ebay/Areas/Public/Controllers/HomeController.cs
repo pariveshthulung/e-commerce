@@ -2,8 +2,8 @@
 using Microsoft.AspNetCore.Mvc;
 using ebay.Models;
 
-namespace ebay.Controllers;
-
+namespace ebay.Areas.Public.Controllers;
+[Area("Public")]
 public class HomeController : Controller
 {
     private readonly ILogger<HomeController> _logger;
