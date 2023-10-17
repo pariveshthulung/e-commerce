@@ -14,14 +14,10 @@ namespace ebay.ViewModel
         [Required]
         public int Price { get; set; }
         public string? Brand { get; set; }
-        [Required]
-        public int Quantity { get; set; }
-        public int Sold { get; set; }
-        [Required]
-        public string? Color { get; set; }
-        public int CategoryId { get; set; }
-        [ValidateNever]
-        public List<Category>? Categories { get; set; }
+		public string? Product_image { get; set; }
+        public int CategoryId { get ; set; }
+        // [ValidateNever]
+        public List<Category>? Categories ;
 
 
         public SelectList CategoryList(){

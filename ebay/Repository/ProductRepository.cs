@@ -28,8 +28,6 @@ public class ProductRepository : Repository<Product>, IProductRepository
             items.Description = vm.Description;
             items.Price = vm.Price;
             items.Brand = vm.Brand;
-            items.Color = vm.Color;
-            items.Quantity = vm.Quantity;
 
             items.Category = _context.Categories.Where(x => x.id == vm.CategoryId).FirstOrDefault();
 
@@ -49,8 +47,6 @@ public class ProductRepository : Repository<Product>, IProductRepository
             items.Description = vm.Description;
             items.Price = vm.Price;
             items.Brand = vm.Brand;
-            items.Color = vm.Color;
-            items.Quantity = vm.Quantity;
             items.Category = await _context.Categories.Where(x => x.id == vm.CategoryId).FirstOrDefaultAsync();
 
         //     tx.Complete();
@@ -71,8 +67,6 @@ public class ProductRepository : Repository<Product>, IProductRepository
         items.Description = obj.Description;
         items.Price = obj.Price;
         items.Brand = obj.Brand;
-        items.Color = obj.Color;
-        items.Quantity = obj.Quantity;
         items.CategoryId = obj.CategoryId;
         items.Categories = _context.Categories.ToList();
         return items;
