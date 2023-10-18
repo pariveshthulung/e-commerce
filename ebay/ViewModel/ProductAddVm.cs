@@ -12,8 +12,10 @@ namespace ebay.ViewModel
         [Required]
         public string? Description { get; set; }
         [Required]
-        public int Price { get; set; }
+        public decimal Price { get; set; }
         public string? Brand { get; set; }
+        public int Stock { get; set; }
+
 		public string? Product_image { get; set; }
         public int CategoryId { get ; set; }
         // [ValidateNever]

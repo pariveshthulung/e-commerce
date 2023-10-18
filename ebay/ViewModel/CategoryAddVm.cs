@@ -2,5 +2,5 @@
 
 public class CategoryAddVm
 {
-    public string Name { get; set; }
+    public string? Name { get; set; }
 }
