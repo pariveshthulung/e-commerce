@@ -1,5 +1,4 @@
-﻿
-@model ebay.ViewModel.ProductUpdateVm
+﻿@model ebay.ViewModel.ProductUpdateVm
 
 
 <h1>This is Update page</h1>
@@ -8,7 +7,7 @@
     <form method="post">
         <div class="mb-3 row">
             <label asp-for="Name" class="form-label"></label>
-            <input asp-for="Name" class="form-control" id="CategoryName">
+            <input asp-for="Name" class="form-control">
             <span asp-validation-for="Name" class="text-danger"></span>
         </div>
         <div class="mb-3 row">
@@ -19,26 +18,26 @@
         </div>
         <div class="mb-3 row">
             <label asp-for="Description" class="form-label"></label>
-            <input asp-for="Description" class="form-control" id="DisplayOrder">
+            <input asp-for="Description" class="form-control">
             <span asp-validation-for="Description" class="text-danger"></span>
             <div class="mb-3 row">
                 <label asp-for="Brand" class="form-label"></label>
-                <input asp-for="Brand" class="form-control" id="CategoryName">
+                <input asp-for="Brand" class="form-control">
                 <span asp-validation-for="Brand" class="text-danger"></span>
             </div>
             <div class="mb-3 row">
                 <label asp-for="Price" class="form-label"></label>
-                <input asp-for="Price" class="form-control" id="DisplayOrder">
+                <input asp-for="Price" class="form-control" >
                 <span asp-validation-for="Price" class="text-danger"></span>
                 <div class="mb-3 row">
-                    <label asp-for="Quantity" class="form-label"></label>
-                    <input asp-for="Quantity" class="form-control" id="CategoryName">
-                    <span asp-validation-for="Quantity" class="text-danger"></span>
+                    <label asp-for="Stock" class="form-label"></label>
+                    <input asp-for="Stock" class="form-control">
+                    <span asp-validation-for="Stock" class="text-danger"></span>
                 </div>
                 <div class="mb-3 row">
-                    <label asp-for="Color" class="form-label"></label>
-                    <input asp-for="Color" class="form-control" id="DisplayOrder">
-                    <span asp-validation-for="Color" class="text-danger"></span>
+                    <label asp-for="Product_image" class="form-label"></label>
+                    <input asp-for="Product_image" class="form-control">
+                    <span asp-validation-for="Product_image" class="text-danger"></span>
 
                 </div>
                 <div class="row">

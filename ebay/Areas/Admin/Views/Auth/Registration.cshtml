@@ -2,6 +2,8 @@
     Layout="_publicLayout";
 }
 @model ebay.ViewModel.AuthRegisterVm;
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+
 <div class="container mt-5 pt-5">
     <div class="row justify-content-center">
         @* <div class="col-6"> *@
@@ -30,8 +32,13 @@
 
             <!-- Password input -->
             <div class="form-outline mb-4">
-                <input type="password" asp-for="Password" class="form-control" />
+                <input type="password" asp-for="Password" name="password" id="password" class="form-control" />
                 <label class="form-label" asp-for="Password">Password</label>
+            </div>
+            <div class="form-outline mb-4">
+                <input type="password" asp-for="Confirm_password" name="confirm_password" id="confirm_password" class="form-control" />
+                <label class="form-label" asp-for="Confirm_password">Confirm Password</label>
+                <span id='message'></span>
             </div>
 
             <!-- Checkbox -->
@@ -44,7 +51,7 @@
 
             <!-- Submit button -->
             <div class="d-flex justify-content-center">
-                <button type="submit" class="btn btn-primary btn-block mb-4">sign-up</button>
+                <button type="submit" id="submit" name= "submit" class="btn btn-primary btn-block mb-4" disabled>sign-up</button>
             </div>
             <!-- sign in buttons -->
             <div class="text-center">
@@ -74,3 +81,14 @@
         @* </div> *@
     </div>
 </div>
+
+<script>
+    $('#password, #confirm_password').on('keyup', function () {
+  if ($('#password').val() == $('#confirm_password').val()) {
+    $('#message').html('Matching').css('color', 'green'),
+    document.getElementById('submit').disabled = false;
+  } else 
+    $('#message').html('Not Matching').css('color', 'red'),
+    document.getElementById('submit').disabled = true;
+});
+</script>

@@ -11,18 +11,18 @@ namespace ebay.Models
 		public string? Name { get; set; }
 		[Required]
 		public string? Description { get; set; }
-        [Required]
-        public int Price { get; set; }
+		[Required]
+		[Column(TypeName = "decimal(18,4)")] // <--
+
+		public decimal Price { get; set; }
+		public int Stock { get; set; }
 		public string? Brand { get; set; }
-        [Required]
-        public int Quantity { get; set; }
-		public int Sold { get; set; }
-        [Required]
-        public string? Color { get; set; }
+		public string? Product_image { get; set; }
 
 		public int CategoryId { get; set; }
 		[ForeignKey("CategoryId")]
 		public virtual Category? Category { get; set; }
+		
 
 	}
 }

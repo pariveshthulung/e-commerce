@@ -51,12 +51,16 @@ public class AuthController : Controller
         }
     }
     public IActionResult Registration()
-    {
+    { 
         return View();
     }
     [HttpPost]
     public async Task<IActionResult> Registration(AuthRegisterVm vm)
     {
+        if(!ModelState.IsValid)
+        {
+            return View(vm);
+        }
         try
         {
             var userExit = await _context.Users.AnyAsync(x => x.Email == vm.Email);
@@ -66,13 +70,13 @@ public class AuthController : Controller
                 return RedirectToAction("LogIn", "Auth");
             }
             _notifyService.Error("User already exits with same Email !!!");
-            return RedirectToAction("Registration", "Auth");
+            return View(vm);
 
         }
         catch (Exception e)
         {
             _notifyService.Error("User registration failed." + e.Message);
-            return RedirectToAction("Registration", "Auth");
+            return View(vm);
 
         }
     }

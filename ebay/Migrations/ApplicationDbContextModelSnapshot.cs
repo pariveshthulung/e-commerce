@@ -245,6 +245,9 @@ namespace ebay.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<long>("PhoneNo")
+                        .HasColumnType("bigint");
+
                     b.Property<string>("UserStatus")
                         .HasColumnType("nvarchar(max)");
 
@@ -254,6 +257,106 @@ namespace ebay.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Users");
+                });
+
+            modelBuilder.Entity("ebay.Models.Address", b =>
+                {
+                    b.Property<int>("id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("id"));
+
+                    b.Property<string>("Address_Line")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("City")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Country_id")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("Is_Default")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Postal_Code")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Region")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Street_no")
+                        .HasColumnType("int");
+
+                    b.Property<int>("User_id")
+                        .HasColumnType("int");
+
+                    b.HasKey("id");
+
+                    b.HasIndex("Country_id");
+
+                    b.HasIndex("User_id");
+
+                    b.ToTable("Addresses");
+                });
+
+            modelBuilder.Entity("ebay.Models.Cart", b =>
+                {
+                    b.Property<int>("id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("id"));
+
+                    b.Property<string>("CartStatus")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("UserId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("User_id")
+                        .HasColumnType("int");
+
+                    b.HasKey("id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Carts");
+                });
+
+            modelBuilder.Entity("ebay.Models.CartItem", b =>
+                {
+                    b.Property<int>("id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("id"));
+
+                    b.Property<int>("Cart_id")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("Cartid")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("Price")
+                        .HasColumnType("decimal(18,4)");
+
+                    b.Property<int>("Product_id")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("Productid")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Quantity")
+                        .HasColumnType("int");
+
+                    b.HasKey("id");
+
+                    b.HasIndex("Cartid");
+
+                    b.HasIndex("Productid");
+
+                    b.ToTable("CartItems");
                 });
 
             modelBuilder.Entity("ebay.Models.Category", b =>
@@ -270,36 +373,9 @@ namespace ebay.Migrations
                     b.HasKey("id");
 
                     b.ToTable("Categories");
-
-                    b.HasData(
-                        new
-                        {
-                            id = 1,
-                            Name = "Electronics"
-                        },
-                        new
-                        {
-                            id = 2,
-                            Name = "Auto Parts"
-                        },
-                        new
-                        {
-                            id = 3,
-                            Name = "Softwares"
-                        },
-                        new
-                        {
-                            id = 4,
-                            Name = "Books"
-                        },
-                        new
-                        {
-                            id = 5,
-                            Name = "Sports"
-                        });
                 });
 
-            modelBuilder.Entity("ebay.Models.Customer", b =>
+            modelBuilder.Entity("ebay.Models.Country", b =>
                 {
                     b.Property<int>("id")
                         .ValueGeneratedOnAdd()
@@ -307,35 +383,12 @@ namespace ebay.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("id"));
 
-                    b.Property<string>("FirstName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("LastName")
+                    b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("id");
 
-                    b.ToTable("Customers");
-
-                    b.HasData(
-                        new
-                        {
-                            id = 1,
-                            FirstName = "Ram",
-                            LastName = "Rai"
-                        },
-                        new
-                        {
-                            id = 2,
-                            FirstName = "Hari",
-                            LastName = "Magar"
-                        },
-                        new
-                        {
-                            id = 3,
-                            FirstName = "Shyam",
-                            LastName = "Limbu"
-                        });
+                    b.ToTable("Countries");
                 });
 
             modelBuilder.Entity("ebay.Models.Order", b =>
@@ -346,36 +399,20 @@ namespace ebay.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("id"));
 
-                    b.Property<int>("CustomerId")
+                    b.Property<string>("Order_status")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<decimal>("Order_total")
+                        .HasColumnType("decimal(18,4)");
+
+                    b.Property<int>("User_id")
                         .HasColumnType("int");
 
                     b.HasKey("id");
 
-                    b.HasIndex("CustomerId");
+                    b.HasIndex("User_id");
 
-                    b.ToTable("Order");
-
-                    b.HasData(
-                        new
-                        {
-                            id = 1,
-                            CustomerId = 1
-                        },
-                        new
-                        {
-                            id = 2,
-                            CustomerId = 1
-                        },
-                        new
-                        {
-                            id = 3,
-                            CustomerId = 3
-                        },
-                        new
-                        {
-                            id = 4,
-                            CustomerId = 2
-                        });
+                    b.ToTable("Orders");
                 });
 
             modelBuilder.Entity("ebay.Models.OrderItems", b =>
@@ -386,48 +423,31 @@ namespace ebay.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("id"));
 
-                    b.Property<int>("OrderDetailsId")
+                    b.Property<int>("Order_id")
                         .HasColumnType("int");
 
                     b.Property<int?>("Orderid")
                         .HasColumnType("int");
 
-                    b.Property<int>("ProductId")
+                    b.Property<decimal>("Price")
+                        .HasColumnType("decimal(18,4)");
+
+                    b.Property<int>("Product_id")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("Productid")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Quantity")
                         .HasColumnType("int");
 
                     b.HasKey("id");
 
                     b.HasIndex("Orderid");
 
-                    b.HasIndex("ProductId");
+                    b.HasIndex("Productid");
 
                     b.ToTable("OrderItems");
-
-                    b.HasData(
-                        new
-                        {
-                            id = 1,
-                            OrderDetailsId = 1,
-                            ProductId = 1
-                        },
-                        new
-                        {
-                            id = 2,
-                            OrderDetailsId = 2,
-                            ProductId = 4
-                        },
-                        new
-                        {
-                            id = 3,
-                            OrderDetailsId = 3,
-                            ProductId = 5
-                        },
-                        new
-                        {
-                            id = 4,
-                            OrderDetailsId = 4,
-                            ProductId = 6
-                        });
                 });
 
             modelBuilder.Entity("ebay.Models.Product", b =>
@@ -444,10 +464,6 @@ namespace ebay.Migrations
                     b.Property<int>("CategoryId")
                         .HasColumnType("int");
 
-                    b.Property<string>("Color")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -456,13 +472,13 @@ namespace ebay.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("Price")
-                        .HasColumnType("int");
+                    b.Property<decimal>("Price")
+                        .HasColumnType("decimal(18,4)");
 
-                    b.Property<int>("Quantity")
-                        .HasColumnType("int");
+                    b.Property<string>("Product_image")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("Sold")
+                    b.Property<int>("Stock")
                         .HasColumnType("int");
 
                     b.HasKey("id");
@@ -470,44 +486,38 @@ namespace ebay.Migrations
                     b.HasIndex("CategoryId");
 
                     b.ToTable("Products");
+                });
 
-                    b.HasData(
-                        new
-                        {
-                            id = 1,
-                            Brand = "Iphone",
-                            CategoryId = 1,
-                            Color = "red",
-                            Description = "This is nice phone.",
-                            Name = "Iphone 11",
-                            Price = 10000,
-                            Quantity = 100,
-                            Sold = 0
-                        },
-                        new
-                        {
-                            id = 2,
-                            Brand = "Samsung",
-                            CategoryId = 1,
-                            Color = "Green",
-                            Description = "This is nice Samsung.",
-                            Name = "SamSung Galaxy",
-                            Price = 50000,
-                            Quantity = 100,
-                            Sold = 0
-                        },
-                        new
-                        {
-                            id = 3,
-                            Brand = "Poco",
-                            CategoryId = 1,
-                            Color = "Blue",
-                            Description = "This is nice POCO.",
-                            Name = "PoCO X3",
-                            Price = 30000,
-                            Quantity = 100,
-                            Sold = 0
-                        });
+            modelBuilder.Entity("ebay.Models.Review", b =>
+                {
+                    b.Property<int>("id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("id"));
+
+                    b.Property<string>("Comment")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Product_id")
+                        .HasColumnType("int");
+
+                    b.Property<int>("RatingValue")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("ReviewDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("User_id")
+                        .HasColumnType("int");
+
+                    b.HasKey("id");
+
+                    b.HasIndex("Product_id");
+
+                    b.HasIndex("User_id");
+
+                    b.ToTable("Reviews");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -561,15 +571,58 @@ namespace ebay.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("ebay.Models.Order", b =>
+            modelBuilder.Entity("ebay.Models.Address", b =>
                 {
-                    b.HasOne("ebay.Models.Customer", "Customer")
+                    b.HasOne("ebay.Models.Country", "Country")
                         .WithMany()
-                        .HasForeignKey("CustomerId")
+                        .HasForeignKey("Country_id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Customer");
+                    b.HasOne("ebay.Entity.User", "User")
+                        .WithMany()
+                        .HasForeignKey("User_id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Country");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("ebay.Models.Cart", b =>
+                {
+                    b.HasOne("ebay.Entity.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("ebay.Models.CartItem", b =>
+                {
+                    b.HasOne("ebay.Models.Cart", "Cart")
+                        .WithMany()
+                        .HasForeignKey("Cartid");
+
+                    b.HasOne("ebay.Models.Product", "Product")
+                        .WithMany()
+                        .HasForeignKey("Productid");
+
+                    b.Navigation("Cart");
+
+                    b.Navigation("Product");
+                });
+
+            modelBuilder.Entity("ebay.Models.Order", b =>
+                {
+                    b.HasOne("ebay.Entity.User", "User")
+                        .WithMany()
+                        .HasForeignKey("User_id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("ebay.Models.OrderItems", b =>
@@ -580,9 +633,7 @@ namespace ebay.Migrations
 
                     b.HasOne("ebay.Models.Product", "Product")
                         .WithMany()
-                        .HasForeignKey("ProductId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("Productid");
 
                     b.Navigation("Order");
 
@@ -598,6 +649,25 @@ namespace ebay.Migrations
                         .IsRequired();
 
                     b.Navigation("Category");
+                });
+
+            modelBuilder.Entity("ebay.Models.Review", b =>
+                {
+                    b.HasOne("ebay.Models.Product", "Product")
+                        .WithMany()
+                        .HasForeignKey("Product_id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("ebay.Entity.User", "User")
+                        .WithMany()
+                        .HasForeignKey("User_id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Product");
+
+                    b.Navigation("User");
                 });
 #pragma warning restore 612, 618
         }
