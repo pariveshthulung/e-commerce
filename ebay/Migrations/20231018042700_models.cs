@@ -3,12 +3,10 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-#pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
-
 namespace ebay.Migrations
 {
     /// <inheritdoc />
-    public partial class initialDb : Migration
+    public partial class models : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -66,17 +64,36 @@ namespace ebay.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Customers",
+                name: "Countries",
                 columns: table => new
                 {
                     id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    FirstName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    LastName = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Customers", x => x.id);
+                    table.PrimaryKey("PK_Countries", x => x.id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Users",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    FirstName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    LastName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    PhoneNo = table.Column<long>(type: "bigint", nullable: false),
+                    Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    PasswordHash = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    UserStatus = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    UserType = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Users", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -125,8 +142,8 @@ namespace ebay.Migrations
                 name: "AspNetUserLogins",
                 columns: table => new
                 {
-                    LoginProvider = table.Column<string>(type: "nvarchar(128)", maxLength: 128, nullable: false),
-                    ProviderKey = table.Column<string>(type: "nvarchar(128)", maxLength: 128, nullable: false),
+                    LoginProvider = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    ProviderKey = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     ProviderDisplayName = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     UserId = table.Column<string>(type: "nvarchar(450)", nullable: false)
                 },
@@ -170,8 +187,8 @@ namespace ebay.Migrations
                 columns: table => new
                 {
                     UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    LoginProvider = table.Column<string>(type: "nvarchar(128)", maxLength: 128, nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(128)", maxLength: 128, nullable: false),
+                    LoginProvider = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     Value = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
@@ -186,45 +203,6 @@ namespace ebay.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "OrderDetails",
-                columns: table => new
-                {
-                    id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    CustomerId = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_OrderDetails", x => x.id);
-                    table.ForeignKey(
-                        name: "FK_OrderDetails_Customers_CustomerId",
-                        column: x => x.CustomerId,
-                        principalTable: "Customers",
-                        principalColumn: "id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "OrderItems",
-                columns: table => new
-                {
-                    id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    OrderDetailsId = table.Column<int>(type: "int", nullable: false),
-                    ProductId = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_OrderItems", x => x.id);
-                    table.ForeignKey(
-                        name: "FK_OrderItems_OrderDetails_OrderDetailsId",
-                        column: x => x.OrderDetailsId,
-                        principalTable: "OrderDetails",
-                        principalColumn: "id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Products",
                 columns: table => new
                 {
@@ -232,13 +210,11 @@ namespace ebay.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Price = table.Column<int>(type: "int", nullable: false),
+                    Price = table.Column<decimal>(type: "decimal(18,4)", nullable: false),
+                    Stock = table.Column<int>(type: "int", nullable: false),
                     Brand = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Quantity = table.Column<int>(type: "int", nullable: false),
-                    Sold = table.Column<int>(type: "int", nullable: false),
-                    Color = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    CategoryId = table.Column<int>(type: "int", nullable: false),
-                    OrderItemsid = table.Column<int>(type: "int", nullable: true)
+                    Product_image = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CategoryId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -249,66 +225,175 @@ namespace ebay.Migrations
                         principalTable: "Categories",
                         principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Addresses",
+                columns: table => new
+                {
+                    id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Street_no = table.Column<int>(type: "int", nullable: false),
+                    Address_Line = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    City = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Region = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Postal_Code = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Country_id = table.Column<int>(type: "int", nullable: false),
+                    User_id = table.Column<int>(type: "int", nullable: false),
+                    Is_Default = table.Column<bool>(type: "bit", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Addresses", x => x.id);
                     table.ForeignKey(
-                        name: "FK_Products_OrderItems_OrderItemsid",
-                        column: x => x.OrderItemsid,
-                        principalTable: "OrderItems",
+                        name: "FK_Addresses_Countries_Country_id",
+                        column: x => x.Country_id,
+                        principalTable: "Countries",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Addresses_Users_User_id",
+                        column: x => x.User_id,
+                        principalTable: "Users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Carts",
+                columns: table => new
+                {
+                    id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    User_id = table.Column<int>(type: "int", nullable: false),
+                    UserId = table.Column<int>(type: "int", nullable: true),
+                    CartStatus = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Carts", x => x.id);
+                    table.ForeignKey(
+                        name: "FK_Carts_Users_UserId",
+                        column: x => x.UserId,
+                        principalTable: "Users",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Orders",
+                columns: table => new
+                {
+                    id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    User_id = table.Column<int>(type: "int", nullable: false),
+                    Order_total = table.Column<decimal>(type: "decimal(18,4)", nullable: false),
+                    Order_status = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Orders", x => x.id);
+                    table.ForeignKey(
+                        name: "FK_Orders_Users_User_id",
+                        column: x => x.User_id,
+                        principalTable: "Users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Reviews",
+                columns: table => new
+                {
+                    id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    RatingValue = table.Column<int>(type: "int", nullable: false),
+                    Comment = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ReviewDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    User_id = table.Column<int>(type: "int", nullable: false),
+                    Product_id = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Reviews", x => x.id);
+                    table.ForeignKey(
+                        name: "FK_Reviews_Products_Product_id",
+                        column: x => x.Product_id,
+                        principalTable: "Products",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Reviews_Users_User_id",
+                        column: x => x.User_id,
+                        principalTable: "Users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "CartItems",
+                columns: table => new
+                {
+                    id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Cart_id = table.Column<int>(type: "int", nullable: false),
+                    Cartid = table.Column<int>(type: "int", nullable: true),
+                    Product_id = table.Column<int>(type: "int", nullable: false),
+                    Productid = table.Column<int>(type: "int", nullable: true),
+                    Quantity = table.Column<int>(type: "int", nullable: false),
+                    Price = table.Column<decimal>(type: "decimal(18,4)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_CartItems", x => x.id);
+                    table.ForeignKey(
+                        name: "FK_CartItems_Carts_Cartid",
+                        column: x => x.Cartid,
+                        principalTable: "Carts",
+                        principalColumn: "id");
+                    table.ForeignKey(
+                        name: "FK_CartItems_Products_Productid",
+                        column: x => x.Productid,
+                        principalTable: "Products",
                         principalColumn: "id");
                 });
 
-            migrationBuilder.InsertData(
-                table: "Categories",
-                columns: new[] { "id", "Name" },
-                values: new object[,]
+            migrationBuilder.CreateTable(
+                name: "OrderItems",
+                columns: table => new
                 {
-                    { 1, "Electronics" },
-                    { 2, "Auto Parts" },
-                    { 3, "Softwares" },
-                    { 4, "Books" },
-                    { 5, "Sports" }
+                    id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Order_id = table.Column<int>(type: "int", nullable: false),
+                    Orderid = table.Column<int>(type: "int", nullable: true),
+                    Product_id = table.Column<int>(type: "int", nullable: false),
+                    Productid = table.Column<int>(type: "int", nullable: true),
+                    Quantity = table.Column<int>(type: "int", nullable: false),
+                    Price = table.Column<decimal>(type: "decimal(18,4)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_OrderItems", x => x.id);
+                    table.ForeignKey(
+                        name: "FK_OrderItems_Orders_Orderid",
+                        column: x => x.Orderid,
+                        principalTable: "Orders",
+                        principalColumn: "id");
+                    table.ForeignKey(
+                        name: "FK_OrderItems_Products_Productid",
+                        column: x => x.Productid,
+                        principalTable: "Products",
+                        principalColumn: "id");
                 });
 
-            migrationBuilder.InsertData(
-                table: "Customers",
-                columns: new[] { "id", "FirstName", "LastName" },
-                values: new object[,]
-                {
-                    { 1, "Ram", "Rai" },
-                    { 2, "Hari", "Magar" },
-                    { 3, "Shyam", "Limbu" }
-                });
+            migrationBuilder.CreateIndex(
+                name: "IX_Addresses_Country_id",
+                table: "Addresses",
+                column: "Country_id");
 
-            migrationBuilder.InsertData(
-                table: "OrderDetails",
-                columns: new[] { "id", "CustomerId" },
-                values: new object[,]
-                {
-                    { 1, 1 },
-                    { 2, 1 },
-                    { 3, 3 },
-                    { 4, 2 }
-                });
-
-            migrationBuilder.InsertData(
-                table: "Products",
-                columns: new[] { "id", "Brand", "CategoryId", "Color", "Description", "Name", "OrderItemsid", "Price", "Quantity", "Sold" },
-                values: new object[,]
-                {
-                    { 1, "Iphone", 1, "red", "This is nice phone.", "Iphone 11", null, 10000, 100, 0 },
-                    { 2, "Samsung", 1, "Green", "This is nice Samsung.", "SamSung Galaxy", null, 50000, 100, 0 },
-                    { 3, "Poco", 1, "Blue", "This is nice POCO.", "PoCO X3", null, 30000, 100, 0 }
-                });
-
-            migrationBuilder.InsertData(
-                table: "OrderItems",
-                columns: new[] { "id", "OrderDetailsId", "ProductId" },
-                values: new object[,]
-                {
-                    { 1, 1, 2001 },
-                    { 2, 2, 2002 },
-                    { 3, 2, 2002 },
-                    { 4, 3, 2003 }
-                });
+            migrationBuilder.CreateIndex(
+                name: "IX_Addresses_User_id",
+                table: "Addresses",
+                column: "User_id");
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
@@ -350,14 +435,34 @@ namespace ebay.Migrations
                 filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
-                name: "IX_OrderDetails_CustomerId",
-                table: "OrderDetails",
-                column: "CustomerId");
+                name: "IX_CartItems_Cartid",
+                table: "CartItems",
+                column: "Cartid");
 
             migrationBuilder.CreateIndex(
-                name: "IX_OrderItems_OrderDetailsId",
+                name: "IX_CartItems_Productid",
+                table: "CartItems",
+                column: "Productid");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Carts_UserId",
+                table: "Carts",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_OrderItems_Orderid",
                 table: "OrderItems",
-                column: "OrderDetailsId");
+                column: "Orderid");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_OrderItems_Productid",
+                table: "OrderItems",
+                column: "Productid");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Orders_User_id",
+                table: "Orders",
+                column: "User_id");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Products_CategoryId",
@@ -365,14 +470,22 @@ namespace ebay.Migrations
                 column: "CategoryId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Products_OrderItemsid",
-                table: "Products",
-                column: "OrderItemsid");
+                name: "IX_Reviews_Product_id",
+                table: "Reviews",
+                column: "Product_id");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Reviews_User_id",
+                table: "Reviews",
+                column: "User_id");
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropTable(
+                name: "Addresses");
+
             migrationBuilder.DropTable(
                 name: "AspNetRoleClaims");
 
@@ -389,7 +502,16 @@ namespace ebay.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "Products");
+                name: "CartItems");
+
+            migrationBuilder.DropTable(
+                name: "OrderItems");
+
+            migrationBuilder.DropTable(
+                name: "Reviews");
+
+            migrationBuilder.DropTable(
+                name: "Countries");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
@@ -398,16 +520,19 @@ namespace ebay.Migrations
                 name: "AspNetUsers");
 
             migrationBuilder.DropTable(
+                name: "Carts");
+
+            migrationBuilder.DropTable(
+                name: "Orders");
+
+            migrationBuilder.DropTable(
+                name: "Products");
+
+            migrationBuilder.DropTable(
+                name: "Users");
+
+            migrationBuilder.DropTable(
                 name: "Categories");
-
-            migrationBuilder.DropTable(
-                name: "OrderItems");
-
-            migrationBuilder.DropTable(
-                name: "OrderDetails");
-
-            migrationBuilder.DropTable(
-                name: "Customers");
         }
     }
 }

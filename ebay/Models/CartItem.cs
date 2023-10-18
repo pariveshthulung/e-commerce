@@ -1,4 +1,6 @@
-﻿namespace ebay.Models;
+﻿using System.ComponentModel.DataAnnotations.Schema;
+
+namespace ebay.Models;
 
 public class CartItem
 {
@@ -8,6 +10,8 @@ public class CartItem
     public int Product_id { get; set; }
     public virtual Product? Product { get; set; }
     public int Quantity { get; set; }
+    [Column(TypeName = "decimal(18,4)")] // <--
+
     public decimal Price { get; set; }
 
 }
