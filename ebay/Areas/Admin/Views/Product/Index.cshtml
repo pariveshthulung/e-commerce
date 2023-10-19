@@ -1,126 +1,184 @@
-﻿
-
-@using ebay.ViewModel
+﻿@using ebay.ViewModel
 @model ProductSearchVm
 
 <div class="container">
 
+    <div class="card shadow">
+        <div class="card-body">
+            <div class="toolbar row mb-3">
+                <div class="col">
+                    <form class="form-inline">
+                        <div class="row">
+                            <div class="form-group col-auto mr-auto d-flex justify-content-right">
+                                <input asp-for="Name" type="text" placeholder="e.g. Iphone" class="form-control ">
 
-    <form>
-        <div class="row pt-3">
-            <div class="col-6">
-                <h1 class="text-primary">Product List</h1>
-            </div>
-            <div class="col-2">
-                <input asp-for="Name" type="text" placeholder="e.g. Iphone" class="form-control">
-            </div>
-            <div class="col-2">
-                <button class="btn btn-primary">
-                    <i class="bi bi-search"></i>&nbsp;Search
-                </button>
-            </div>
-            <div class="col-1">
-                <a asp-controller="Product" asp-action="Add" class="btn btn-primary">
-                    <i class="bi bi-plus-circle"></i>&nbsp;Add New Product
-                </a>
-            </div>
-        </div>
-
-    <table class="table table-bordered table-striped">
-        <thead>
-
-            <tr>
-                <td>
-                    <h3>
-                        Product Name
-                    </h3>
-                </td>
-                <td>
-                    <h3>
-                        Description
-                    </h3>
-                </td>
-
-                <td>
-                    <h3>
-                        Price
-                    </h3>
-                </td>
-                <td>
-                    <h3>
-                        Brand
-                    </h3>
-                </td>
-
-                <td>
-                    <h3>
-                        Stock
-                    </h3>
-                </td>
-                <td>
-                    <h3>
-                        Category
-                    </h3>
-                </td>
-                <td>
-                    <h3>
-                        ImageUrl
-                    </h3>
-                </td>
-                <td>
-                    <h3>
-                        Action
-                    </h3>
-                </td>
-            </tr>
-        </thead>
-
-        <tbody>
-            @foreach (var data in Model.Data)
-            {
-                <tr>
-                    <td>
-                        @data.Name
-                    </td>
-
-                    <td>
-                        @data.Description
-                    </td>
-                    <td>
-                        @data.Price
-                    </td>
-
-                    <td>
-                        @data.Brand
-                    </td>
-                    <td>
-                        @data.Stock
-                    </td>
-
-                    <td>
-                        @data.Category.Name
-                    </td>
-                    <td>
-                        @data.Product_image
-                    </td>
-                    <td>
-                        <div class="w-75 btn-group" role="group">
-                            <a class="btn btn-primary mx-2" asp-controller="Product" asp-action="Edit" asp-route-id="@data.id">
-                                <i class="bi bi-pencil"></i>&nbsp; Edit
-                            </a>
-                            
-                             <button asp-action="Delete" asp-controller="Product" asp-route-id="@data.id" class="btn btn-danger mx-2">
-                                 <i class="bi bi-trash"></i>&nbsp; Delete
-                            </button>
-
+                            </div>
+                            <div class="form-group col-auto mr-auto d-flex justify-content-center">
+                                <button class="btn btn-primary">
+                                    <i class="bi bi-search"></i>&nbsp;Search
+                                </button>
+                            </div>
+                            <div class="form-group col-auto mr-auto position-absolute end-0">
+                                <a asp-controller="Product" asp-action="Add" class="btn btn-primary">
+                                    <i class="bi bi-plus-circle"></i>&nbsp;Add more
+                                </a>
+                            </div>
                         </div>
-                    </td>
+                        @* <div class="row pt-3">
+                        <div class="col-6">
+                        <h1 class="text-primary">Product List</h1>
+                        </div>
+                        <div class="col-2">
+                        <input asp-for="Name" type="text" placeholder="e.g. Iphone" class="form-control">
+                        </div>
+                        <div class="col-2">
+                        <button class="btn btn-primary">
+                        <i class="bi bi-search"></i>&nbsp;Search
+                        </button>
+                        </div>
+                        <div class="col-1">
+                        <a asp-controller="Product" asp-action="Add" class="btn btn-primary">
+                        <i class="bi bi-plus-circle"></i>&nbsp;Add New Product
+                        </a>
+                        </div>
+                        </div> *@
 
-                </tr>
-            }
-        </tbody>
+                        <table class="table table-borderless table-hover">
+                            <thead>
 
-    </table>
+                                <tr>
+                                    <th>
+                                        <h3>
+                                            Image
+                                        </h3>
+                                    </th>
+                                    <th>
+                                        <h3>
+                                            Name
+                                        </h3>
+                                    </th>
+                                    <th>
+                                        <h3>
+                                            Description
+                                        </h3>
+                                    </th>
 
-    </form>
+                                    <th>
+                                        <h3>
+                                            Price
+                                        </h3>
+                                    </th>
+                                    <th>
+                                        <h3>
+                                            Brand
+                                        </h3>
+                                    </th>
+
+                                    <th>
+                                        <h3>
+                                            Stock
+                                        </h3>
+                                    </th>
+                                    <th>
+                                        <h3>
+                                            Category
+                                        </h3>
+                                    </th>
+                                    <th>
+                                        <h3>
+                                            ImageUrl
+                                        </h3>
+                                    </th>
+                                    <th>
+                                        <h3>
+                                            Action
+                                        </h3>
+                                    </th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                                @foreach (var data in Model.Data)
+                                {
+                                    <tr>
+                                        <td>
+                                            <div class="avatar avatar-md">
+
+                                                <img src="/Public/images/product/@data.Product_image" alt="image"
+                                                    class="avatar-img rounded">
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <strong>@data.Name</strong>
+                                        </td>
+
+                                        <td class="w-25">
+                                            @data.Description
+                                        </td>
+                                        <td>
+                                            @data.Price
+                                        </td>
+
+                                        <td>
+                                            @data.Brand
+                                        </td>
+                                        <td>
+                                            @data.Stock
+                                        </td>
+
+                                        <td>
+                                            @data.Category.Name
+                                        </td>
+                                        <td>
+                                            @data.Product_image
+                                        </td>
+                                        <td>
+                                            <div class="dropdown">
+                                                <button class="btn btn-md border-0 more-horizontal" type="button"
+                                                    data-bs-toggle="dropdown" aria-expanded="false">
+                                                    @* <span class="text-muted sr-only">Action</span> *@
+                                                    <i class="bi bi-three-dots"></i>
+
+                                                </button>
+                                                <ul class="dropdown-menu dropdown-menu-right">
+                                                    <li>
+                                                        <button class="dropdown-item" asp-controller="Product" asp-action="Edit"
+                                                            asp-route-id="@data.id">
+                                                            <i class="bi bi-pencil"></i>&nbsp; Edit
+                                                        </button>
+                                                    </li>
+                                                    <li>
+                                                        <button asp-action="Delete" asp-controller="Product"
+                                                            asp-route-id="@data.id" class="dropdown-item">
+                                                            <i class="bi bi-trash"></i>&nbsp; Delete
+                                                        </button>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                            @* <div class="w-75 btn-group" role="group">
+                                        <a class="btn btn-primary mx-2" asp-controller="Product" asp-action="Edit"
+                                        asp-route-id="@data.id">
+                                        <i class="bi bi-pencil"></i>&nbsp; Edit
+                                        </a>
+
+                                        <button asp-action="Delete" asp-controller="Product" asp-route-id="@data.id"
+                                        class="btn btn-danger mx-2">
+                                        <i class="bi bi-trash"></i>&nbsp; Delete
+                                        </button>
+
+                                        </div> *@
+                                        </td>
+
+                                    </tr>
+                                }
+                            </tbody>
+
+                        </table>
+
+                    </form>
+                </div>
+            </div>
+
+        </div>
+    </div>
 </div>

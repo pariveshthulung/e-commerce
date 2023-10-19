@@ -38,8 +38,8 @@
                     <span asp-validation-for="Stock" class="text-danger"></span>
                 </div>
                 <div class="mb-3 row">
-                    <label asp-for="Product_image" class="form-label"></label>
-                    <input type="file" class="form-control">
+                    <label asp-for="ImageFile" class="form-label"></label>
+                    <input asp-for="ImageFile" accept="image/*" class="form-control">
                 </div>
                 <div class="row">
                     <div class="col-6 col-md-3">
@@ -53,9 +53,9 @@
                 </div>
             </div>
             <div class="col-2">
-
+                <img src="/Public/images/product/@Model.Image" alt="image"/ width="100%">
             </div>
-        </div>
+        </div>  
 
 
     </form>
