@@ -10,4 +10,8 @@ public class PublicController :Controller
     {
         return View();
     }
+    public IActionResult Cart()
+    {
+        return View();
+    }
 }

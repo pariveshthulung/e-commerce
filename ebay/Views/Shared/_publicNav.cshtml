@@ -14,7 +14,7 @@
 		<div class="collapse navbar-collapse" id="navbarsFurni">
 			<ul class="custom-navbar-nav navbar-nav ms-auto mb-2 mb-md-0">
 				<li class="nav-item active">
-					<a class="nav-link" href="index.html">Home</a>
+					<a class="nav-link" asp-action="Index" asp-controller="Public">Home</a>
 				</li>
 				<li><a class="nav-link" href="shop.html">Shop</a></li>
 				<li><a class="nav-link" href="about.html">About us</a></li>
@@ -86,7 +86,7 @@
 						</div>
 					</div>
 				</li>
-				<li><a class="nav-link" href="cart.html"><img src="/Public/images/cart.svg"></a></li>
+				<li><a class="nav-link" asp-action="Cart" asp-controller="Public" asp-area="Public" ><img src="/Public/images/cart.svg"></a></li>
 			</ul>
 		</div>
 	</div>

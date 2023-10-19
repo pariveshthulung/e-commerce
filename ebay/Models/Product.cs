@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -17,6 +18,7 @@ namespace ebay.Models
 		public decimal Price { get; set; }
 		public int Stock { get; set; }
 		public string? Brand { get; set; }
+		[DisplayName("Image")]
 		public string? Product_image { get; set; }
 
 		public int CategoryId { get; set; }

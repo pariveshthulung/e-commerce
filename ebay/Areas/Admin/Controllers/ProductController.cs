@@ -25,13 +25,20 @@ namespace ebay.Areas.Admin.Controllers
 
         private readonly IUnitOfWork _unitOfWork;
         private readonly ApplicationDbContext _context;
+        private readonly IWebHostEnvironment _webHostEnvironment;
+
         public INotyfService _notifyService { get; }
 
-        public ProductController(IUnitOfWork unitOfWork, INotyfService notifyService, ApplicationDbContext context)
+        public ProductController(
+            IUnitOfWork unitOfWork,
+            INotyfService notifyService,
+            ApplicationDbContext context,
+            IWebHostEnvironment webHostEnvironment)
         {
             _unitOfWork = unitOfWork;
             _notifyService = notifyService;
             _context = context;
+            _webHostEnvironment = webHostEnvironment;
         }
         // GET: /<controller>/
         public async Task<IActionResult> Index(ProductSearchVm vm)
@@ -61,6 +68,18 @@ namespace ebay.Areas.Admin.Controllers
 
                 if (ModelState.IsValid)
                 {
+                    // state wwwroot folder path
+                    string wwwRootPath = _webHostEnvironment.WebRootPath;
+                    // assign new unique name
+                    string fileName = Guid.NewGuid().ToString() + Path.GetExtension(vm.ImageFile.FileName);
+                    // declare file path where image get stored
+                    string filePath = Path.Combine(wwwRootPath,@"Public/images/product");
+                    string imagePath = Path.Combine(filePath,fileName);
+                    using(var fileStream = new FileStream(imagePath,FileMode.Create))
+                    {
+                        await vm.ImageFile.CopyToAsync(fileStream);
+                    }
+                    vm.Image = fileName;
 
 
                     // adding transactioScope for data integrity

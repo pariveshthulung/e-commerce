@@ -29,7 +29,7 @@ public class ProductRepository : Repository<Product>, IProductRepository
         items.Price = vm.Price;
         items.Brand = vm.Brand;
         items.Stock = vm.Stock;
-        items.Product_image = vm.Product_image;
+        items.Product_image = vm.Image;
 
         items.Category = _context.Categories.Where(x => x.id == vm.CategoryId).FirstOrDefault();
 

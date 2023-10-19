@@ -37,6 +37,10 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Controllers/" />
+    <Folder Include="ViewModel/auth/" />
+    <Folder Include="ViewModel/category/" />
+    <Folder Include="ViewModel/product/" />
+    <Folder Include="wwwroot/Public/images/Products/" />
     <Folder Include="wwwroot\assets\" />
     <Folder Include="wwwroot\assets\dist\" />
     <Folder Include="Views\Product\" />
