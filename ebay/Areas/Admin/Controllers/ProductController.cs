@@ -25,20 +25,17 @@ namespace ebay.Areas.Admin.Controllers
 
         private readonly IUnitOfWork _unitOfWork;
         private readonly ApplicationDbContext _context;
-        private readonly IWebHostEnvironment _webHostEnvironment;
 
         public INotyfService _notifyService { get; }
 
         public ProductController(
             IUnitOfWork unitOfWork,
             INotyfService notifyService,
-            ApplicationDbContext context,
-            IWebHostEnvironment webHostEnvironment)
+            ApplicationDbContext context)
         {
             _unitOfWork = unitOfWork;
             _notifyService = notifyService;
             _context = context;
-            _webHostEnvironment = webHostEnvironment;
         }
         // GET: /<controller>/
         public async Task<IActionResult> Index(ProductSearchVm vm)
@@ -49,8 +46,6 @@ namespace ebay.Areas.Admin.Controllers
           ).Include(x => x.Category).ToListAsync();
 
             return View(vm);
-
-
         }
 
         public async Task<IActionResult> Add()
@@ -68,20 +63,6 @@ namespace ebay.Areas.Admin.Controllers
 
                 if (ModelState.IsValid)
                 {
-                    // state wwwroot folder path
-                    string wwwRootPath = _webHostEnvironment.WebRootPath;
-                    // assign new unique name
-                    string fileName = Guid.NewGuid().ToString() + Path.GetExtension(vm.ImageFile.FileName);
-                    // declare file path where image get stored
-                    string filePath = Path.Combine(wwwRootPath,@"Public/images/product");
-                    string imagePath = Path.Combine(filePath,fileName);
-                    using(var fileStream = new FileStream(imagePath,FileMode.Create))
-                    {
-                        await vm.ImageFile.CopyToAsync(fileStream);
-                    }
-                    vm.Image = fileName;
-
-
                     // adding transactioScope for data integrity
                     using (var tx = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
                     {
@@ -105,8 +86,6 @@ namespace ebay.Areas.Admin.Controllers
                 _notifyService.Error("Operation failed.");
                 return RedirectToAction("Index");
             }
-
-
         }
 
         public IActionResult Edit(int id)
@@ -121,7 +100,6 @@ namespace ebay.Areas.Admin.Controllers
                 _notifyService.Error("Operation failed.");
                 return RedirectToAction("Index");
             }
-
         }
 
         [HttpPost]
@@ -131,7 +109,6 @@ namespace ebay.Areas.Admin.Controllers
             {
                 if (ModelState.IsValid)
                 {
-
                     using (var tx = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
                     {
                         await _unitOfWork.ProductRepo.Update(id, vm);
@@ -181,7 +158,6 @@ namespace ebay.Areas.Admin.Controllers
                 return RedirectToAction("Index");
             }
         }
-
     }
 }
 

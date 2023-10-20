@@ -4,7 +4,7 @@
 <h1>This is Update page</h1>
 
 <div class="container">
-    <form method="post">
+    <form method="post" enctype="multipart/form-data">
         <div class="mb-3 row">
             <label asp-for="Name" class="form-label"></label>
             <input asp-for="Name" class="form-control">
@@ -35,10 +35,8 @@
                     <span asp-validation-for="Stock" class="text-danger"></span>
                 </div>
                 <div class="mb-3 row">
-                    <label asp-for="Product_image" class="form-label"></label>
-                    <input asp-for="Product_image" class="form-control">
-                    <span asp-validation-for="Product_image" class="text-danger"></span>
-
+                    <label asp-for="ImageFile" class="form-label"></label>
+                    <input asp-for="ImageFile" class="form-control">
                 </div>
                 <div class="row">
                     <div class="col-6 col-md-3">
