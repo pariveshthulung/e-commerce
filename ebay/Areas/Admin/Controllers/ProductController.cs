@@ -25,7 +25,7 @@ namespace ebay.Areas.Admin.Controllers
 
         private readonly IUnitOfWork _unitOfWork;
         private readonly ApplicationDbContext _context;
-        private readonly IWebHostEnvironment _webHostEnvironment;
+        public readonly IWebHostEnvironment _webHostEnvironment;
 
         public INotyfService _notifyService { get; }
 
@@ -40,6 +40,7 @@ namespace ebay.Areas.Admin.Controllers
             _context = context;
             _webHostEnvironment = webHostEnvironment;
         }
+
         // GET: /<controller>/
         public async Task<IActionResult> Index(ProductSearchVm vm)
         {
@@ -49,8 +50,6 @@ namespace ebay.Areas.Admin.Controllers
           ).Include(x => x.Category).ToListAsync();
 
             return View(vm);
-
-
         }
 
         public async Task<IActionResult> Add()
@@ -73,9 +72,9 @@ namespace ebay.Areas.Admin.Controllers
                     // assign new unique name
                     string fileName = Guid.NewGuid().ToString() + Path.GetExtension(vm.ImageFile.FileName);
                     // declare file path where image get stored
-                    string filePath = Path.Combine(wwwRootPath,@"Public/images/product");
-                    string imagePath = Path.Combine(filePath,fileName);
-                    using(var fileStream = new FileStream(imagePath,FileMode.Create))
+                    string filePath = Path.Combine(wwwRootPath, @"Public/images/product");
+                    string imagePath = Path.Combine(filePath, fileName);
+                    using (var fileStream = new FileStream(imagePath, FileMode.Create))
                     {
                         await vm.ImageFile.CopyToAsync(fileStream);
                     }
@@ -131,6 +130,8 @@ namespace ebay.Areas.Admin.Controllers
             {
                 if (ModelState.IsValid)
                 {
+
+                    
 
                     using (var tx = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
                     {
