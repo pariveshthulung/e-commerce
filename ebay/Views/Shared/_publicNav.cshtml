@@ -1,95 +1,160 @@
 @using ebay.Provider.Interface
+@model ebay.ViewModel.ProductSearchVm
 @inject ICurrentUserProvider _currentUserProvider
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.js"></script>
+<style>
+	#resizing_select {
+		width: 50px;
+	}
+
+	#width_tmp_select {
+		display: none;
+	}
+</style>
+
 <!-- Start Header/Navigation -->
-<nav class="custom-navbar navbar navbar navbar-expand-md navbar-dark bg-dark" arial-label="Furni navigation bar">
+<form>
+	<nav class="custom-navbar navbar navbar navbar-expand-md navbar-dark bg-dark" arial-label="Furni navigation bar">
 
-	<div class="container">
-		<a class="navbar-brand" href="index.html">Furni<span>.</span></a>
+		<div class="container">
+			<a class="navbar-brand" href="index.html">Bmazon<span>X.</span></a>
 
-		<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarsFurni"
-			aria-controls="navbarsFurni" aria-expanded="false" aria-label="Toggle navigation">
-			<span class="navbar-toggler-icon"></span>
-		</button>
+			<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarsFurni"
+				aria-controls="navbarsFurni" aria-expanded="false" aria-label="Toggle navigation">
+				<span class="navbar-toggler-icon"></span>
+			</button>
+			<div class="input-group input-group-sm mb-3">
 
-		<div class="collapse navbar-collapse" id="navbarsFurni">
-			<ul class="custom-navbar-nav navbar-nav ms-auto mb-2 mb-md-0">
+				<select id="resizing_select" style=" position: relative; height : 35px;top : 8px;" asp-for="CategoryId"
+					asp-items="@Model.CategoryLists()">
+					<option selected>All</option>
+				</select>
+				<select id="width_tmp_select">
+					<option id="width_tmp_option"></option>
+				</select>
+
+
+				<input type="text" asp-for="Name" class="form-control" style=" height : 35px;top : 8px">
+				<button class="btn btn-outline-secondary" style="height : 35px; top:8px">
+					<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+						class="bi bi-search" viewBox="0 0 16 16">
+						<path
+							d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z" />
+					</svg>
+				</button>
+
+			</div>
+
+			<div class="collapse navbar-collapse" id="navbarsFurni">
+				@* <ul class="custom-navbar-nav navbar-nav ms-auto mb-2 mb-md-0">
 				<li class="nav-item active">
-					<a class="nav-link" asp-action="Index" asp-controller="Public">Home</a>
+				<a class="nav-link" asp-action="Index" asp-controller="Public">Home</a>
 				</li>
 				<li><a class="nav-link" href="shop.html">Shop</a></li>
 				<li><a class="nav-link" href="about.html">About us</a></li>
 				<li><a class="nav-link" href="services.html">Services</a></li>
 				<li><a class="nav-link" href="blog.html">Blog</a></li>
 				<li><a class="nav-link" href="contact.html">Contact us</a></li>
-			</ul>
+				</ul> *@
 
-			<ul class="custom-navbar-cta navbar-nav mb-2 mb-md-0 ms-5">
+				<ul class="custom-navbar-cta navbar-nav mb-2 mb-md-0 ms-5">
 
-				@* <div class="nav-item dropdown">
-				<a href="#" class="nav-link d-flex lh-1 text-reset p-0" data-bs-toggle="dropdown" aria-label="Open user
-				menu">
-				<span class="avatar avatar-sm" style="background-image: url(/assets/static/avatars/000m.jpg)"></span>
-				<div class="d-none d-xl-block ps-2">
-				<div>Paweł Kuna</div>
-				<div class="mt-1 small text-muted">UI Designer</div>
-				</div>
-				</a>
-				<div class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
-				<a href="#" class="dropdown-item">Status</a>
-				<a href="./profile.html" class="dropdown-item">Profile</a>
-				<a href="#" class="dropdown-item">Feedback</a>
-				<div class="dropdown-divider"></div>
-				<a href="./settings.html" class="dropdown-item">Settings</a>
-				<partial name="_LoginPartial"/>
-				<a asp-action="LogOut" asp-controller="Auth" class="dropdown-item">Logout</a>
-				</div>
-				</div> *@
-				<li style="margin-top:12px; margin-bottom:12px;">
-					<div class="nav-item dropdown">
-						<a href="#" class="nav-link d-flex lh-1 text-reset p-0 pl-3" data-bs-toggle="dropdown"
-							aria-label="Open user menu">
-							<img src="/Public/images/user.svg">
-							<span class="avatar avatar-sm"
-								style="background-image: url(/assets/static/avatars/000m.jpg)">
-
-							</span>
-
-							<div class="d-none d-xl-block ps-2 m-auto">
-
-								<div>
-									<partial name="_LoginPartial" />
-								</div>
-							</div>
-						</a>
-						<div class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
-							<div class="mt-1 small text-muted">
-								<img src="/Public/images/user.svg">
-							</div>
-							<a href="./profile.html" class="dropdown-item"><i class="fa-regular fa-user"></i> &nbsp My Profile</a>
-							<a href="./settings.html" class="dropdown-item"><i class="bi bi-box-seam"></i> &nbsp Orders</a>
-							<div class="dropdown-divider"></div>
-							@{
-								var currentUser = await _currentUserProvider.GetCurrentUser();
-								if (currentUser == null)
-								{
-									<a asp-action="LogIn" asp-controller="Auth" asp-area="Admin"
-										class="dropdown-item"><i class="fa-solid fa-arrow-right-to-bracket"></i>&nbsp Log-in</a>
-
-								}
-								else
-								{
-
-									<a asp-action="LogOut" asp-controller="Auth" asp-area="Admin"
-										class="dropdown-item"><i class="fa-solid fa-arrow-right-from-bracket"></i> &nbsp Log-out</a>
-								}
-							}
-						</div>
+					@* <div class="nav-item dropdown">
+					<a href="#" class="nav-link d-flex lh-1 text-reset p-0" data-bs-toggle="dropdown" aria-label="Open
+					user
+					menu">
+					<span class="avatar avatar-sm" style="background-image:
+					url(/assets/static/avatars/000m.jpg)"></span>
+					<div class="d-none d-xl-block ps-2">
+					<div>Paweł Kuna</div>
+					<div class="mt-1 small text-muted">UI Designer</div>
 					</div>
-				</li>
-				<li><a class="nav-link" asp-action="Cart" asp-controller="Public" asp-area="Public" ><img src="/Public/images/cart.svg"></a></li>
-			</ul>
-		</div>
-	</div>
+					</a>
+					<div class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
+					<a href="#" class="dropdown-item">Status</a>
+					<a href="./profile.html" class="dropdown-item">Profile</a>
+					<a href="#" class="dropdown-item">Feedback</a>
+					<div class="dropdown-divider"></div>
+					<a href="./settings.html" class="dropdown-item">Settings</a>
+					<partial name="_LoginPartial"/>
+					<a asp-action="LogOut" asp-controller="Auth" class="dropdown-item">Logout</a>
+					</div>
+					</div> *@
+					<li style="margin-top:12px; margin-bottom:12px;">
+						<div class="nav-item dropdown">
+							<a href="#" class="nav-link d-flex lh-1 text-reset p-0 pl-3" data-bs-toggle="dropdown"
+								aria-label="Open user menu">
+								<img src="/Public/images/user.svg">
+								<span class="avatar avatar-sm"
+									style="background-image: url(/assets/static/avatars/000m.jpg)">
 
-</nav>
+								</span>
+
+								<div class="d-none d-xl-block ps-2 m-auto">
+
+									<div>
+										<partial name="_LoginPartial" />
+									</div>
+								</div>
+							</a>
+							<div class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
+								<div class="mt-1 small text-muted">
+									<img src="/Public/images/user.svg">
+								</div>
+								<a href="./profile.html" class="dropdown-item"><i class="fa-regular fa-user"></i> &nbsp
+									My
+									Profile</a>
+								<a href="./settings.html" class="dropdown-item"><i class="bi bi-box-seam"></i> &nbsp
+									Orders</a>
+								<div class="dropdown-divider"></div>
+								@{
+									var currentUser = await _currentUserProvider.GetCurrentUser();
+									if (currentUser == null)
+									{
+										<a asp-action="LogIn" asp-controller="Auth" asp-area="Admin" class="dropdown-item"><i
+												class="fa-solid fa-arrow-right-to-bracket"></i>&nbsp Log-in</a>
+
+									}
+									else
+									{
+
+										<a asp-action="LogOut" asp-controller="Auth" asp-area="Admin" class="dropdown-item"><i
+												class="fa-solid fa-arrow-right-from-bracket"></i> &nbsp Log-out</a>
+									}
+								}
+							</div>
+						</div>
+					</li>
+					<li>
+						@{
+							currentUser = await _currentUserProvider.GetCurrentUser();
+							if (currentUser == null)
+							{
+								<a class="nav-link" asp-action="LogIn" asp-controller="Auth" asp-area="Admin"><img
+										src="/Public/images/cart.svg"></a>
+
+							}
+							else
+							{
+
+								<a class="nav-link" asp-action="Cart" asp-controller="Public" asp-area="Public"><img
+										src="/Public/images/cart.svg"></a>
+							}
+						}
+					</li>
+				</ul>
+			</div>
+		</div>
+
+
+	</nav>
+</form>
 <!-- End Header/Navigation -->
+<script>
+	$(document).ready(function () {
+		$('#resizing_select').change(function () {
+			$("#width_tmp_option").html($('#resizing_select option:selected').text());
+			$(this).width($("#width_tmp_select").width());
+		});
+	});
+</script>

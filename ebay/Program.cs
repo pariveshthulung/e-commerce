@@ -25,7 +25,7 @@ builder.Services.AddNotyf(config => { config.DurationInSeconds = 10; config.IsDi
 //     .AddEntityFrameworkStores<ApplicationDbContext>();
 builder.Services.AddControllersWithViews();
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-    .AddCookie(x => { x.LoginPath = "/Auth/LogIn"; });
+    .AddCookie(x => { x.LoginPath = "/Admin/Auth/LogIn"; });
 
 builder.Services.AddScoped<IAuthManager, AuthManager>();
 builder.Services.AddScoped<ICurrentUserProvider, CurrentUserProvider>();
