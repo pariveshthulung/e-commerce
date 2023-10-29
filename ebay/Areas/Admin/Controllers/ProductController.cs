@@ -44,8 +44,7 @@ namespace ebay.Areas.Admin.Controllers
           .Where(x =>
               string.IsNullOrEmpty(vm.Name) || x.Name.Contains(vm.Name)
           ).Include(x => x.Category).ToListAsync();
-
-            return View(vm);
+          return View(vm);
         }
 
         public async Task<IActionResult> Add()
