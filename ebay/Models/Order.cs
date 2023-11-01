@@ -12,7 +12,7 @@ namespace ebay.Models
         public int User_id { get; set; }
         [ForeignKey("User_id")]
         public virtual User? User { get; set; }
-        [Column(TypeName = "decimal(18,4)")] // <--
+        [Column(TypeName = "decimal(18,2)")] 
 
         public decimal Order_total { get; set; }
         public DateTime Order_date = DateTime.Now;

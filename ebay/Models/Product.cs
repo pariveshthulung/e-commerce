@@ -13,7 +13,7 @@ namespace ebay.Models
 		[Required]
 		public string? Description { get; set; }
 		[Required]
-		[Column(TypeName = "decimal(18,4)")] // <--
+		[Column(TypeName = "decimal(18,2)")] 
 
 		public decimal Price { get; set; }
 		public int Stock { get; set; }
