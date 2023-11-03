@@ -34,18 +34,7 @@ public class PublicController : Controller
         vm.Categories = await _context.Categories.ToListAsync();
         return View(vm);
     }
-
-    public async Task<IActionResult> Cart(ProductSearchVm vm)
-    {
-        // need to add redirect to index page through search
-        vm.Data = await _context.Products
-          .Where(x =>
-               x.Name.Contains(vm.Name) && vm.CategoryId == x.CategoryId || vm.CategoryId == x.CategoryId && string.IsNullOrEmpty(vm.Name) || vm.CategoryId == null
-          ).ToListAsync();
-        vm.Categories = await _context.Categories.ToListAsync();
-        return View(vm);
-
-    }
+  
     [AllowAnonymous]
     public async Task<IActionResult> Detail(int id)
     {
@@ -59,23 +48,26 @@ public class PublicController : Controller
     [HttpPost]
     public async Task<IActionResult> Detail(cartVm vm)
     {
-        // using (var tx = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
-        // {
-            var currentUser = _currentUserProvder.GetCurrentUserId();
-            vm.User_id = currentUser;
+        using (var tx = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
+        {
+            // get user's id
+            vm.User_id = _currentUserProvder.GetCurrentUserId();
+            // check existing user's cart
             var cartExist = _context.Carts.Any(x => x.User_id == vm.User_id);
             if (!cartExist)
             {
+                // if user's cart doesn't exist create new one
                 var cart = new Cart();
                 cart.User_id = vm.User_id;
                 await _context.AddAsync(cart);
                 await _context.SaveChangesAsync();
             }
-
+            // check existing item in cart
             var cartFrmDb = await _context.Carts.FirstOrDefaultAsync(x => x.User_id == vm.User_id);
             var cartItemExits = await _context.CartItems.FirstOrDefaultAsync(x => x.Cart_id == cartFrmDb.id && x.Product_id == vm.Product_id);
             if (cartItemExits == null)
             {
+                // create new item in cart
                 var cartitem = new CartItem();
                 cartitem.Product_id = vm.Product_id;
                 cartitem.Cart_id = cartFrmDb.id;
@@ -86,15 +78,13 @@ public class PublicController : Controller
             }
             else
             {
+                // update existing item in cart
                 cartItemExits.Quantity = cartItemExits.Quantity + vm.Quantity;
-                _context.Add(cartItemExits);
                 await _context.SaveChangesAsync();
                 _notifyService.Success("Added to cart");
             }
-
-
-        //     tx.Complete();
-        // }
+            tx.Complete();
+        }
         return RedirectToAction(nameof(Index));
     }
 }

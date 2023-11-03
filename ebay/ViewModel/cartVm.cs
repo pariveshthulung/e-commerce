@@ -13,6 +13,7 @@ public class cartVm
     public int Product_id { get; set; }
     public int Quantity { get; set; }
     [Column(TypeName = "decimal(18,2)")] // <--
+    public List<CartItem>? CartItemList ;
 
-    public decimal Price { get; set; }
+    public decimal Subtotal { get; set; }
 }

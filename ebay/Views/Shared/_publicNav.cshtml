@@ -126,7 +126,9 @@
 						</div>
 					</li>
 					<li>
-						@{
+						<a class="nav-link" asp-action="Index" asp-controller="Cart" asp-area="Public"><img
+										src="/Public/images/cart.svg"></a>
+						@* @{
 							currentUser = await _currentUserProvider.GetCurrentUser();
 							if (currentUser == null)
 							{
@@ -140,7 +142,7 @@
 								<a class="nav-link" asp-action="Cart" asp-controller="Public" asp-area="Public"><img
 										src="/Public/images/cart.svg"></a>
 							}
-						}
+						} *@
 					</li>
 				</ul>
 			</div>
