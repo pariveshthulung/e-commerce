@@ -5,54 +5,69 @@
 <div class="container">
     <form method="post" enctype="multipart/form-data">
         <div class="row">
-            
-                <div class="mb-3 row">
-                    <label asp-for="Name" class="form-label"></label>
-                    <input asp-for="Name" class="form-control">
-                    <span asp-validation-for="Name" class="text-danger"></span>
+
+            <div class="mb-3 row">
+                <label asp-for="Name" class="form-label"></label>
+                <input asp-for="Name" class="form-control">
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+            <div class="mb-3 row">
+                <label asp-for="CategoryId" class="form-lable"></label>
+                <select class="form-select" asp-for="CategoryId" asp-items="@Model.CategoryList()">
+                    <option disabled selected>--SELECT CATEGORY--</option>
+                </select>
+            </div>
+            <div class="mb-3 row">
+                <label asp-for="Description" class="form-lable"></label>
+                <textarea asp-for="Description" class="form-label"></textarea>
+            </div>
+            <div class="mb-3 row">
+                <label asp-for="Brand" class="form-label"></label>
+                <input asp-for="Brand" class="form-control">
+                <span asp-validation-for="Brand" class="text-danger"></span>
+            </div>
+            <div class="mb-3 row">
+                <label asp-for="Price" class="form-label"></label>
+                <input asp-for="Price" class="form-control">
+                <span asp-validation-for="Price" class="text-danger"></span>
+            </div>
+            <div class="mb-3 row">
+                <label asp-for="Stock" class="form-label"></label>
+                <input asp-for="Stock" class="form-control" id="CategoryName">
+                <span asp-validation-for="Stock" class="text-danger"></span>
+            </div>
+            <div class="mb-3 row">
+                <label asp-for="ImageFile" class="form-label"></label>
+                <input asp-for="ImageFile" accept="image/*" class="form-control">
+            </div>
+            <div class="row">
+                <div class="col-6 col-md-3">
+                    <button type="submit" class="btn btn-primary form-control">Add</button>
                 </div>
-                <div class="mb-3 row">
-                    <label asp-for="CategoryId" class="form-lable"></label>
-                    <select class="form-select" asp-for="CategoryId" asp-items="@Model.CategoryList()">
-                        <option disabled selected>--SELECT CATEGORY--</option>
-                    </select>
+                <div class="col-6 col-md-3">
+                    <a asp-controller="Product" asp-action="Index" class="btn btn-secondary border form-control">
+                        Back
+                    </a>
                 </div>
-                <div class="mb-3 row">
-                    <label asp-for="Description" class="form-label"></label>
-                    <input asp-for="Description" class="form-control">
-                    <span asp-validation-for="Description" class="text-danger"></span>
-                </div>
-                <div class="mb-3 row">
-                    <label asp-for="Brand" class="form-label"></label>
-                    <input asp-for="Brand" class="form-control">
-                    <span asp-validation-for="Brand" class="text-danger"></span>
-                </div>
-                <div class="mb-3 row">
-                    <label asp-for="Price" class="form-label"></label>
-                    <input asp-for="Price" class="form-control">
-                    <span asp-validation-for="Price" class="text-danger"></span>
-                </div>
-                <div class="mb-3 row">
-                    <label asp-for="Stock" class="form-label"></label>
-                    <input asp-for="Stock" class="form-control" id="CategoryName">
-                    <span asp-validation-for="Stock" class="text-danger"></span>
-                </div>
-                <div class="mb-3 row">
-                    <label asp-for="ImageFile" class="form-label"></label>
-                    <input asp-for="ImageFile" accept="image/*" class="form-control">
-                </div>
-                <div class="row">
-                    <div class="col-6 col-md-3">
-                        <button type="submit" class="btn btn-primary form-control">Add</button>
-                    </div>
-                    <div class="col-6 col-md-3">
-                        <a asp-controller="Product" asp-action="Index" class="btn btn-secondary border form-control">
-                            Back
-                        </a>
-                    </div>
-                </div>   
-        </div>  
+            </div>
+        </div>
 
 
     </form>
 </div>
+
+
+<script>
+    tinymce.init({
+        selector: 'textarea',
+        plugins: 'ai tinycomments mentions anchor autolink charmap codesample emoticons image link lists media searchreplace table visualblocks wordcount checklist mediaembed casechange export formatpainter pageembed permanentpen footnotes advtemplate advtable advcode editimage tableofcontents mergetags powerpaste tinymcespellchecker autocorrect a11ychecker typography inlinecss',
+        toolbar: 'undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | link image media table mergetags | align lineheight | tinycomments | checklist numlist bullist indent outdent | emoticons charmap | removeformat',
+        tinycomments_mode: 'embedded',
+        tinycomments_author: 'Author name',
+        mergetags_list: [
+            { value: 'First.Name', title: 'First Name' },
+            { value: 'Email', title: 'Email' },
+        ],
+        ai_request: (request, respondWith) => respondWith.string(() => Promise.reject("See docs to implement AI Assistant")),
+    });
+</script>

@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ebay.Data;
 
@@ -11,9 +12,11 @@ using ebay.Data;
 namespace ebay.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231031023609_fixModels")]
+    partial class fixModels
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -311,7 +314,7 @@ namespace ebay.Migrations
                     b.Property<string>("CartStatus")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("User_id")
+                    b.Property<int>("User_id")
                         .HasColumnType("int");
 
                     b.HasKey("id");
@@ -579,7 +582,9 @@ namespace ebay.Migrations
                 {
                     b.HasOne("ebay.Entity.User", "User")
                         .WithMany()
-                        .HasForeignKey("User_id");
+                        .HasForeignKey("User_id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("User");
                 });
