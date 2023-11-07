@@ -90,7 +90,7 @@
                                 <h5 class="text-success">In Stock</h5>
                                 <span class="text-dark">Qty:
                                     <select class="" asp-for="Quantity">
-                                        <option value="1" disabled selected>1</option>
+                                        <option value="1">1</option>
                                         <option value="2">2</option>
                                         <option value="3">3</option>
                                         <option value="4">4</option>
@@ -124,6 +124,7 @@
                             </div>
                             <div class="col-12 col-md-6 pb-1">
                                 <button type="submit"
+                                    asp-action="Checkout" asp-controller="Cart"
                                     class="btn btn-warning bg-gradient btn-sm  w-50 py-2 text-uppercase fw-semibold"
                                     style="position:relative; right:50%;">
                                     Buy Now

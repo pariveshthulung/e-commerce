@@ -1,0 +1,197 @@
+@{
+	Layout = "_publicLayout";
+}
+@model ebay.ViewModel.CheckOutVm
+<form method="post">
+	<br />
+	<input asp-for="Subtotal" hidden/>
+	<input asp-for="Cart_id" hidden/>
+	<div class="container">
+		<div class="card shadow border-0">
+			<div class="card-body">
+				<div class="container rounded p-2">
+					<div class="row">
+						<div class="col-md-6 mb-5 mb-md-0">
+							<h2 class="h3 mb-3 text-black">Billing Details</h2>
+							<div class="p-3 p-lg-5 border bg-white">
+								<div class="form-group">
+									<label for="c_country" class="text-black">Country <span
+											class="text-danger">*</span></label>
+									<select asp-for="CountryId" asp-items="@Model.CountryList()" class="form-control" required>
+										<option selected disabled>Select a country</option>
+									</select>
+								</div>
+								<div class="form-group row">
+									<div class="col-md-6">
+										<label asp-for="FirstName" class="text-black">First Name <span
+												class="text-danger">*</span></label>
+										<input type="text" class="form-control" asp-for="FirstName" required>
+									</div>
+									<div class="col-md-6">
+										<label for="c_lname" class="text-black">Last Name <span
+												class="text-danger">*</span></label>
+										<input type="text" class="form-control" asp-for="LastName" required>
+									</div>
+								</div>
+
+								<div class="form-group row">
+									<div class="col-md-12">
+										<label asp-for="Address_Line" class="text-black">Address<span
+												class="text-danger">*</span></label>
+										<input type="text" class="form-control" asp-for="Address_Line" required>
+									</div>
+								</div>
+
+								<div class="form-group mt-1">
+									<label asp-for="Landmark" class="text-black">Landmark</label>
+									<input type="text" asp-for="Landmark" class="form-control" 
+										placeholder="Apartment, suite, unit etc. (optional)">
+								</div>
+
+								<div class="form-group row">
+									<div class="col-md-4">
+										<label asp-for="City" class="text-black">City<span
+												class="text-danger">*</span></label>
+										<input type="text" class="form-control" asp-for="City" required>
+									</div>
+									<div class="col-md-4">
+										<label asp-for="Region" class="text-black">State / Region <span
+												class="text-danger">*</span></label>
+										<input type="text" class="form-control" asp-for="Region" required>
+									</div>
+									<div class="col-md-4">
+										<label asp-for="Postal_Code" class="text-black">Postal / Zip <span
+												class="text-danger">*</span></label>
+										<input type="text" class="form-control" asp-for="Postal_Code">
+									</div>
+								</div>
+
+								<div class="form-group row mb-5">
+									<div class="col-md-6">
+										<label asp-for="Email" class="text-black">Email Address <span
+												class="text-danger">*</span></label>
+										<input type="text" class="form-control" asp-for="Email" required>
+									</div>
+									<div class="col-md-6">
+										<label for="c_phone" class="text-black">Phone <span
+												class="text-danger">*</span></label>
+										<input type="text" class="form-control" asp-for="PhoneNo"
+											placeholder="Phone Number">
+									</div>
+								</div>
+								<div class="form-group">
+									<label for="c_order_notes" class="text-black">Order Notes</label>
+									<textarea name="c_order_notes" id="c_order_notes" cols="30" rows="5"
+										class="form-control" placeholder="Write your notes here..."></textarea>
+								</div>
+
+							</div>
+						</div>
+						<div class="col-md-6">
+
+							<div class="row mb-5">
+								<div class="col-md-12">
+									<h2 class="h3 mb-3 text-black">Your Order</h2>
+									<div class="p-3 p-lg-5 border bg-white">
+										<table class="table site-block-order-table mb-5">
+											<thead>
+												<th>Product</th>
+												<th>Total</th>
+											</thead>
+											<tbody>
+												@foreach (var data in Model.CartItemList)
+                								{
+												<tr>
+													<td>@data.Product.Name.Substring(0,36)... <strong class="mx-2">x</strong>@data.Quantity</td>
+													<td>@data.Product.Price</td>
+												</tr>
+												}
+												<tr>
+													<td class="text-black font-weight-bold"><strong>Cart
+															Subtotal</strong></td>
+													<td class="text-black">@Model.Subtotal.ToString("c")</td>
+												</tr>
+												<tr>
+													<td class="text-black font-weight-bold"><strong>Order Total</strong>
+													</td>
+													<td class="text-black font-weight-bold"><strong>@Model.Subtotal.ToString("c")</strong>
+													</td>
+												</tr>
+											</tbody>
+										</table>
+
+										<div class="border p-3 mb-3">
+											<h3 class="h6 mb-0"><a class="d-block" data-bs-toggle="collapse"
+													href="#collapsebank" role="button" aria-expanded="false"
+													aria-controls="collapsebank">Direct Bank Transfer</a></h3>
+
+											<div class="collapse" id="collapsebank">
+												<div class="py-2">
+													<p class="mb-0">Make your payment directly into our bank account.
+														Please use your Order ID as the payment reference. Your order
+														won’t be shipped until the funds have cleared in our account.
+													</p>
+												</div>
+											</div>
+										</div>
+
+										<div class="border p-3 mb-3">
+											<h3 class="h6 mb-0"><a class="d-block" data-bs-toggle="collapse"
+													href="#collapsecheque" role="button" aria-expanded="false"
+													aria-controls="collapsecheque">Cheque Payment</a></h3>
+
+											<div class="collapse" id="collapsecheque">
+												<div class="py-2">
+													<p class="mb-0">Make your payment directly into our bank account.
+														Please use your Order ID as the payment reference. Your order
+														won’t be shipped until the funds have cleared in our account.
+													</p>
+												</div>
+											</div>
+										</div>
+
+										<div class="border p-3 mb-5">
+											<h3 class="h6 mb-0"><a class="d-block" data-bs-toggle="collapse"
+													href="#collapsepaypal" role="button" aria-expanded="false"
+													aria-controls="collapsepaypal">Paypal</a></h3>
+
+											<div class="collapse" id="collapsepaypal">
+												<div class="py-2">
+													<p class="mb-0">Make your payment directly into our bank account.
+														Please use your Order ID as the payment reference. Your order
+														won’t be shipped until the funds have cleared in our account.
+													</p>
+												</div>
+											</div>
+										</div>
+
+										@* <div class="form-group">
+											<button class="btn btn-black btn-lg py-3 btn-block"
+												onclick="window.location='thankyou.html'">Place Order</button>
+										</div> *@
+
+									</div>
+								</div>
+							</div>
+
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="card-footer">
+				<div class="row">
+					<div class="col-12 col-md-8 pt-2">
+						<p style="color:maroon; font-size:14px;">Estimate Arrival Date:
+							@DateTime.Now.AddDays(2).ToShortDateString()-@DateTime.Now.AddDays(5	).ToShortDateString()
+
+						</p>
+					</div>
+					<div class="col-12 col-md-4">
+						<button type="submit" value="Place Order" class="btn btn-primary form-control">Place
+							Order</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</form>
