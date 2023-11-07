@@ -9,10 +9,14 @@ using ebay.Provider.Interface;
 using ebay.Provider;
 using ebay.Repository.IRepository;
 using ebay.Repository;
+using ebay.Models;
+using Stripe;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddRazorPages()
     .AddRazorRuntimeCompilation();
+
+builder.Services.Configure<StripeSetting>(builder.Configuration.GetSection("Stripe"));
 
 // Add services to the container.
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
@@ -47,6 +51,8 @@ else
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
+
+StripeConfiguration.ApiKey = builder.Configuration.GetSection("Stripe:SecretKey").Get<String>();
 
 app.UseRouting();
 
