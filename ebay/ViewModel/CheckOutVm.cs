@@ -19,12 +19,14 @@ public class CheckOutVm
     public string? Postal_Code { get; set; }
     [Column(TypeName = "decimal(18,2)")]
     public Decimal OrderTotal { get; set; }
-    public List<Address>? Address ;
-    public List<Country>? Countries ;
-    public List<CartItem>? CartItemList ;
-    public Cart? Cart ;
+    public List<Address>? Address;
+    public List<Country>? Countries;
+    public List<CartItem>? CartItemList;
+    public Cart? Cart;
     public Order? Order { get; set; }
     public List<Order>? OderList { get; set; }
+    public string? PaymentIntentId { get; set; }
+    public string? SessionId { get; set; }
 
     public int? User_id { get; set; }
     public long PhoneNo { get; set; }
@@ -38,9 +40,6 @@ public class CheckOutVm
     public decimal Subtotal { get; set; }
     public int CountryId { get; set; }
 
-
-
-
     public SelectList CountryList()
     {
         return new SelectList(
@@ -50,5 +49,5 @@ public class CheckOutVm
             CountryId
         );
     }
-    
+
 }

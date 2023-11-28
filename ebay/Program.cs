@@ -18,6 +18,7 @@ builder.Services.AddRazorPages()
 
 builder.Services.Configure<StripeSetting>(builder.Configuration.GetSection("Stripe"));
 
+
 // Add services to the container.
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
@@ -52,9 +53,10 @@ else
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 
-StripeConfiguration.ApiKey = builder.Configuration.GetSection("Stripe:SecretKey").Get<String>();
 
 app.UseRouting();
+StripeConfiguration.ApiKey = builder.Configuration.GetSection("Stripe:SecretKey").Get<String>();
+
 
 app.UseAuthorization();
 
