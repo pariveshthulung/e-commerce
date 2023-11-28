@@ -36,6 +36,7 @@
       	font-feature-settings: "cv03", "cv04", "cv11";
       }
     </style>
+<link rel="stylesheet" href="//cdn.datatables.net/1.13.7/css/jquery.dataTables.min.css">
 </head>
 <body>
     <script src="/assets/dist/js/demo-theme.min.js?1684106062"></script>
@@ -1359,7 +1360,9 @@
       // @@formatter:on
     </script>
     <script src="~/lib/jquery/dist/jquery.js"></script>
+    <script src="//cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
 
      @await Component.InvokeAsync("Notyf")
+     @RenderSection("scripts", required: false)
      </body>
 </html>

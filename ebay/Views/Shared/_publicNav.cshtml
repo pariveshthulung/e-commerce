@@ -101,10 +101,10 @@
 								<div class="mt-1 small text-muted">
 									<img src="/Public/images/user.svg">
 								</div>
-								<a href="./profile.html" class="dropdown-item"><i class="fa-regular fa-user"></i> &nbsp
+								<a asp-action="Index" asp-controller="Profile" asp-area="Public" class="dropdown-item"><i class="fa-regular fa-user"></i> &nbsp
 									My
 									Profile</a>
-								<a href="./settings.html" class="dropdown-item"><i class="bi bi-box-seam"></i> &nbsp
+								<a asp-action="Order" asp-controller="Profile" asp-area="Public" class="dropdown-item"><i class="bi bi-box-seam"></i> &nbsp
 									Orders</a>
 								<div class="dropdown-divider"></div>
 								@{

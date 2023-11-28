@@ -15,8 +15,13 @@ namespace ebay.Models
         [Column(TypeName = "decimal(18,2)")] 
 
         public decimal Order_total { get; set; }
-        public DateTime Order_date { get; set; }= DateTime.Now;
+        public DateTime Order_date { get; set; } = DateTime.Now;
 
-        public string? Order_status { get; set; } = OrderStatusConstants.Confirm;
+        public string? PaymentIntentId { get; set; }
+        public string? SessionId { get; set; }
+        public DateTime PaymentDate { get; set; }
+        public string? PaymentStatus { get; set; } = PaymentStatusConstant.Pending;
+
+        public string? Order_status { get; set; } = OrderStatusConstants.Pending;
     }
 }
