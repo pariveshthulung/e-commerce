@@ -3,9 +3,9 @@
 }
 @model ebay.ViewModel.OrderMangementVm
 <div class="mt-5">
-    @* @foreach (var order in Model.OrderList)
-    { *@
-        @foreach (var data in Model.OrderItemsList)
+    <h1 class="text-center text-dark mt-5">Order</h1>
+    <hr>
+        @foreach (var data in Model.OrderItemsList.OrderByDescending(x=>x.Order.Order_date))
         {
             <div class="form-check col-md-10 offset-md-1">
                 <div class="row border-bottom pb-3 ">
@@ -18,27 +18,41 @@
                         </h5>
                         <p><small>@Html.Raw(data.Product.Description.Substring(0, 250) + "...")</small></p>
                     </div>
-                    <div class="col-12  col-lg-5 text-center row">
-                        <div class="col-3 text-md-right pt-2 pt-md-4">
-                            <h6 class="fw-semibold">
+                    <div class="col-12  col-lg-5 text-center row mx-auto my-auto">
+                        <div class="col-3 text-center ">
+                            <h6 class="fw-semibold mt-2">
                                 @data.Product.Price
                                 <span class="text-muted">&nbsp;x&nbsp;</span>@data.Quantity
                             </h6>
                         </div>
-                        <div class="col-6 col-sm-4 col-lg-6 pt-2">
+                        <div class="col-6 col-sm-4 col-lg-4 ">
                             <div class="w-75 btn-group" role="group">
                                 <strong>@data.Order.Order_status</strong>
                             </div>
                         </div>
-                        <div class="col-3 col-sm-4 col-lg-2 offset-lg-1 text-right pt-2">
-                            <a class="btn btn-danger bg-gradient py-2 " asp-action="Delete" asp-route-id="@data.id">
-                                <i class="bi bi-trash-fill"></i>
+                        @if(@data.Order.Order_status=="Approved")
+                        {
+                            <div class="col-3 col-sm-4 col-lg-4 offset-lg-1 text-right  mx-auto my-auto">
+                            <a class="" asp-action="Delete" asp-route-id="@data.id">
+                                @* <i class="bi bi-trash-fill"></i> *@
+                                <h6>Manage order</h6>
                             </a>
                         </div>
+                        }
+                        else
+                         {
+                            <div class="col-3 col-sm-4 col-lg-4 offset-lg-1 text-right pt-2 mx-auto my-auto">
+
+                            <a class="" asp-action="Delete" asp-route-id="@data.id">
+                                @* <i class="bi bi-trash-fill"></i> *@
+                                <h6>Detail</h6>
+                            </a>
+                            </div>
+                         }
+                        
                     </div>
 
                 </div>
             </div>
         }
-    @* } *@
 </div>

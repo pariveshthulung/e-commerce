@@ -130,13 +130,13 @@ velit imperdiet dolor tempor tristique. </p>
 					<a class="product-item" asp-action="Detail" asp-route-id="@product.id">
 						<div class="card">
 							<img src="/Public/images/product/@product.Product_image"
-								class="card-img-top rounded mx-auto d-block">
+								class="card-img-top rounded mx-auto d-block" style="width:200px; height:300px; object-fit:contain;">
 						</div>
 						<div class="card-body">
 							<div class="pl-1">
 								<h3 class="product-title col-12 text-truncate">@product.Name</h3>
 								<strong class="product-price">$@product.Price</strong>
-								<span class="icon-cross">
+								<span class="icon-cross mb-2">
 									<img src="/Public/images/cross.svg" class="img-fluid">
 								</span>
 							</div>

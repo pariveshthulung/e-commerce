@@ -27,14 +27,19 @@ public class PublicController : Controller
     [AllowAnonymous]
     public async Task<IActionResult> Index(ProductSearchVm vm)
     {
-        vm.Data = await _context.Products
-          .Where(x =>
-               x.Name.Contains(vm.Name) && vm.CategoryId == x.CategoryId || vm.CategoryId == x.CategoryId && string.IsNullOrEmpty(vm.Name) || vm.CategoryId == null
-          ).ToListAsync();
+        // vm.Data = await _context.Products
+        //   .Where(x =>
+        //        x.Name.Contains(vm.Name) && vm.CategoryId == x.CategoryId || vm.CategoryId == x.CategoryId && string.IsNullOrEmpty(vm.Name) || vm.CategoryId == null
+        //   ).ToListAsync();
+
+        vm.Data = await _context.Products.Where(
+            x => (vm.CategoryId == null || vm.CategoryId == x.CategoryId)
+            && (string.IsNullOrEmpty(vm.Name) || x.Name.ToLower().Contains(vm.Name.ToLower()))
+            ).ToListAsync();
         vm.Categories = await _context.Categories.ToListAsync();
         return View(vm);
     }
-  
+
     [AllowAnonymous]
     public async Task<IActionResult> Detail(int id)
     {

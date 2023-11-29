@@ -19,7 +19,7 @@ public class ProfileController : Controller
         _currentUserProvider = currentUserProvider;
         _notifyService = notifyService;
     }
-    public async Task<IActionResult> IndexAsync(CheckOutVm vm)
+    public async Task<IActionResult> Index(CheckOutVm vm)
     {
         // get current user
         vm.User_id = _currentUserProvider.GetCurrentUserId();
@@ -38,12 +38,14 @@ public class ProfileController : Controller
         vm.City = address.City;
         // vm.Countries = _context.Countries.Where(x => x.id == address.Country_id).ToList();
         vm.Countries = await _context.Countries.ToListAsync();
+        vm.CountryId = address.Country_id;
 
 
         return View(vm);
     }
     [HttpPost]
-    public async Task<IActionResult> Index(CheckOutVm vm)
+    [ActionName("Index")]
+    public async Task<IActionResult> IndexPost(CheckOutVm vm)
     {
         // get current user
         vm.User_id = _currentUserProvider.GetCurrentUserId();
