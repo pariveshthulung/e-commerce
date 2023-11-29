@@ -41,6 +41,10 @@ public class AuthController : Controller
         try
         {
             await _authManger.LogIn(vm.Username, vm.Password);
+            if(!string.IsNullOrEmpty(vm.ReturnUrl))
+            {
+                return LocalRedirect(vm.ReturnUrl);
+            }
             return RedirectToAction("Index", "Public", new { area = "Public" });
         }
         catch (Exception e)

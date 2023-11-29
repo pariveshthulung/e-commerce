@@ -96,6 +96,7 @@ public class CartController : Controller
             vm.Landmark = address.Landmark;
             vm.City = address.City;
             vm.Countries = _context.Countries.Where(x => x.id == address.Country_id).ToList();
+            vm.CountryId = address.Country_id;
         }
         var user = await _context.Users.FirstOrDefaultAsync(x => x.Id == vm.User_id);
         vm.FirstName = user.FirstName;
@@ -167,7 +168,7 @@ public class CartController : Controller
         var domain = "http://localhost:5191/";
         var options = new SessionCreateOptions
         {
-            SuccessUrl = domain + $"Public/Cart/Thankyou?id={order.id}?id2={vm.Cart_id}",
+            SuccessUrl = domain + $"Public/Cart/Thankyou?orderId={order.id}&cartId={vm.Cart_id}",
             CancelUrl = domain + "Public/Cart/Index",
             LineItems = new List<SessionLineItemOptions>(),
             Mode = "payment",
@@ -208,7 +209,7 @@ public class CartController : Controller
     public IActionResult Thankyou(int orderId, int cartId)
     {
         var order = _context.Orders.Where(x => x.id == orderId).FirstOrDefault();
-        if (order.Order_status != PaymentStatusConstant.Pending)
+        if (order.Order_status == PaymentStatusConstant.Pending)
         {
             var service = new SessionService();
             Session session = service.Get(order.SessionId);

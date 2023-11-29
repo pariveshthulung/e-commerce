@@ -4,90 +4,106 @@
 @model ebay.ViewModel.cartVm
 @* <partial name="_publicNav" /> *@
 
-
-<form method="post">
+@if (@Model.Subtotal == 0)
+{
+    <div class="col-md-2 offset-md-1 mt-5">
+    <a class="btn btn-outline-primary text-uppercase mb-5 btn-sm" asp-action="Index"
+        asp-controller="Public"><small>Continue
+            Shopping</small></a>
+    </div>
+    <h1 class="text-center mt-5">No item in Carts</h1>
+}
+else
+{
+    <form method="post">
     <br />
     <div class="card shadow border-0">
         @* <div class="card-header bg-secondary bg-gradient text-light ml-0 py-4">
-            <div class="row px-4">
-                <div class="col-6">
-                    <h5 class="pt-2 text-white">
-                        Shopping Cart
-                    </h5>
-                </div>
-            </div>
+        <div class="row px-4">
+        <div class="col-6">
+        <h5 class="pt-2 text-white">
+        Shopping Cart
+        </h5>
+        </div>
+        </div>
         </div> *@
         <div class="card-body my-4">
             <div class="row">
             </div>
             <div class="row mb-3 pb-3">
                 <div class="col-md-2 offset-md-1">
-                    <a  class="btn btn-outline-primary text-uppercase mb-5 btn-sm" asp-action="Index" asp-controller="Public"><small>Continue
+                    <a class="btn btn-outline-primary text-uppercase mb-5 btn-sm" asp-action="Index"
+                        asp-controller="Public"><small>Continue
                             Shopping</small></a>
                 </div>
                 @foreach (var data in Model.CartItemList)
-                {
-                    <div class="form-check col-md-10 offset-md-1">
-                        <div class="row border-bottom pb-3 ">
-                            <div class="text-center">
-                                <input class="form-check-input mt-5" type="checkbox" value="" id="flexCheckChecked" checked>
-                            </div>
-                            <div class="d-none d-lg-block col-lg-1 text-center py-2">
-                                <img src="/Public/images/product/@data.Product.Product_image" class="rounded"
-                                    width="100%" />
-                            </div>
-                            <div class="col-12 col-lg-6 pt-md-3">
-                                <h5 class="text-uppercase text-dark product-title col-12 text-truncate">
-                                    <strong>@data.Product.Name</strong>
-                                </h5>
-                                <p><small>@Html.Raw(data.Product.Description.Substring(0, 250) + "...")</small></p>
-                            </div>
-                            <div class="col-12  col-lg-5 text-center row">
-                                <div class="col-3 text-md-right pt-2 pt-md-4">
-                                    <h6 class="fw-semibold">
-                                        @data.Product.Price
-                                        <span class="text-muted">&nbsp;x&nbsp;</span>@data.Quantity
-                                    </h6>
+                    {
+                        <div class="form-check col-md-10 offset-md-1">
+                            <div class="row border-bottom pb-3 ">
+                                <div class="text-center">
+                                    <input class="form-check-input mt-5" type="checkbox" value="" id="flexCheckChecked" checked>
                                 </div>
-                                <div class="col-6 col-sm-4 col-lg-6 pt-2">
-                                    <div class="w-75 btn-group" role="group">
-                                        <a class="btn btn-outline-primary bg-gradient py-2" asp-action="Add" asp-route-id="@data.id">
-                                            <i class="bi bi-plus-square"></i>
-                                        </a> &nbsp;
-                                        <a class="btn btn-outline-primary bg-gradient py-2" asp-action="Minus" asp-route-id="@data.id">
-                                            <i class="bi bi-dash-square"></i>
+                                <div class="d-none d-lg-block col-lg-1 text-center py-2">
+                                    <img src="/Public/images/product/@data.Product.Product_image" class="rounded"
+                                        width="100%" />
+                                </div>
+                                <div class="col-12 col-lg-6 pt-md-3">
+                                    <h5 class="text-uppercase text-dark product-title col-12 text-truncate">
+                                        <strong>@data.Product.Name</strong>
+                                    </h5>
+                                    <p><small>@Html.Raw(data.Product.Description.Substring(0, 250) + "...")</small></p>
+                                </div>
+                                <div class="col-12  col-lg-5 text-center row">
+                                    <div class="col-3 text-md-right pt-2 pt-md-4">
+                                        <h6 class="fw-semibold">
+                                            @data.Product.Price
+                                            <span class="text-muted">&nbsp;x&nbsp;</span>@data.Quantity
+                                        </h6>
+                                    </div>
+                                    <div class="col-6 col-sm-4 col-lg-6 pt-2">
+                                        <div class="w-75 btn-group" role="group">
+                                            <a class="btn btn-outline-primary bg-gradient py-2" asp-action="Add"
+                                                asp-route-id="@data.id">
+                                                <i class="bi bi-plus-square"></i>
+                                            </a> &nbsp;
+                                            <a class="btn btn-outline-primary bg-gradient py-2" asp-action="Minus"
+                                                asp-route-id="@data.id">
+                                                <i class="bi bi-dash-square"></i>
+                                            </a>
+                                        </div>
+                                    </div>
+                                    <div class="col-3 col-sm-4 col-lg-2 offset-lg-1 text-right pt-2">
+                                        <a class="btn btn-danger bg-gradient py-2 " asp-action="Delete" asp-route-id="@data.id">
+                                            <i class="bi bi-trash-fill"></i>
                                         </a>
                                     </div>
                                 </div>
-                                <div class="col-3 col-sm-4 col-lg-2 offset-lg-1 text-right pt-2">
-                                    <a class="btn btn-danger bg-gradient py-2 "  asp-action="Delete" asp-route-id="@data.id">
-                                        <i class="bi bi-trash-fill"></i>
-                                    </a>
-                                </div>
-                            </div>
 
+                            </div>
+                        </div>
+                    }
+                </div>
+                <div class="card-footer bg-white border-0">
+                    <div class="row">
+                        <div class="col-md-4 offset-md-4">
+                            <ul class="list-group mb-4">
+                                <li class="d-flex justify-content-between align-items-center">
+                                    <h5 class="text-dark fw-semibold text-uppercase"> Subtotal (USD)</h5>
+                                    <h4 class="text-dark fw-bolder">@Model.Subtotal.ToString("c")</h4>
+                                </li>
+                            </ul>
                         </div>
                     </div>
-                }
-            </div>
-            <div class="card-footer bg-white border-0">
-                <div class="row">
-                    <div class="col-md-4 offset-md-4">
-                        <ul class="list-group mb-4">
-                            <li class="d-flex justify-content-between align-items-center">
-                                <h5 class="text-dark fw-semibold text-uppercase"> Subtotal (USD)</h5>
-                                <h4 class="text-dark fw-bolder">@Model.Subtotal.ToString("c")</h4>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-2 offset-md-5">
-                        <a class="btn btn-primary border-0 bg-gradient w-100 btn-sm py-2" asp-action="CheckOut" >Proceed to checkout</a>
+                    <div class="row">
+                        <div class="col-md-2 offset-md-5">
+                            <a class="btn btn-primary border-0 bg-gradient w-100 btn-sm py-2" asp-action="CheckOut">Proceed
+                                to checkout</a>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-</form>
+    </form>
+}
+
 
 @* <partial name="_publicNewsletter" /> *@
