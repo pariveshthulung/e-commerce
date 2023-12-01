@@ -4,6 +4,7 @@ using ebay.Data;
 using ebay.Entity;
 using ebay.Models;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -35,6 +36,7 @@ public class SeedingController : Controller
 					FirstName = "admin",
 					LastName = "admin"
 				};
+				UserManager.AddToRole(admin.Id, "Admin");
 				await _context.AddAsync(admin);
 				await _context.SaveChangesAsync();
 				tx.Complete();
@@ -254,4 +256,17 @@ public class SeedingController : Controller
 			return Content("countries added!!!");
 		
 	}
+}
+
+internal class UserManager
+{
+    internal static void AddToRole(bool adminExit, string v)
+    {
+        throw new NotImplementedException();
+    }
+
+    internal static void AddToRole(int id, string v)
+    {
+        throw new NotImplementedException();
+    }
 }

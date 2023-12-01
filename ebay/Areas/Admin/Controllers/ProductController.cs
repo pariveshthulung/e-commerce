@@ -9,6 +9,7 @@ using ebay.Models;
 using ebay.Repository;
 using ebay.Repository.IRepository;
 using ebay.ViewModel;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -19,6 +20,7 @@ using Microsoft.Identity.Client;
 namespace ebay.Areas.Admin.Controllers
 {
     [Area("Admin")]
+    [Authorize(Roles = "Admin")]
 
     public class ProductController : Controller
     {
@@ -44,7 +46,7 @@ namespace ebay.Areas.Admin.Controllers
           .Where(x =>
               string.IsNullOrEmpty(vm.Name) || x.Name.Contains(vm.Name)
           ).Include(x => x.Category).ToListAsync();
-          return View(vm);
+            return View(vm);
         }
 
         public async Task<IActionResult> Add()

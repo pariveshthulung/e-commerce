@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using NuGet.Common;
+using Stripe;
 using Stripe.Checkout;
 
 namespace ebay.Areas.Public.Controllers;
@@ -122,7 +123,7 @@ public class CartController : Controller
         user.PhoneNo = vm.PhoneNo;
         if (addressFrmDb == null)
         {
-            var address = new Address();
+            var address = new Models.Address();
             address.Address_Line = vm.Address_Line;
             address.Landmark = vm.Landmark;
             address.Region = vm.Region;
@@ -224,6 +225,26 @@ public class CartController : Controller
         _context.RemoveRange(cartItems);
         _context.SaveChanges();
         return View();
+    }
+    // [HttpPost]
+    public IActionResult CancelOrder(int orderId, int orderItemId)
+    {
+        var orderFromDb = _context.Orders.FirstOrDefault(x => x.id == orderId);
+        var orderItemsFrmDb = _context.OrderItems.Where(x => x.id == orderItemId).FirstOrDefault();
+        if (orderFromDb.PaymentStatus == "Approved")
+        {
+            var options = new RefundCreateOptions
+            {
+                PaymentIntent = orderFromDb.PaymentIntentId,
+                Amount = (long?)orderItemsFrmDb.Price
+            };
+            var service = new RefundService();
+            service.Create(options);
+        }
+            UpdateStatus(orderId, OrderStatusConstants.Cancelled, PaymentStatusConstant.Refund);
+        _context.SaveChanges();
+        _notifyService.Success("Order cancelLed Sucessfully!!!");
+        return RedirectToAction(nameof(Index),nameof(Public));
     }
 
     public void UpdateStatus(int id, string orderStatus, string? paymentStatus)

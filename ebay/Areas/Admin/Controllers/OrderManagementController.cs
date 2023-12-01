@@ -1,11 +1,14 @@
 ﻿using AspNetCoreHero.ToastNotification.Abstractions;
 using ebay.Data;
 using ebay.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace ebay.Areas.Admin.Controllers;
 [Area("Admin")]
+[Authorize(Roles ="Admin")]
+
 public class OrderManagementController : Controller
 {
     private readonly ApplicationDbContext _context;

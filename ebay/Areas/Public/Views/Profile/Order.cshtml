@@ -2,10 +2,12 @@
     Layout = "_publicLayout";
 }
 @model ebay.ViewModel.OrderMangementVm
-<div class="mt-5">
-    <h1 class="text-center text-dark mt-5">Order</h1>
-    <hr>
-        @foreach (var data in Model.OrderItemsList.OrderByDescending(x=>x.Order.Order_date))
+<form method="post">
+
+    <div class="mt-5">
+        <h1 class="text-center text-dark mt-5">Order</h1>
+        <hr>
+        @foreach (var data in Model.OrderItemsList.OrderByDescending(x => x.Order.Order_date))
         {
             <div class="form-check col-md-10 offset-md-1">
                 <div class="row border-bottom pb-3 ">
@@ -30,29 +32,31 @@
                                 <strong>@data.Order.Order_status</strong>
                             </div>
                         </div>
-                        @if(@data.Order.Order_status=="Approved")
+                        @if (@data.Order.Order_status == "Approved")
                         {
                             <div class="col-3 col-sm-4 col-lg-4 offset-lg-1 text-right  mx-auto my-auto">
-                            <a class="" asp-action="Delete" asp-route-id="@data.id">
-                                @* <i class="bi bi-trash-fill"></i> *@
-                                <h6>Manage order</h6>
-                            </a>
-                        </div>
+                                <a class="" asp-action="Delete" asp-route-id="@data.id">
+                                    @* <i class="bi bi-trash-fill"></i> *@
+                                    <h6>Manage order</h6>
+                                </a>
+                            </div>
                         }
                         else
-                         {
+                        {
                             <div class="col-3 col-sm-4 col-lg-4 offset-lg-1 text-right pt-2 mx-auto my-auto">
 
-                            <a class="" asp-action="Delete" asp-route-id="@data.id">
-                                @* <i class="bi bi-trash-fill"></i> *@
-                                <h6>Detail</h6>
-                            </a>
+                                <a class="btn btn-danger" asp-action="CancelOrder" asp-controller="Cart" asp-route-orderId="@data.Order_id" asp-route-orderItemId="@data.id">
+                                    @* <i class="bi bi-trash-fill"></i> *@
+                                    <h6>Cancel Order</h6>
+                                </a>
                             </div>
-                         }
-                        
+                        }
+
                     </div>
 
                 </div>
             </div>
         }
-</div>
+    </div>
+
+</form>

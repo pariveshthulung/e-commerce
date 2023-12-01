@@ -1,8 +1,11 @@
 ﻿using System.Transactions;
 using AspNetCoreHero.ToastNotification.Abstractions;
+using ebay.Constants;
 using ebay.Data;
+using ebay.Entity;
 using ebay.Models;
 using ebay.ViewModel;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
@@ -10,6 +13,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Internal;
 namespace ebay.Areas.Admin.Controllers;
 
 [Area("Admin")]
+[Authorize(Roles = "Admin")]
 
 public class CategoryController : Controller
 {
