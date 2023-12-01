@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
+using ebay.Constants;
 
 namespace ebay.Models
 {
@@ -14,8 +15,11 @@ namespace ebay.Models
         public virtual Product? Product { get; set; }
         public int Quantity { get; set; }
         [Column(TypeName = "decimal(18,2)")] 
-
         public decimal Price { get; set; }
+        public string? PaymentStatus { get; set; }
+
+        public string? Order_status { get; set; } 
+
 
     }
 }

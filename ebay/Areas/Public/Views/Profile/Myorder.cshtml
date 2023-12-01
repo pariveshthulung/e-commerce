@@ -29,26 +29,26 @@
                         </div>
                         <div class="col-6 col-sm-4 col-lg-4 ">
                             <div class="w-75 btn-group" role="group">
-                                <strong>@data.Order.Order_status</strong>
+                                @* <strong>@data.Order.Order_status</strong> *@
                             </div>
                         </div>
-                        @if (@data.Order.Order_status == "Approved")
+                        @* @if (@data.Order.Order_status != "Approved") *@
                         {
                             <div class="col-3 col-sm-4 col-lg-4 offset-lg-1 text-right  mx-auto my-auto">
-                                <a class="" asp-action="Delete" asp-route-id="@data.id">
+                                <button class="" asp-action="Delete" asp-route-id="@data.id">
                                     @* <i class="bi bi-trash-fill"></i> *@
                                     <h6>Manage order</h6>
-                                </a>
+                                </button>
                             </div>
                         }
                         else
                         {
                             <div class="col-3 col-sm-4 col-lg-4 offset-lg-1 text-right pt-2 mx-auto my-auto">
 
-                                <a class="btn btn-danger" asp-action="CancelOrder" asp-controller="Cart" asp-route-orderId="@data.Order_id" asp-route-orderItemId="@data.id">
+                                <button class="btn btn-danger" asp-action="CancelOrder" asp-controller="Cart" asp-route-orderId="@data.Order_id" asp-route-orderItemId="@data.id">
                                     @* <i class="bi bi-trash-fill"></i> *@
                                     <h6>Cancel Order</h6>
-                                </a>
+                                </button>
                             </div>
                         }
 

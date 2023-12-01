@@ -226,7 +226,7 @@ public class CartController : Controller
         _context.SaveChanges();
         return View();
     }
-    // [HttpPost]
+    [HttpPost]
     public IActionResult CancelOrder(int orderId, int orderItemId)
     {
         var orderFromDb = _context.Orders.FirstOrDefault(x => x.id == orderId);
@@ -240,11 +240,12 @@ public class CartController : Controller
             };
             var service = new RefundService();
             service.Create(options);
-        }
             UpdateStatus(orderId, OrderStatusConstants.Cancelled, PaymentStatusConstant.Refund);
+        }
         _context.SaveChanges();
         _notifyService.Success("Order cancelLed Sucessfully!!!");
-        return RedirectToAction(nameof(Index),nameof(Public));
+        
+        return RedirectToAction("Myorder","Profile");
     }
 
     public void UpdateStatus(int id, string orderStatus, string? paymentStatus)
