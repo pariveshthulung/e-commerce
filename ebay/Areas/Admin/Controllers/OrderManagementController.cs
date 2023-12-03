@@ -29,7 +29,7 @@ public class OrderManagementController : Controller
     [HttpGet]
     public IActionResult GetAll()
     {
-        List<Order> OrderList = _context.Orders.Include(x=>x.User).ToList();  
+        List<OrderItems> OrderList = _context.OrderItems.Include(x=>x.Order.User).ToList();  
         return Json(new {data= OrderList});
     }
     #endregion

@@ -33,13 +33,19 @@ public class PublicController : Controller
         //   ).ToListAsync();
 
         vm.Data = await _context.Products.Where(
-            x => (vm.CategoryId == null || vm.CategoryId == x.CategoryId)
+            x => (vm.CategoryId == null )
             && (string.IsNullOrEmpty(vm.Name) || x.Name.ToLower().Contains(vm.Name.ToLower()))
             ).ToListAsync();
         vm.Categories = await _context.Categories.ToListAsync();
-        var userId = _currentUserProvder.GetCurrentUserId();
-        var cartFrmDb = _context.Carts.FirstOrDefault(x=>x.User_id==userId);
-        vm.CartCount = (int)_context.CartItems.Where(x => x.Cart_id ==cartFrmDb.id).LongCount();
+        if (_currentUserProvder.IsLoggedIn())
+        {
+            var userId = _currentUserProvder.GetCurrentUserId();
+            var cartFrmDb = _context.Carts.FirstOrDefault(x => x.User_id == userId);
+            if (cartFrmDb != null)
+            {
+                vm.CartCount = (int)_context.CartItems.Where(x => x.Cart_id == cartFrmDb.id).LongCount();
+            }
+        }
         return View(vm);
     }
 

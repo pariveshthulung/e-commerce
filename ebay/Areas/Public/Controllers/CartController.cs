@@ -209,16 +209,20 @@ public class CartController : Controller
     }
     public IActionResult Thankyou(int orderId, int cartId)
     {
-        var order = _context.Orders.Where(x => x.id == orderId).FirstOrDefault();
-        if (order.Order_status == PaymentStatusConstant.Pending)
+        var orderfromDb = _context.Orders.Where(x => x.id == orderId).FirstOrDefault();
+        var orderItemFromDb = _context.OrderItems.Where(x => x.Order_id == orderId).ToList();
+        foreach (var item in orderItemFromDb)
         {
-            var service = new SessionService();
-            Session session = service.Get(order.SessionId);
-            if (session.PaymentStatus.ToLower() == "paid")
+            if (item.Order_status == PaymentStatusConstant.Pending)
             {
-                UpdateStripePaymentID(orderId, session.Id, session.PaymentIntentId);
-                UpdateStatus(orderId, OrderStatusConstants.Approved, PaymentStatusConstant.Approved);
-                _context.SaveChanges();
+                var service = new SessionService();
+                Session session = service.Get(orderfromDb.SessionId);
+                if (session.PaymentStatus.ToLower() == "paid")
+                {
+                    UpdateStripePaymentID(orderId, session.Id, session.PaymentIntentId);
+                    UpdateStatus(item.id, OrderStatusConstants.Approved, PaymentStatusConstant.Approved);
+                    _context.SaveChanges();
+                }
             }
         }
         List<CartItem> cartItems = _context.CartItems.Where(x => x.Cart_id == cartId).ToList();
@@ -231,32 +235,32 @@ public class CartController : Controller
     {
         var orderFromDb = _context.Orders.FirstOrDefault(x => x.id == orderId);
         var orderItemsFrmDb = _context.OrderItems.Where(x => x.id == orderItemId).FirstOrDefault();
-        if (orderFromDb.PaymentStatus == "Approved")
+        if (orderItemsFrmDb.PaymentStatus == "Approved")
         {
             var options = new RefundCreateOptions
             {
                 PaymentIntent = orderFromDb.PaymentIntentId,
-                Amount = (long?)orderItemsFrmDb.Price
+                Amount = (long?)orderItemsFrmDb.Price * 100 * orderItemsFrmDb.Quantity
             };
             var service = new RefundService();
             service.Create(options);
-            UpdateStatus(orderId, OrderStatusConstants.Cancelled, PaymentStatusConstant.Refund);
+            UpdateStatus(orderItemsFrmDb.id, OrderStatusConstants.Cancelled, PaymentStatusConstant.Refund);
         }
         _context.SaveChanges();
         _notifyService.Success("Order cancelLed Sucessfully!!!");
-        
-        return RedirectToAction("Myorder","Profile");
+
+        return RedirectToAction("Myorder", "Profile");
     }
 
-    public void UpdateStatus(int id, string orderStatus, string? paymentStatus)
+    public void UpdateStatus(int itemId, string orderStatus, string? paymentStatus)
     {
-        var orderFromDb = _context.Orders.FirstOrDefault(x => x.id == id);
-        if (orderFromDb != null)
+        var orderItemFromDb = _context.OrderItems.FirstOrDefault(x => x.id == itemId);
+        if (orderItemFromDb != null)
         {
-            orderFromDb.Order_status = orderStatus;
+            orderItemFromDb.Order_status = orderStatus;
             if (!string.IsNullOrEmpty(paymentStatus))
             {
-                orderFromDb.PaymentStatus = paymentStatus;
+                orderItemFromDb.PaymentStatus = paymentStatus;
             }
         }
     }

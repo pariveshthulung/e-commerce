@@ -36,7 +36,6 @@ public class SeedingController : Controller
 					FirstName = "admin",
 					LastName = "admin"
 				};
-				UserManager.AddToRole(admin.Id, "Admin");
 				await _context.AddAsync(admin);
 				await _context.SaveChangesAsync();
 				tx.Complete();
