@@ -37,6 +37,9 @@ public class PublicController : Controller
             && (string.IsNullOrEmpty(vm.Name) || x.Name.ToLower().Contains(vm.Name.ToLower()))
             ).ToListAsync();
         vm.Categories = await _context.Categories.ToListAsync();
+        var userId = _currentUserProvder.GetCurrentUserId();
+        var cartFrmDb = _context.Carts.FirstOrDefault(x=>x.User_id==userId);
+        vm.CartCount = (int)_context.CartItems.Where(x => x.Cart_id ==cartFrmDb.id).LongCount();
         return View(vm);
     }
 
@@ -77,6 +80,7 @@ public class PublicController : Controller
                 cartitem.Product_id = vm.Product_id;
                 cartitem.Cart_id = cartFrmDb.id;
                 cartitem.Quantity = vm.Quantity;
+                // cartFrmDb.CartCount = _context.CartItems.Where(x => x.Cart_id == cartFrmDb.id).Count();
                 _context.Add(cartitem);
                 await _context.SaveChangesAsync();
                 _notifyService.Success("Added to cart");

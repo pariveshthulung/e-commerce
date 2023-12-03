@@ -25,6 +25,7 @@ namespace ebay.ViewModel
 			);
 
 		}
+		public int CartCount { get; set; }
 
 	}
 }

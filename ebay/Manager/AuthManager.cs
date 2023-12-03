@@ -2,6 +2,7 @@
 using System.Security.Claims;
 using System.Transactions;
 using AspNetCoreHero.ToastNotification.Abstractions;
+using ebay.Constants;
 using ebay.Data;
 using ebay.Entity;
 using ebay.Manager.Interface;
@@ -46,7 +47,12 @@ public class AuthManager : IAuthManager
             var claim = new List<Claim>
             {
                 new ("Id" , user.Id.ToString())
+
             };
+            if(user.UserType == UserTypeConstants.Admin)
+            {
+                claim.Add( new Claim(ClaimsIdentity.DefaultRoleClaimType, "Admin"));
+            }
             var claimsIdentity = new ClaimsIdentity(claim, CookieAuthenticationDefaults.AuthenticationScheme);
             await httpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme,
                 new ClaimsPrincipal(claimsIdentity));

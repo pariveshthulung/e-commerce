@@ -104,7 +104,7 @@
 								<a asp-action="Index" asp-controller="Profile" asp-area="Public" class="dropdown-item"><i class="fa-regular fa-user"></i> &nbsp
 									My
 									Profile</a>
-								<a asp-action="Order" asp-controller="Profile" asp-area="Public" class="dropdown-item"><i class="bi bi-box-seam"></i> &nbsp
+								<a asp-action="Myorder" asp-controller="Profile" asp-area="Public" class="dropdown-item"><i class="bi bi-box-seam"></i> &nbsp
 									Orders</a>
 								<div class="dropdown-divider"></div>
 								@{
@@ -126,8 +126,10 @@
 						</div>
 					</li>
 					<li>
-						<a class="nav-link" asp-action="Index" asp-controller="Cart" asp-area="Public"><img
-										src="/Public/images/cart.svg"></a>
+						<a class="nav-link position-relative" asp-action="Index" asp-controller="Cart" asp-area="Public"><img
+										src="/Public/images/cart.svg">
+										<span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-secondary">@Model.CartCount</span>
+						</a>
 						@* @{
 							currentUser = await _currentUserProvider.GetCurrentUser();
 							if (currentUser == null)

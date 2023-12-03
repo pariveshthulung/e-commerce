@@ -67,7 +67,7 @@ public class ProfileController : Controller
 
         return RedirectToAction(nameof(Index), nameof(Public));
     }
-    public IActionResult Order(OrderMangementVm vm)
+    public IActionResult Myorder(OrderMangementVm vm)
     {
         // get current user 
         vm.UserId = _currentUserProvider.GetCurrentUserId();
