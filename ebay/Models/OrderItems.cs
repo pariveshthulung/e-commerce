@@ -16,9 +16,9 @@ namespace ebay.Models
         public int Quantity { get; set; }
         [Column(TypeName = "decimal(18,2)")] 
         public decimal Price { get; set; }
-        public string? PaymentStatus { get; set; }
+        public string? PaymentStatus { get; set; } = PaymentStatusConstant.Pending;
 
-        public string? Order_status { get; set; } 
+        public string? Order_status { get; set; } = OrderStatusConstants.Pending;
 
 
     }

@@ -12,8 +12,8 @@ using ebay.Data;
 namespace ebay.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20231018042700_models")]
-    partial class models
+    [Migration("20231203110908_inital")]
+    partial class inital
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -282,16 +282,16 @@ namespace ebay.Migrations
                     b.Property<bool>("Is_Default")
                         .HasColumnType("bit");
 
+                    b.Property<string>("Landmark")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Postal_Code")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Region")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("Street_no")
-                        .HasColumnType("int");
-
-                    b.Property<int>("User_id")
+                    b.Property<int?>("User_id")
                         .HasColumnType("int");
 
                     b.HasKey("id");
@@ -314,15 +314,12 @@ namespace ebay.Migrations
                     b.Property<string>("CartStatus")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("UserId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("User_id")
+                    b.Property<int?>("User_id")
                         .HasColumnType("int");
 
                     b.HasKey("id");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("User_id");
 
                     b.ToTable("Carts");
                 });
@@ -335,19 +332,13 @@ namespace ebay.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("id"));
 
+                    b.Property<DateTime>("AddedDate")
+                        .HasColumnType("datetime2");
+
                     b.Property<int>("Cart_id")
                         .HasColumnType("int");
 
-                    b.Property<int?>("Cartid")
-                        .HasColumnType("int");
-
-                    b.Property<decimal>("Price")
-                        .HasColumnType("decimal(18,4)");
-
                     b.Property<int>("Product_id")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("Productid")
                         .HasColumnType("int");
 
                     b.Property<int>("Quantity")
@@ -355,9 +346,9 @@ namespace ebay.Migrations
 
                     b.HasKey("id");
 
-                    b.HasIndex("Cartid");
+                    b.HasIndex("Cart_id");
 
-                    b.HasIndex("Productid");
+                    b.HasIndex("Product_id");
 
                     b.ToTable("CartItems");
                 });
@@ -402,13 +393,22 @@ namespace ebay.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("id"));
 
-                    b.Property<string>("Order_status")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<DateTime>("Order_date")
+                        .HasColumnType("datetime2");
 
                     b.Property<decimal>("Order_total")
-                        .HasColumnType("decimal(18,4)");
+                        .HasColumnType("decimal(18,2)");
 
-                    b.Property<int>("User_id")
+                    b.Property<DateTime>("PaymentDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("PaymentIntentId")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("SessionId")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("User_id")
                         .HasColumnType("int");
 
                     b.HasKey("id");
@@ -429,16 +429,16 @@ namespace ebay.Migrations
                     b.Property<int>("Order_id")
                         .HasColumnType("int");
 
-                    b.Property<int?>("Orderid")
-                        .HasColumnType("int");
+                    b.Property<string>("Order_status")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PaymentStatus")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<decimal>("Price")
-                        .HasColumnType("decimal(18,4)");
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<int>("Product_id")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("Productid")
                         .HasColumnType("int");
 
                     b.Property<int>("Quantity")
@@ -446,9 +446,9 @@ namespace ebay.Migrations
 
                     b.HasKey("id");
 
-                    b.HasIndex("Orderid");
+                    b.HasIndex("Order_id");
 
-                    b.HasIndex("Productid");
+                    b.HasIndex("Product_id");
 
                     b.ToTable("OrderItems");
                 });
@@ -476,7 +476,7 @@ namespace ebay.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<decimal>("Price")
-                        .HasColumnType("decimal(18,4)");
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<string>("Product_image")
                         .HasColumnType("nvarchar(max)");
@@ -584,9 +584,7 @@ namespace ebay.Migrations
 
                     b.HasOne("ebay.Entity.User", "User")
                         .WithMany()
-                        .HasForeignKey("User_id")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("User_id");
 
                     b.Navigation("Country");
 
@@ -597,7 +595,7 @@ namespace ebay.Migrations
                 {
                     b.HasOne("ebay.Entity.User", "User")
                         .WithMany()
-                        .HasForeignKey("UserId");
+                        .HasForeignKey("User_id");
 
                     b.Navigation("User");
                 });
@@ -606,11 +604,15 @@ namespace ebay.Migrations
                 {
                     b.HasOne("ebay.Models.Cart", "Cart")
                         .WithMany()
-                        .HasForeignKey("Cartid");
+                        .HasForeignKey("Cart_id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("ebay.Models.Product", "Product")
                         .WithMany()
-                        .HasForeignKey("Productid");
+                        .HasForeignKey("Product_id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Cart");
 
@@ -621,9 +623,7 @@ namespace ebay.Migrations
                 {
                     b.HasOne("ebay.Entity.User", "User")
                         .WithMany()
-                        .HasForeignKey("User_id")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("User_id");
 
                     b.Navigation("User");
                 });
@@ -632,11 +632,15 @@ namespace ebay.Migrations
                 {
                     b.HasOne("ebay.Models.Order", "Order")
                         .WithMany()
-                        .HasForeignKey("Orderid");
+                        .HasForeignKey("Order_id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("ebay.Models.Product", "Product")
                         .WithMany()
-                        .HasForeignKey("Productid");
+                        .HasForeignKey("Product_id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Order");
 
