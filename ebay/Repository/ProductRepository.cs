@@ -117,7 +117,7 @@ public class ProductRepository : Repository<Product>, IProductRepository
         items.Stock = obj.Stock;
         items.Brand = obj.Brand;
         items.Image = obj.Product_image;
-        // items.CategoryId = obj.CategoryId;
+        items.CategoryIds = _context.ProductCategories.Where(x=>x.ProductId==id).Select(x=>x.CategoryId).ToList();
         items.Categories = _context.Categories.ToList();
         return items;
     }

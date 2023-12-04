@@ -10,10 +10,11 @@ namespace ebay.ViewModel
 		public string? Name { get; set; }
 		public List<Product>? Data;
 		public Product? Product;
-		public int? CategoryId { get; set; }
+		public List<ProductCategory>? CategoryName { get; set; }
 		[ValidateNever]
 
 		public List<Category>? Categories { get; set; }
+		public int CategoryId { get; set; }
 
 		public SelectList? CategoryLists()
 		{

@@ -33,7 +33,7 @@ public class PublicController : Controller
         //   ).ToListAsync();
 
         vm.Data = await _context.Products.Where(
-            x => (vm.CategoryId == null )
+            x => (vm.CategoryName == null )
             && (string.IsNullOrEmpty(vm.Name) || x.Name.ToLower().Contains(vm.Name.ToLower()))
             ).ToListAsync();
         vm.Categories = await _context.Categories.ToListAsync();
