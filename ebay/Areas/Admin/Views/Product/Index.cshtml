@@ -148,6 +148,13 @@
                                                         </button>
                                                     </li>
                                                     <li>
+                                                        <a asp-controller="Image" asp-action="Add"
+                                                            asp-route-productId="@data.id"
+                                                            class="btn border-0 dropdown-item">
+                                                            <i class="bi bi-upload"></i>&nbsp Upload multiple image
+                                                        </a>
+                                                    </li>
+                                                    <li>
                                                         <!-- Button trigger modal -->
                                                         <button class="dropdown-item" type="button" data-bs-toggle="modal"
                                                             data-bs-target="#exampleModal">

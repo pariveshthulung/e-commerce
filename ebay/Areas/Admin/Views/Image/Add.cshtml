@@ -1,0 +1,15 @@
+@model ebay.ViewModel.ImageVm
+
+<form method="post" enctype="multipart/form-data">
+
+    <div class="mb-3 row">
+        <input asp-for="ProductId" hidden />
+        <label asp-for="Files" class="form-label"></label>
+        <input asp-for="Files" accept="image/*" class="form-control" multiple>
+    </div>
+    <div class="row">
+        <div class="col-6 col-md-3">
+            <button type="submit" class="btn btn-primary form-control">Add</button>
+        </div>
+    </div>
+</form>
