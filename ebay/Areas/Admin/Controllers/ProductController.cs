@@ -45,7 +45,7 @@ namespace ebay.Areas.Admin.Controllers
             vm.Data = await _context.Products
           .Where(x =>
               string.IsNullOrEmpty(vm.Name) || x.Name.Contains(vm.Name)
-          ).Include(x => x.Category).ToListAsync();
+          ).ToListAsync();
             return View(vm);
         }
 
@@ -67,7 +67,9 @@ namespace ebay.Areas.Admin.Controllers
                     // adding transactioScope for data integrity
                     using (var tx = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
                     {
-                        await _unitOfWork.ProductRepo.AddAsync(vm);
+                        var productId =  _unitOfWork.ProductRepo.AddAsync(vm);
+                        // await _unitOfWork.Save();
+                        await _unitOfWork.CategoryRepo.AddAsync(vm.CategoryId,productId);
                         await _unitOfWork.Save();
                         _notifyService.Success("Product added successfully.");
                         tx.Complete();

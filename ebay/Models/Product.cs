@@ -20,10 +20,7 @@ namespace ebay.Models
 		public string? Brand { get; set; }
 		[DisplayName("Image")]
 		public string? Product_image { get; set; }
-		[Required]
-		public int CategoryId { get; set; }
-		[ForeignKey("CategoryId")]
-		public virtual Category? Category { get; set; }
+		
 		
 
 	}

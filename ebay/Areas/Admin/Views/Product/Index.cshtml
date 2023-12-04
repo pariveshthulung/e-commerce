@@ -111,8 +111,8 @@
                                            
                                         <td class="w-25">
                                             
-
-                                            @Html.Raw(data.Description.Substring(0,120)+"...")
+                                            @data.Description
+                                            @* @Html.Raw(data.Description.Substring(0,120)+"...") *@
                                             
                                         </td>
                                             
@@ -128,7 +128,7 @@
                                         </td>
 
                                         <td>
-                                            @data.Category.Name
+                                            @* @data.Category.Name *@
                                         </td>
                                         <td>
                                             <div class="dropdown">

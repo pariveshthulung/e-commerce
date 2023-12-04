@@ -12,7 +12,7 @@ using ebay.Data;
 namespace ebay.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20231203110908_inital")]
+    [Migration("20231203135451_inital")]
     partial class inital
     {
         /// <inheritdoc />
@@ -464,9 +464,6 @@ namespace ebay.Migrations
                     b.Property<string>("Brand")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("CategoryId")
-                        .HasColumnType("int");
-
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -485,8 +482,6 @@ namespace ebay.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("id");
-
-                    b.HasIndex("CategoryId");
 
                     b.ToTable("Products");
                 });
@@ -645,17 +640,6 @@ namespace ebay.Migrations
                     b.Navigation("Order");
 
                     b.Navigation("Product");
-                });
-
-            modelBuilder.Entity("ebay.Models.Product", b =>
-                {
-                    b.HasOne("ebay.Models.Category", "Category")
-                        .WithMany()
-                        .HasForeignKey("CategoryId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Category");
                 });
 
             modelBuilder.Entity("ebay.Models.Review", b =>
