@@ -4,5 +4,6 @@ namespace ebay.Repository.IRepository;
 
 public interface ICategoryRepository :IRepository<ProductCategory> 
 {
-    Task AddAsync (int Id , int ProductId);
+    Task AddAsync (List<int>? Id , int ProductId);
+    Task UpdateAsync (List<int>? Id , int ProductId);
 }

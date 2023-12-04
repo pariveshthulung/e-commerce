@@ -46,6 +46,7 @@ namespace ebay.Areas.Admin.Controllers
           .Where(x =>
               string.IsNullOrEmpty(vm.Name) || x.Name.Contains(vm.Name)
           ).ToListAsync();
+          vm.CategoryName = _context.ProductCategories.Include(x=>x.Category).ToList();
             return View(vm);
         }
 
@@ -69,7 +70,7 @@ namespace ebay.Areas.Admin.Controllers
                     {
                         var productId =  _unitOfWork.ProductRepo.AddAsync(vm);
                         // await _unitOfWork.Save();
-                        await _unitOfWork.CategoryRepo.AddAsync(vm.CategoryId,productId);
+                        await _unitOfWork.CategoryRepo.AddAsync(vm.CategoryIds,productId);
                         await _unitOfWork.Save();
                         _notifyService.Success("Product added successfully.");
                         tx.Complete();
@@ -95,6 +96,7 @@ namespace ebay.Areas.Admin.Controllers
         {
             try
             {
+                var categoryId = _context.ProductCategories.Where(x=>x.ProductId==id).Select(x=>x.CategoryId).ToList();
                 var items = _unitOfWork.ProductRepo.UpdateDisplay(id);
                 return View(items);
             }
@@ -115,6 +117,7 @@ namespace ebay.Areas.Admin.Controllers
                     using (var tx = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
                     {
                         await _unitOfWork.ProductRepo.Update(id, vm);
+                        await _unitOfWork.CategoryRepo.UpdateAsync(vm.CategoryIds,id);
                         await _unitOfWork.Save();
                         _notifyService.Success("Product updated successfully.");
                         tx.Complete();
@@ -150,8 +153,8 @@ namespace ebay.Areas.Admin.Controllers
 
                     _unitOfWork.ProductRepo.Remove(res);
                     await _unitOfWork.Save();
-                    _notifyService.Success("Product deleted successfully.");
                     tx.Complete();
+                    _notifyService.Success("Product deleted successfully.");
                 }
                 return RedirectToAction("Index");
             }

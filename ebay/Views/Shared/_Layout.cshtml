@@ -37,6 +37,8 @@
       }
     </style>
 <link rel="stylesheet" href="//cdn.datatables.net/1.13.7/css/jquery.dataTables.min.css">
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+
 </head>
 <body>
     <script src="/assets/dist/js/demo-theme.min.js?1684106062"></script>
@@ -1361,7 +1363,12 @@
     </script>
     <script src="~/lib/jquery/dist/jquery.js"></script>
     <script src="//cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
-
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+<script>
+    $(document).ready(function () {
+      $('.select2').select2();
+    });
+  </script>
      @await Component.InvokeAsync("Notyf")
      @RenderSection("scripts", required: false)
      </body>

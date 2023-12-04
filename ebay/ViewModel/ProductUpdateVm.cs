@@ -20,6 +20,10 @@ namespace ebay.ViewModel
         [DisplayName("Upload Image")]
         public IFormFile? ImageFile { get; set; }
 
+		public List<ProductCategory>? CategoryName { get; set; }
+        public List<int> CategoryIds { get; set; }
+
+
         public int CategoryId { get; set; }
         public List<Category>? Categories { get; set; }
 

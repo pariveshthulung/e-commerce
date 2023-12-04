@@ -12,9 +12,9 @@
         </div>
         <div class="mb-3 row">
             <label asp-for="CategoryId" class="form-lable"></label>
-            <select class="form-select" asp-for="CategoryId" asp-items="@Model.CategoryList()">
-                <option disabled selected>--SELECT CATEGORY--</option>
-            </select>
+                <select class="form-select select2" multiple="multiple" asp-for="CategoryIds" asp-items="@Model.CategoryList()">
+                    @* <option disabled>--SELECT CATEGORY--</option> *@
+                </select>
         </div>
         <div class="mb-3 row">
             <label asp-for="Description" class="form-lable"></label>
