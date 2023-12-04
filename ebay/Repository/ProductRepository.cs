@@ -52,7 +52,7 @@ public class ProductRepository : Repository<Product>, IProductRepository
         return ("error adding images");
     }
 
-    public async Task AddAsync(ProductAddVm vm)
+    public  int AddAsync(ProductAddVm vm)
     {
         //adding transactioScope for data integrity
         using (var tx = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
@@ -66,9 +66,12 @@ public class ProductRepository : Repository<Product>, IProductRepository
             //  call method to insert image(pass items.product_image to check existing image)
             vm.Image = ConfigureImage(vm.ImageFile, items.Product_image);
             items.Product_image = vm.Image;
-            items.Category = _context.Categories.Where(x => x.id == vm.CategoryId).FirstOrDefault();
-            await dbset.AddAsync(items);
+            // items.Category = _context.Categories.Where(x => x.id == vm.CategoryId).FirstOrDefault();
+            //  dbset.AddAsync(items);
+             _context.Products.Add(items);
+             _context.SaveChanges();
             tx.Complete();
+            return (items.id);
         }
     }
 
@@ -90,7 +93,7 @@ public class ProductRepository : Repository<Product>, IProductRepository
             items.Price = vm.Price;
             items.Brand = vm.Brand;
             items.Stock = vm.Stock;
-            items.Category = await _context.Categories.Where(x => x.id == vm.CategoryId).FirstOrDefaultAsync();
+            // items.Category = await _context.Categories.Where(x => x.id == vm.CategoryId).FirstOrDefaultAsync();
 
             tx.Complete();
         }
@@ -114,7 +117,7 @@ public class ProductRepository : Repository<Product>, IProductRepository
         items.Stock = obj.Stock;
         items.Brand = obj.Brand;
         items.Image = obj.Product_image;
-        items.CategoryId = obj.CategoryId;
+        items.CategoryIds = _context.ProductCategories.Where(x=>x.ProductId==id).Select(x=>x.CategoryId).ToList();
         items.Categories = _context.Categories.ToList();
         return items;
     }

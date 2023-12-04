@@ -310,17 +310,17 @@ public class SeedingController : Controller
 	{
 		try
 		{
-			using (var Tx = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
-			{
-				var Product = new List<Product>
-				{
-					new Product(){Name= "Apple iPhone 11, 64GB, Black - Unlocked (Renewed)",Description="This phone is unlocked and compatible with any carrier of choice on GSM and CDMA networks (e.g. AT&T, T-Mobile, Sprint, Verizon, US Cellular, Cricket, Metro, Tracfone, Mint Mobile, etc.).Tested for battery health and guaranteed to have a minimum battery capacity of 80%.Successfully passed a full diagnostic test which ensures like-new functionality and removal of any prior-user personal information.The device does not come with headphones or a SIM card. It does include a generic (Mfi certified) charger and charging cable.Inspected and guaranteed to have minimal cosmetic damage, which is not noticeable when the device is held at arm's length.",Price=267,Stock=100,Brand="Apple",CategoryId=3},
-					new Product{Name = "MageGee 75% Mechanical Gaming Keyboard with Red Switch, LED Blue Backlit Keyboard, 87 Keys Compact TKL Wired Computer Keyboard for Windows Laptop PC Gamer - Black/Grey",Description="[Mechanical red switch]: characterized for being linear and smoother, slight key sound has no paragraph sense with minimal resistance, but fast action without a tactile bump feel which makes it easier to tap the keyboard.[Classic charming blue LED backlight]: customize multiple illuminated light effects with static and dynamic, supports about 20 kinds backlight modes, press Fn+| to switch, FN+↑/↓ control backlight brightness, FN+←/→ control backlight speed.",Stock=100,Price=29,CategoryId=2,Brand="MageGee"}
-				};
-				await _context.Products.AddRangeAsync(Product);
-				_context.SaveChanges();
-				Tx.Complete();
-			}
+			// using (var Tx = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
+			// {
+			// 	var Product = new List<Product>
+			// 	{
+			// 		new Product(){Name= "Apple iPhone 11, 64GB, Black - Unlocked (Renewed)",Description="This phone is unlocked and compatible with any carrier of choice on GSM and CDMA networks (e.g. AT&T, T-Mobile, Sprint, Verizon, US Cellular, Cricket, Metro, Tracfone, Mint Mobile, etc.).Tested for battery health and guaranteed to have a minimum battery capacity of 80%.Successfully passed a full diagnostic test which ensures like-new functionality and removal of any prior-user personal information.The device does not come with headphones or a SIM card. It does include a generic (Mfi certified) charger and charging cable.Inspected and guaranteed to have minimal cosmetic damage, which is not noticeable when the device is held at arm's length.",Price=267,Stock=100,Brand="Apple",CategoryId=3},
+			// 		new Product{Name = "MageGee 75% Mechanical Gaming Keyboard with Red Switch, LED Blue Backlit Keyboard, 87 Keys Compact TKL Wired Computer Keyboard for Windows Laptop PC Gamer - Black/Grey",Description="[Mechanical red switch]: characterized for being linear and smoother, slight key sound has no paragraph sense with minimal resistance, but fast action without a tactile bump feel which makes it easier to tap the keyboard.[Classic charming blue LED backlight]: customize multiple illuminated light effects with static and dynamic, supports about 20 kinds backlight modes, press Fn+| to switch, FN+↑/↓ control backlight brightness, FN+←/→ control backlight speed.",Stock=100,Price=29,CategoryId=2,Brand="MageGee"}
+			// 	};
+			// 	await _context.Products.AddRangeAsync(Product);
+			// 	_context.SaveChanges();
+			// 	Tx.Complete();
+			// }
 
 		}
 		catch(Exception e)

@@ -9,14 +9,14 @@ public class UnitOfWork : IUnitOfWork
     public IProductRepository ProductRepo {get;private set;}
     public IWebHostEnvironment _webHostEnvironment { get; }
 
-    // public ICategoryRepository CategoryRepo {get;private set;}
+    public ICategoryRepository CategoryRepo {get;private set;}
 
     public UnitOfWork(ApplicationDbContext context, IWebHostEnvironment webHostEnvironment  )
     {
         _context = context;
         _webHostEnvironment = webHostEnvironment;
         ProductRepo = new ProductRepository(_context,_webHostEnvironment);
-        // CategoryRepo = new CategoryRepository(_context); 
+        CategoryRepo = new CategoryRepository(_context); 
     }
     
     public async Task Save()

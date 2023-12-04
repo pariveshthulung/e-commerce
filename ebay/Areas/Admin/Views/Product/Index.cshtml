@@ -105,17 +105,16 @@
                                             </div>
                                         </td>
                                         <td>
-                                            <strong class="d-inline-block text-truncate" style="max-width: 150px;">@data.Name</strong>
+                                            <strong class="d-inline-block text-truncate"
+                                                style="max-width: 120px;">@data.Name</strong>
                                         </td>
 
-                                           
+
                                         <td class="w-25">
-                                            
-
-                                            @Html.Raw(data.Description.Substring(0,120)+"...")
-                                            
+                                            @* @data.Description *@
+                                            @Html.Raw(data.Description.Substring(0, 150) + "...")
                                         </td>
-                                            
+
                                         <td>
                                             @data.Price
                                         </td>
@@ -128,7 +127,10 @@
                                         </td>
 
                                         <td>
-                                            @data.Category.Name
+                                            @foreach (var name in Model.CategoryName.Where(x => x.ProductId == @data.id))
+                                            {
+                                                @Html.Raw(@name.Category.Name + ",")
+                                            }
                                         </td>
                                         <td>
                                             <div class="dropdown">
