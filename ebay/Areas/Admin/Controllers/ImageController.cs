@@ -51,7 +51,7 @@ public class ImageController : Controller
         _context.ProductImages.Remove(deleleRequest);
         _context.SaveChanges();
         _notifyService.Success("Image deleted!!!");
-        return RedirectToAction(nameof(Add));
+        return RedirectToAction(nameof(Index),nameof(Product));
     }
     public string ConfigureImage(int productId, List<IFormFile> files)
     {

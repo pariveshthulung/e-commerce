@@ -25,7 +25,7 @@
                 </div>
                 <div class="row">
 
-                    <div class="col-12 col-lg-5 offset-lg-1 text-center mb-3" style="margin-left: 0px;">
+                    <div class="col-12 col-lg-5 offset-lg-1 text-center mb-3" style="margin-left: 17px;">
                         <div class="sticky-top mt-5">
                             <div class="mt-3">
                                 <div class="row">
@@ -55,8 +55,9 @@
                                         class="closebtn">&times;</span> *@
 
                                         <!-- Expanded image -->
-                                        <img class="mt-5" src="/Public/images/product/@Model.Product.Product_image"
-                                            id="expandedImg" style="width:200%;">
+                                        <img class="mt-5" data-toggle="magnify"
+                                            src="/Public/images/product/@Model.Product.Product_image" id="expandedImg"
+                                            style="width:200%;">
 
                                         <!-- Image text -->
                                         <div id="imgtext"></div>
@@ -69,110 +70,110 @@
 
                         </div>
                     </div>
-                    <div class="col-12 col-lg-6 offset-lg-1">
+                    <div class="col-12 col-lg-6 offset-lg-1" style="margin-left: 11px;">
 
-                        <div class="col-12 col-md-6 pb-4">
-                            @* <span class="badge">@Model.Product.Category</span> *@
-                        </div>
-                        <div class="row ">
-                            <h1 class="text-dark" style="font-size: 24px;line-height: 32px;">@Model.Product.Name
-                            </h1>
-                        </div>
-                        <div class="row ">
-                            <span>Brand : @Model.Product.Brand</span>
-                        </div>
-                        <hr>
-                        <div class="row ">
-                            <h4 class="text-dark text-opacity-100 pt-2 pb-2">
-                                <span>
-                                    @Model.Product.Price.ToString("c")
-                                </span>
-                            </h4>
-                        </div>
-                        @* <div class="row text-center ">
-                        <div class="p-1 col-3 col-lg-2 bg-white border-bottom">
-                        <div class="text-dark text-opacity-50 fw-semibold">Quantity</div>
-                        </div>
-                        <div class="p-1 col-3 col-lg-2 bg-white border-bottom">
-                        <div class="text-dark text-opacity-50 fw-semibold">1-50</div>
-                        </div>
-                        <div class="p-1 col-3 col-lg-2 bg-white border-bottom">
-                        <div class="text-dark text-opacity-50 fw-semibold">51-100</div>
-                        </div>
-                        <div class="p-1 col-3 col-lg-2 bg-white border-bottom">
-                        <div class="text-dark text-opacity-50 fw-semibold">100+</div>
-                        </div>
-                        </div>
-                        <div class="row text-center ">
-                        <div class="p-1 col-3 col-lg-2 bg-white text-warning fw-bold">
-                        <div>Price</div>
-                        </div>
-                        <div class="p-1 col-3 col-lg-2 bg-white text-warning fw-bold">
-                        <div>Price</div>
-                        </div>
-                        <div class="p-1 col-3 col-lg-2 bg-white text-warning fw-bold">
-                        <div>Price50</div>
-                        </div>
-                        <div class="p-1 col-3 col-lg-2 bg-white text-warning fw-bold">
-                        <div>Price100</div>
-                        </div>
-                        </div> *@
-                        <div class="row pl-2 my-3">
-                            <h5 class="text-dark">About this item</h5>
-                            <div class="text-dark mt-0 pt-0">
-                                <p class="text-dark lh-sm">@Html.Raw(Model.Product.Description)</p>
-                            </div>
-                        </div>
-                        <div class="row pl-2 mb-3">
-                            <div class="col-md-4">
-                                <h5 class="text-success">In Stock</h5>
-                                <span class="text-dark">Qty:
-                                    <select class="" asp-for="Quantity">
-                                        <option value="1">1</option>
-                                        <option value="2">2</option>
-                                        <option value="3">3</option>
-                                        <option value="4">4</option>
-                                        <option value="5">5</option>
-                                        <option value="6">6</option>
-                                        <option value="7">7</option>
-                                        <option value="8">8</option>
-                                        <option value="9">9</option>
-                                        <option value="10">10</option>
-                                        <option value="11">11</option>
-                                        <option value="12">12</option>
-                                        <option value="13">13</option>
-                                        <option value="14">14</option>
-                                        <option value="15">15</option>
-                                        <option value="16">16</option>
-                                        <option value="17">17</option>
-                                        <option value="18">18</option>
-                                        <option value="19">19</option>
-                                        <option value="20">10</option>
-                                        <option value="21">21</option>
-                                    </select>
-                                </span>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-12 col-md-6 pb-1">
-                                <button type="submit"
-                                    class="btn btn-warning bg-gradient btn-sm  w-50 py-2 text-uppercase fw-semibold">
-                                    Add to Cart
-                                </button>
-                            </div>
-                            <div class="col-12 col-md-6 pb-1">
-                                <button type="submit" asp-action="Checkout" asp-controller="Cart"
-                                    class="btn btn-warning bg-gradient btn-sm  w-50 py-2 text-uppercase fw-semibold"
-                                    style="position:relative; right:50%;">
-                                    Buy Now
-                                </button>
-                            </div>
+                        <div class=" col-12 col-md-6 pb-4">
+                        @* <span class="badge">@Model.Product.Category</span> *@
+                    </div>
+                    <div class="row ">
+                        <h1 class="text-dark" style="font-size: 24px;line-height: 32px;">@Model.Product.Name
+                        </h1>
+                    </div>
+                    <div class="row ">
+                        <span>Brand : @Model.Product.Brand</span>
+                    </div>
+                    <hr>
+                    <div class="row ">
+                        <h4 class="text-dark text-opacity-100 pt-2 pb-2">
+                            <span>
+                                @Model.Product.Price.ToString("c")
+                            </span>
+                        </h4>
+                    </div>
+                    @* <div class="row text-center ">
+                    <div class="p-1 col-3 col-lg-2 bg-white border-bottom">
+                    <div class="text-dark text-opacity-50 fw-semibold">Quantity</div>
+                    </div>
+                    <div class="p-1 col-3 col-lg-2 bg-white border-bottom">
+                    <div class="text-dark text-opacity-50 fw-semibold">1-50</div>
+                    </div>
+                    <div class="p-1 col-3 col-lg-2 bg-white border-bottom">
+                    <div class="text-dark text-opacity-50 fw-semibold">51-100</div>
+                    </div>
+                    <div class="p-1 col-3 col-lg-2 bg-white border-bottom">
+                    <div class="text-dark text-opacity-50 fw-semibold">100+</div>
+                    </div>
+                    </div>
+                    <div class="row text-center ">
+                    <div class="p-1 col-3 col-lg-2 bg-white text-warning fw-bold">
+                    <div>Price</div>
+                    </div>
+                    <div class="p-1 col-3 col-lg-2 bg-white text-warning fw-bold">
+                    <div>Price</div>
+                    </div>
+                    <div class="p-1 col-3 col-lg-2 bg-white text-warning fw-bold">
+                    <div>Price50</div>
+                    </div>
+                    <div class="p-1 col-3 col-lg-2 bg-white text-warning fw-bold">
+                    <div>Price100</div>
+                    </div>
+                    </div> *@
+                    <div class="row pl-2 my-3">
+                        <h5 class="text-dark">About this item</h5>
+                        <div class="text-dark mt-0 pt-0">
+                            <p class="text-dark lh-sm">@Html.Raw(Model.Product.Description)</p>
                         </div>
                     </div>
-
+                    <div class="row pl-2 mb-3">
+                        <div class="col-md-4">
+                            <h5 class="text-success">In Stock</h5>
+                            <span class="text-dark">Qty:
+                                <select class="" asp-for="Quantity">
+                                    <option value="1">1</option>
+                                    <option value="2">2</option>
+                                    <option value="3">3</option>
+                                    <option value="4">4</option>
+                                    <option value="5">5</option>
+                                    <option value="6">6</option>
+                                    <option value="7">7</option>
+                                    <option value="8">8</option>
+                                    <option value="9">9</option>
+                                    <option value="10">10</option>
+                                    <option value="11">11</option>
+                                    <option value="12">12</option>
+                                    <option value="13">13</option>
+                                    <option value="14">14</option>
+                                    <option value="15">15</option>
+                                    <option value="16">16</option>
+                                    <option value="17">17</option>
+                                    <option value="18">18</option>
+                                    <option value="19">19</option>
+                                    <option value="20">10</option>
+                                    <option value="21">21</option>
+                                </select>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12 col-md-6 pb-1">
+                            <button type="submit"
+                                class="btn btn-warning bg-gradient btn-sm  w-50 py-2 text-uppercase fw-semibold">
+                                Add to Cart
+                            </button>
+                        </div>
+                        <div class="col-12 col-md-6 pb-1">
+                            <button type="submit" asp-action="Checkout" asp-controller="Cart"
+                                class="btn btn-warning bg-gradient btn-sm  w-50 py-2 text-uppercase fw-semibold"
+                                style="position:relative; right:50%;">
+                                Buy Now
+                            </button>
+                        </div>
+                    </div>
                 </div>
+
             </div>
         </div>
+    </div>
     </div>
 </form>
 
