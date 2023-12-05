@@ -94,40 +94,40 @@
                             </thead>
 
                             <tbody>
-                                @foreach (var data in Model.Data)
+                                @foreach (var product in Model.Data)
                                 {
                                     <tr>
                                         <td>
                                             <div class="avatar avatar-md border-0">
 
-                                                <img src="/Public/images/product/@data.Product_image" alt="image"
+                                                <img src="/Public/images/product/@product.Product_image" alt="image"
                                                     class="avatar-img rounded ">
                                             </div>
                                         </td>
                                         <td>
                                             <strong class="d-inline-block text-truncate"
-                                                style="max-width: 120px;">@data.Name</strong>
+                                                style="max-width: 120px;">@product.Name</strong>
                                         </td>
 
 
                                         <td class="w-25">
-                                            @* @data.Description *@
-                                            @Html.Raw(data.Description.Substring(0, 150) + "...")
+                                            @product.Description
+                                            @* @Html.Raw(product.Description.Substring(0, 150) + "...") *@
                                         </td>
 
                                         <td>
-                                            @data.Price
+                                            @product.Price
                                         </td>
 
                                         <td>
-                                            @data.Brand
+                                            @product.Brand
                                         </td>
                                         <td>
-                                            @data.Stock
+                                            @product.Stock
                                         </td>
 
                                         <td>
-                                            @foreach (var name in Model.CategoryName.Where(x => x.ProductId == @data.id))
+                                            @foreach (var name in Model.CategoryName.Where(x => x.ProductId == @product.id))
                                             {
                                                 @Html.Raw(@name.Category.Name + ",")
                                             }
@@ -143,13 +143,20 @@
                                                 <ul class="dropdown-menu dropdown-menu-right">
                                                     <li>
                                                         <button class="dropdown-item" asp-controller="Product"
-                                                            asp-action="Edit" asp-route-id="@data.id">
+                                                            asp-action="Edit" asp-route-id="@product.id">
                                                             <i class="bi bi-pencil"></i>&nbsp; Edit
                                                         </button>
                                                     </li>
                                                     <li>
+                                                        <a asp-controller="Image" asp-action="Add"
+                                                            asp-route-productId="@product.id"
+                                                            class="btn border-0 dropdown-item">
+                                                            <i class="bi bi-upload"></i>&nbsp Upload multiple image
+                                                        </a>
+                                                    </li>
+                                                    <li>
                                                         <!-- Button trigger modal -->
-                                                        <button class="dropdown-item" type="button" data-bs-toggle="modal"
+                                                        <button class="dropdown-item" asp-route-id="@product.id" type="button" data-bs-toggle="modal"
                                                             data-bs-target="#exampleModal">
                                                             <i class="bi bi-trash"></i>&nbsp Delete
                                                         </button>
@@ -176,7 +183,7 @@
                                                     <button type="button" class="btn btn-secondary"
                                                         data-bs-dismiss="modal">Close</button>
                                                     <button asp-action="Delete" class="btn btn-danger"
-                                                        asp-controller="Product" asp-route-id="@data.id"
+                                                        asp-controller="Product" asp-route-id="@product.id"
                                                         class="dropdown-item">
                                                         Delete
                                                     </button>

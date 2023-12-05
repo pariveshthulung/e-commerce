@@ -54,6 +54,7 @@ public class PublicController : Controller
     {
         var vm = new cartVm();
         vm.Product = await _context.Products.Where(x => x.id == id).FirstOrDefaultAsync();
+        vm.ProductImages = _context.ProductImages.Where(x=>x.ProductId==id).ToList();
         vm.Quantity = 1;
         vm.Product_id = id;
         return View(vm);

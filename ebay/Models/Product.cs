@@ -22,6 +22,7 @@ namespace ebay.Models
 		public string? Product_image { get; set; }
 		
 		
+		
 
 	}
 }

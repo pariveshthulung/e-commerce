@@ -13,7 +13,8 @@
             </div>
             <div class="mb-3 row">
                 <label asp-for="CategoryId" class="form-lable"></label>
-                <select class="form-select select2" multiple="multiple" asp-for="CategoryIds" asp-items="@Model.CategoryList()">
+                <select class="form-select select2" multiple="multiple" asp-for="CategoryIds"
+                    asp-items="@Model.CategoryList()">
                     @* <option disabled>--SELECT CATEGORY--</option> *@
                 </select>
             </div>
@@ -40,6 +41,7 @@
                 <label asp-for="ImageFile" class="form-label"></label>
                 <input asp-for="ImageFile" accept="image/*" class="form-control">
             </div>
+        
             <div class="row">
                 <div class="col-6 col-md-3">
                     <button type="submit" class="btn btn-primary form-control">Add</button>
@@ -60,14 +62,14 @@
 <script>
     tinymce.init({
         selector: 'textarea',
-        @* plugins: 'ai tinycomments mentions anchor autolink charmap codesample emoticons image link lists media searchreplace table visualblocks wordcount checklist mediaembed casechange export formatpainter pageembed permanentpen footnotes advtemplate advtable advcode editimage tableofcontents mergetags powerpaste tinymcespellchecker autocorrect a11ychecker typography inlinecss', *@
+    @* plugins: 'ai tinycomments mentions anchor autolink charmap codesample emoticons image link lists media searchreplace table visualblocks wordcount checklist mediaembed casechange export formatpainter pageembed permanentpen footnotes advtemplate advtable advcode editimage tableofcontents mergetags powerpaste tinymcespellchecker autocorrect a11ychecker typography inlinecss', *@
         toolbar: 'undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | link image media table mergetags | align lineheight | tinycomments | checklist numlist bullist indent outdent | emoticons charmap | removeformat',
         tinycomments_mode: 'embedded',
         tinycomments_author: 'Author name',
         mergetags_list: [
-            { value: 'First.Name', title: 'First Name' },
-            { value: 'Email', title: 'Email' },
-        ],
+        { value: 'First.Name', title: 'First Name' },
+        { value: 'Email', title: 'Email' },
+    ],
         ai_request: (request, respondWith) => respondWith.string(() => Promise.reject("See docs to implement AI Assistant")),
     });
 </script>

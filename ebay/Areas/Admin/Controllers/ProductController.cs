@@ -137,7 +137,7 @@ namespace ebay.Areas.Admin.Controllers
                 return RedirectToAction("Index");
             }
         }
-
+        [HttpPost]
         public async Task<IActionResult> Delete(int? id)
         {
             try
@@ -148,11 +148,13 @@ namespace ebay.Areas.Admin.Controllers
                 }
                 using (var tx = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
                 {
-                    // var res = await _context.Products.Where(x => x.id == id).FirstOrDefaultAsync();
-                    var res = await _unitOfWork.ProductRepo.Get(x => x.id == id);
+                    var res = await _context.Products.Where(x => x.id == id).FirstOrDefaultAsync();
+                    _context.Products.Remove(res);
+                    await _context.SaveChangesAsync();
+                    // var res = await _unitOfWork.ProductRepo.Get(x => x.id == id);
 
-                    _unitOfWork.ProductRepo.Remove(res);
-                    await _unitOfWork.Save();
+                    // _unitOfWork.ProductRepo.Remove(res);
+                    // await _unitOfWork.Save();
                     tx.Complete();
                     _notifyService.Success("Product deleted successfully.");
                 }
