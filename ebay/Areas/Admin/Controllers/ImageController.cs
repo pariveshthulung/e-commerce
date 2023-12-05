@@ -24,6 +24,8 @@ public class ImageController : Controller
 
     public IActionResult Add(int productId, ImageVm vm)
     {
+        vm.Images = _context.ProductImages.Where(x => x.ProductId == vm.ProductId).ToList();
+
         vm.ProductId = productId;
         return View(vm);
     }
@@ -32,7 +34,24 @@ public class ImageController : Controller
     public IActionResult Add(ImageVm vm)
     {
         ConfigureImage(vm.ProductId, vm.Files);
-        return View();
+        return RedirectToAction(nameof(Index), nameof(Product));
+    }
+
+    [HttpPost]
+    public IActionResult Delete(int imageId)
+    {
+        string wwwRootPath = _webHostEnvironment.WebRootPath;
+
+        var deleleRequest = _context.ProductImages.FirstOrDefault(x => x.Id == imageId);
+        var oldimagePath = Path.Combine(wwwRootPath,deleleRequest.ImageURl.TrimStart('/'));
+        if (System.IO.File.Exists(oldimagePath))
+        {
+            System.IO.File.Delete(oldimagePath);
+        }
+        _context.ProductImages.Remove(deleleRequest);
+        _context.SaveChanges();
+        _notifyService.Success("Image deleted!!!");
+        return RedirectToAction(nameof(Add));
     }
     public string ConfigureImage(int productId, List<IFormFile> files)
     {
@@ -47,13 +66,14 @@ public class ImageController : Controller
                 {
                     string fileName = Guid.NewGuid().ToString() + Path.GetExtension(file.FileName);
                     // declare file path where image get stored
+                    string imageUrl = Path.Combine(@"/Public/images/product" + productId, fileName);
                     string filePath = Path.Combine(wwwRootPath, @"Public/images/product" + productId);
                     string imagePath = Path.Combine(filePath, fileName);
 
-                    // if (!Directory.Exists(imagePath))
-                    // {
-                    //     Directory.CreateDirectory(imagePath);
-                    // }
+                    if (!Directory.Exists(filePath))
+                    {
+                        Directory.CreateDirectory(filePath);
+                    }
                     // insert image
                     using (var fileStream = new FileStream(imagePath, FileMode.Create))
                     {
@@ -61,7 +81,7 @@ public class ImageController : Controller
                     }
                     ProductImages productImages = new()
                     {
-                        ImageURl = fileName,
+                        ImageURl = imageUrl,
                         ProductId = productId
                     };
                     _context.ProductImages.Add(productImages);
@@ -82,6 +102,7 @@ public class ImageController : Controller
                 // return fileName;
             }
             tx.Complete();
+            _notifyService.Success("Image uploaded.");
             return ("error adding images");
         }
     }

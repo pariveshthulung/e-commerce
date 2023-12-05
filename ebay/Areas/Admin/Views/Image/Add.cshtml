@@ -1,15 +1,49 @@
 @model ebay.ViewModel.ImageVm
 
 <form method="post" enctype="multipart/form-data">
-
-    <div class="mb-3 row">
-        <input asp-for="ProductId" hidden />
-        <label asp-for="Files" class="form-label"></label>
-        <input asp-for="Files" accept="image/*" class="form-control" multiple>
-    </div>
-    <div class="row">
-        <div class="col-6 col-md-3">
-            <button type="submit" class="btn btn-primary form-control">Add</button>
+    @* Display image *@
+    <div class="product-section">
+        <div class="container">
+            <div class="row">
+                @if (Model.Images.Count()!= 0)
+                {
+                    @foreach (var image in Model.Images)
+                    {
+                        <div class="col-12 col-md-4 col-lg-3 mb-5 mb-md-0">
+                            <div class="card">
+                                <img src="@image.ImageURl" class="card-img-top rounded mx-auto d-block"
+                                    style="width:200px; height:300px; object-fit:contain;">
+                            </div>
+                            <div class="card-body">
+                                <button asp-action="Delete" class="btn btn-danger" asp-controller="Image"
+                                    asp-route-imageId="@image.Id">
+                                    <i class="bi bi-trash"></i>&nbsp Delete
+                                </button>
+                            </div>
+                        </div>
+                    }
+                }
+                else
+                {
+                    <h5 class="text-danger">
+                        No Images uploaded!!!
+                    </h5>
+                }
+            </div>
+        </div>
+        <div class="row">
+            <div class="mb-3 col-4">
+                <input asp-for="ProductId" hidden />
+                <label asp-for="Files" class="form-label"></label>
+                <input asp-for="Files" accept="image/*" class="form-control" multiple>
+            </div>
+            <div class="col3">
+                <div class="col-6 col-md-3">
+                    <button type="submit" class="btn btn-primary form-control">Add</button>
+                </div>
+            </div>
         </div>
     </div>
+    </div>
+
 </form>
