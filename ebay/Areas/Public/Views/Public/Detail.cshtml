@@ -24,12 +24,49 @@
                     </div>
                 </div>
                 <div class="row">
-                    
-                    <div class="col-12 col-lg-3 offset-lg-1 text-center mb-3">
-                        <div class="sticky-top">
 
-                        <img src="/Public/images/product/@Model.Product.Product_image" width="100%"
-                            class="rounded mt-5" />
+                    <div class="col-12 col-lg-5 offset-lg-1 text-center mb-3" style="margin-left: 0px;">
+                        <div class="sticky-top mt-5">
+                            <div class="mt-3">
+                                <div class="row">
+                                    <div class="col-3">
+                                        <div class=" col-2 mt-2">
+                                            <img src="/Public/images/product/@Model.Product.Product_image"
+                                                class="card-img-top rounded mx-auto d-block"
+                                                style="width:50px; height:75px; object-fit:contain;"
+                                                onclick="myFunction(this);">
+                                        </div>
+                                        @foreach (var productImage in Model.ProductImages)
+                                        {
+                                            @* <div class="col-12 col-md-4 col-lg-3 mb-5 mb-md-0"> *@
+                                            @* <div class=""> *@
+                                            <div class="col-2 mt-2">
+                                                <img src="@productImage.ImageURl"
+                                                    class="card-img-top rounded mx-auto d-block"
+                                                    style="width:50px; height:75px; object-fit:contain;"
+                                                    onclick="myFunction(this);">
+                                            </div>
+                                            @* </div> *@
+                                        }
+                                    </div>
+                                    <div class="col-4">
+                                        <!-- Close the image -->
+                                        @* <span onclick="this.parentElement.style.display='none'"
+                                        class="closebtn">&times;</span> *@
+
+                                        <!-- Expanded image -->
+                                        <img class="mt-5" src="/Public/images/product/@Model.Product.Product_image"
+                                            id="expandedImg" style="width:200%;">
+
+                                        <!-- Image text -->
+                                        <div id="imgtext"></div>
+                                    </div>
+                                    @* </div> *@
+                                    @* <img src="/Public/images/product/@Model.Product.Product_image" width="100%"
+                                    class="rounded mt-5" /> *@
+                                </div>
+                            </div>
+
                         </div>
                     </div>
                     <div class="col-12 col-lg-6 offset-lg-1">
@@ -38,7 +75,8 @@
                             @* <span class="badge">@Model.Product.Category</span> *@
                         </div>
                         <div class="row ">
-                            <h1 class="text-dark" style="font-size: 24px;line-height: 32px;">@Model.Product.Name</h1>
+                            <h1 class="text-dark" style="font-size: 24px;line-height: 32px;">@Model.Product.Name
+                            </h1>
                         </div>
                         <div class="row ">
                             <span>Brand : @Model.Product.Brand</span>
@@ -123,8 +161,7 @@
                                 </button>
                             </div>
                             <div class="col-12 col-md-6 pb-1">
-                                <button type="submit"
-                                    asp-action="Checkout" asp-controller="Cart"
+                                <button type="submit" asp-action="Checkout" asp-controller="Cart"
                                     class="btn btn-warning bg-gradient btn-sm  w-50 py-2 text-uppercase fw-semibold"
                                     style="position:relative; right:50%;">
                                     Buy Now
@@ -138,3 +175,7 @@
         </div>
     </div>
 </form>
+
+@section scripts {
+    <script src="/js/Detail.js"></script>
+}

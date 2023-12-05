@@ -72,6 +72,8 @@
 	<script src="https://kit.fontawesome.com/524f66d954.js" crossorigin="anonymous"></script>
 	<script src="~/lib/jquery/dist/jquery.js"></script>
      @await Component.InvokeAsync("Notyf")
+     @RenderSection("scripts", required: false)
+
 </body>
 
 </html>
