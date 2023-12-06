@@ -10,7 +10,7 @@ namespace ebay.ViewModel
 		public string? Name { get; set; }
 		public List<Product>? Data;
 		public Product? Product;
-		public List<ProductCategory>? CategoryName { get; set; }
+		// public List<ProductCategory>? CategoryName { get; set; }
 		[ValidateNever]
 
 		public List<Category>? Categories { get; set; }

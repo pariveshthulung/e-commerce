@@ -31,12 +31,13 @@ public class PublicController : Controller
         //   .Where(x =>
         //        x.Name.Contains(vm.Name) && vm.CategoryId == x.CategoryId || vm.CategoryId == x.CategoryId && string.IsNullOrEmpty(vm.Name) || vm.CategoryId == null
         //   ).ToListAsync();
-
-        vm.Data = await _context.Products.Where(
-            x => (vm.CategoryName == null )
-            && (string.IsNullOrEmpty(vm.Name) || x.Name.ToLower().Contains(vm.Name.ToLower()))
-            ).ToListAsync();
         vm.Categories = await _context.Categories.ToListAsync();
+        // vm.CategoryName = await _context.ProductCategories.ToListAsync();
+        vm.Data = await _context.Products.Where(
+            x => (vm.CategoryId == null || x.ProductCategories.Any(i=>i.CategoryId==vm.CategoryId))
+            && (string.IsNullOrEmpty(vm.Name) || x.Name.ToLower().Contains(vm.Name.ToLower()))
+            // || vm.CategoryName.Contains(vm.CategoryId)
+            ).ToListAsync();
         if (_currentUserProvder.IsLoggedIn())
         {
             var userId = _currentUserProvder.GetCurrentUserId();
@@ -54,7 +55,7 @@ public class PublicController : Controller
     {
         var vm = new cartVm();
         vm.Product = await _context.Products.Where(x => x.id == id).FirstOrDefaultAsync();
-        vm.ProductImages = _context.ProductImages.Where(x=>x.ProductId==id).ToList();
+        vm.ProductImages = _context.ProductImages.Where(x => x.ProductId == id).ToList();
         vm.Quantity = 1;
         vm.Product_id = id;
         return View(vm);

@@ -12,6 +12,7 @@ public class CartItem
     [ForeignKey("Product_id")]
     public virtual Product? Product { get; set; }
     public int Quantity { get; set; }
+    public bool Checked { get; set; }
     public DateTime AddedDate { get; set; } = DateTime.Now;
 
 }
