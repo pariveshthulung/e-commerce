@@ -127,7 +127,7 @@
                                         </td>
 
                                         <td>
-                                            @foreach (var name in Model.CategoryName.Where(x => x.ProductId == @product.id))
+                                            @foreach (var name in product.ProductCategories)
                                             {
                                                 @Html.Raw(@name.Category.Name + ",")
                                             }

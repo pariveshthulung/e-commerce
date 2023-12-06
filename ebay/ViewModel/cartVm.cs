@@ -15,5 +15,6 @@ public class cartVm
     public List<CartItem>? CartItemList ;
     [Column(TypeName = "decimal(18,2)")]
     public decimal Subtotal { get; set; }
+    public List<int>? Checked { get; set; }
     public List<ProductImages>? ProductImages { get; set; }
 }

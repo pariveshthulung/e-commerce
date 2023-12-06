@@ -20,6 +20,7 @@ namespace ebay.Models
 		public string? Brand { get; set; }
 		[DisplayName("Image")]
 		public string? Product_image { get; set; }
+		public virtual List<ProductCategory>? ProductCategories { get; set; }
 		
 		
 		

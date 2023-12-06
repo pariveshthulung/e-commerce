@@ -16,6 +16,7 @@
 else
 {
     <form method="post">
+        <input asp-for="Cart_id" hidden/>
     <br />
     <div class="card shadow border-0">
         @* <div class="card-header bg-secondary bg-gradient text-light ml-0 py-4">
@@ -41,7 +42,7 @@ else
                         <div class="form-check col-md-10 offset-md-1">
                             <div class="row border-bottom pb-3 ">
                                 <div class="text-center">
-                                    <input class="form-check-input mt-5" type="checkbox" value="" id="flexCheckChecked" checked>
+                                    <input class="form-check-input item-selection mt-5" data-amount="@(data.Product.Price * data.Quantity) " name="Checked" type="checkbox" value="@data.Product_id" checked>
                                 </div>
                                 <div class="d-none d-lg-block col-lg-1 text-center py-2">
                                     <img src="/Public/images/product/@data.Product.Product_image" class="rounded"
@@ -51,7 +52,7 @@ else
                                     <h5 class="text-uppercase text-dark product-title col-12 text-truncate">
                                         <strong>@data.Product.Name</strong>
                                     </h5>
-                                    <p><small>@Html.Raw(data.Product.Description.Substring(0, 250) + "...")</small></p>
+                                    @* <p><small>@Html.Raw(data.Product.Description.Substring(0, 230) + "...")</small></p> *@
                                 </div>
                                 <div class="col-12  col-lg-5 text-center row">
                                     <div class="col-3 text-md-right pt-2 pt-md-4">
@@ -96,8 +97,8 @@ else
                     </div>
                     <div class="row">
                         <div class="col-md-2 offset-md-5">
-                            <a class="btn btn-primary border-0 bg-gradient w-100 btn-sm py-2" asp-action="CheckOut">Proceed
-                                to checkout</a>
+                            <button class="btn btn-primary border-0 bg-gradient w-100 btn-sm py-2">Proceed
+                                to checkout</button>
                         </div>
                     </div>
                 </div>
@@ -105,5 +106,15 @@ else
     </form>
 }
 
+
+@* const checkboxes = document.querySelectorAll(".item-selection");
+
+Array.from(checkboxes).forEach(elm => elm.addEventListener('change', e => {
+    if(e.target.checked) {
+     // add e.target.dataset.amount
+} else {
+    //subtract
+}
+});  *@
 
 @* <partial name="_publicNewsletter" /> *@

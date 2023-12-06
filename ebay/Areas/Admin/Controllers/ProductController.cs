@@ -46,7 +46,7 @@ namespace ebay.Areas.Admin.Controllers
           .Where(x =>
               string.IsNullOrEmpty(vm.Name) || x.Name.Contains(vm.Name)
           ).ToListAsync();
-          vm.CategoryName = _context.ProductCategories.Include(x=>x.Category).ToList();
+        //   vm.CategoryName = _context.ProductCategories.Include(x=>x.Category).ToList();
             return View(vm);
         }
 
