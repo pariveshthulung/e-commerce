@@ -10,13 +10,13 @@
     <a class="btn btn-outline-primary text-uppercase mb-5 btn-sm" asp-action="Index"
         asp-controller="Public"><small>Continue
             Shopping</small></a>
-    </div>
+</div>
     <h1 class="text-center mt-5">No item in Carts</h1>
 }
 else
 {
     <form method="post">
-        <input asp-for="Cart_id" hidden/>
+    <input asp-for="Cart_id" hidden />
     <br />
     <div class="card shadow border-0">
         @* <div class="card-header bg-secondary bg-gradient text-light ml-0 py-4">
@@ -42,7 +42,9 @@ else
                         <div class="form-check col-md-10 offset-md-1">
                             <div class="row border-bottom pb-3 ">
                                 <div class="text-center">
-                                    <input class="form-check-input item-selection mt-5" data-amount="@(data.Product.Price * data.Quantity) " name="Checked" type="checkbox" value="@data.Product_id" checked>
+                                    <input class="form-check-input item-selection mt-5"
+                                        data-amount="@(data.Product.Price * data.Quantity) " name="Checked" type="checkbox"
+                                        value="@data.Product_id" checked>
                                 </div>
                                 <div class="d-none d-lg-block col-lg-1 text-center py-2">
                                     <img src="/Public/images/product/@data.Product.Product_image" class="rounded"
@@ -90,7 +92,7 @@ else
                             <ul class="list-group mb-4">
                                 <li class="d-flex justify-content-between align-items-center">
                                     <h5 class="text-dark fw-semibold text-uppercase"> Subtotal (USD)</h5>
-                                    <h4 class="text-dark fw-bolder">@Model.Subtotal.ToString("c")</h4>
+                                    <h4 class="text-dark fw-bolder" id="Subtotal"></h4>
                                 </li>
                             </ul>
                         </div>
@@ -106,15 +108,29 @@ else
     </form>
 }
 
+@section scripts {
+    <script>
+        const checkboxes = document.querySelectorAll(".item-selection");
+        var value = parseFloat(@Json.Serialize(Model.Subtotal));
+        Array.from(checkboxes).forEach(elm => elm.addEventListener('change', e => {
+            if (e.target.checked) {
+                // add e.target.dataset.amount
+                value = value + parseFloat(e.target.dataset.amount);
+                console.log(value);
+                document.getElementById("Subtotal").innerHTML = '$ ' + value;
 
-@* const checkboxes = document.querySelectorAll(".item-selection");
+            }
+            else {
+                value = value - parseFloat(e.target.dataset.amount);
+                console.log(value);
+                document.getElementById("Subtotal").innerHTML = '$ ' + value;
 
-Array.from(checkboxes).forEach(elm => elm.addEventListener('change', e => {
-    if(e.target.checked) {
-     // add e.target.dataset.amount
-} else {
-    //subtract
+            }
+        }));
+        document.getElementById("Subtotal").innerHTML = '$ ' + value;
+        console.log(value);
+    </script>
 }
-});  *@
+
 
 @* <partial name="_publicNewsletter" /> *@
