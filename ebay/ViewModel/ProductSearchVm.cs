@@ -14,7 +14,7 @@ namespace ebay.ViewModel
 		[ValidateNever]
 
 		public List<Category>? Categories { get; set; }
-		public int CategoryId { get; set; }
+		public int? CategoryId { get; set; }
 
 		public SelectList? CategoryLists()
 		{

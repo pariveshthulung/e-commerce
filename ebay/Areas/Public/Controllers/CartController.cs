@@ -63,14 +63,14 @@ public class CartController : Controller
         {
             using (var tx = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
             {
-                var cartFalse = _context.CartItems.Where(x => x.id == vm.Cart_id).ToList();
+                var cartFalse = _context.CartItems.Where(x => x.Cart_id == vm.Cart_id).ToList();
                 foreach (var item in cartFalse)
                 {
                     item.Checked = false;
                     _context.SaveChanges();
                 }
 
-                var cartItemFrmDb = _context.CartItems.Where(x => x.id == vm.Cart_id & (vm.Checked.Contains(x.Product_id))).ToList();
+                var cartItemFrmDb = _context.CartItems.Where(x => x.Cart_id == vm.Cart_id & (vm.Checked.Contains(x.Product_id))).ToList();
                 foreach (var cartitem in cartItemFrmDb)
                 {
                     cartitem.Checked = true;
@@ -231,6 +231,13 @@ public class CartController : Controller
                     addressFrmDb.City = vm.City;
                     addressFrmDb.Country = await _context.Countries.Where(x => x.id == vm.CountryId).FirstOrDefaultAsync();
                 }
+                 vm.CartItemList = await _context.CartItems.Where(x => x.Cart_id == vm.Cart_id & x.Checked==true).Include(x => x.Product).ToListAsync();
+
+                // var orderItemsFrmDb = _context.Orders.FirstOrDefault(x => x.User_id == vm.User_id);
+                foreach (var cartitem in vm.CartItemList)
+                {
+                    vm.Subtotal = vm.Subtotal + (cartitem.Quantity * cartitem.Product.Price);
+                }
                 var order = new Order()
                 {
                     User_id = vm.User_id,
@@ -238,10 +245,7 @@ public class CartController : Controller
                 };
                 _context.Add(order);
                 await _context.SaveChangesAsync();
-                vm.CartItemList = await _context.CartItems.Where(x => x.Cart_id == vm.Cart_id & x.Checked==true).Include(x => x.Product).ToListAsync();
-
-                // var orderItemsFrmDb = _context.Orders.FirstOrDefault(x => x.User_id == vm.User_id);
-
+               
                 foreach (var cartList in vm.CartItemList)
                 {
                     var orderItems = new OrderItems()
@@ -293,6 +297,7 @@ public class CartController : Controller
             return Content(e.Message);
         }
     }
+    
     public IActionResult Thankyou(int orderId, int cartId)
     {
         try

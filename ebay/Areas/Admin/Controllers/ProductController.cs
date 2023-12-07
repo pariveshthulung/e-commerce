@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using System.Transactions;
 using AspNetCoreHero.ToastNotification.Abstractions;
 using ebay.Data;
+using ebay.Migrations;
 using ebay.Models;
 using ebay.Repository;
 using ebay.Repository.IRepository;
@@ -45,8 +46,9 @@ namespace ebay.Areas.Admin.Controllers
             vm.Data = await _context.Products
           .Where(x =>
               string.IsNullOrEmpty(vm.Name) || x.Name.Contains(vm.Name)
-          ).ToListAsync();
+          ).Include(x=>x.ProductCategories).ThenInclude(y=>y.Category).ToListAsync();
         //   vm.CategoryName = _context.ProductCategories.Include(x=>x.Category).ToList();
+        
             return View(vm);
         }
 
