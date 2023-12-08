@@ -333,7 +333,7 @@ public class CartController : Controller
         }
 
     }
-    [HttpPost]
+    // [HttpPost]
     public IActionResult CancelOrder(int orderId, int orderItemId)
     {
         try
