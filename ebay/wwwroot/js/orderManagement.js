@@ -12,7 +12,6 @@ function loadDataTable() {
     { data: 'order.order_date', "width": "15%" },
     { data: 'order.order_total' , "width": "15%" },
     { data: 'paymentStatus' , "width": "15%"},
-    { data: 'order_status' , "width": "15%"},
-    { data: 'action' , "width": "15%"}
+    { data: 'order_status' , "width": "15%"}
 ]});
 }

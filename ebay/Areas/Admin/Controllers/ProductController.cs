@@ -139,7 +139,7 @@ namespace ebay.Areas.Admin.Controllers
                 return RedirectToAction("Index");
             }
         }
-        // [HttpPost]
+        [HttpPost]
         public async Task<IActionResult> Delete(int? id)
         {
             try

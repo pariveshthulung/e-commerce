@@ -4,7 +4,6 @@ using ebay.Constants;
 using ebay.Data;
 using ebay.Entity;
 using ebay.Models;
-using ebay.Provider.Interface;
 using ebay.ViewModel;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -25,7 +24,6 @@ public class CategoryController : Controller
     {
         _context = context;
         _notifyService = notifyService;
-
     }
     public async Task<IActionResult> Index(CategoryVm vm)
     {

@@ -10,7 +10,7 @@ public class Review
     public string? Comment { get; set; }
     public DateTime ReviewDate { get; set; }
 
-    public int? User_id { get; set; }
+    public int User_id { get; set; }
     [ForeignKey("User_id")]
     public virtual User? User { get; set; }
     public int Product_id { get; set; }

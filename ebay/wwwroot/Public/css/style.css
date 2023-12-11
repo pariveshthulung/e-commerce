@@ -264,32 +264,14 @@ a.more {
   background: #314d43;
   border-color: #314d43;
 }
-.star-rating {
-  line-height: 32px;
-  font-size: 3em;
-}
-
-.star-rating .fa-star {
-  color: yellow;
-
-}
 .btn.btn-secondary {
   color: #2f2f2f;
   background: #f9bf29;
   border-color: #f9bf29;
 }
 .btn.btn-secondary:hover {
-  background: #f8b50b;
-  border-color: #f6b102;
-}
-.btn.btn-buy {
-  color: #2f2f2f;
-  background: #f3b519 !important;
-  border-color: #f6b208 !important;
-}
-.btn.btn-buy:hover {
-  background: #d29805 !important;
-  border-color: #cc9408 !important;
+  background: #f8b810;
+  border-color: #f8b810;
 }
 .btn.btn-white-outline {
   background: transparent;
