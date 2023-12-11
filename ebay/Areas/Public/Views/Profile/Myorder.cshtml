@@ -2,7 +2,8 @@
     Layout = "_publicLayout";
 }
 @model ebay.ViewModel.OrderMangementVm
-<form method="post">
+<div >
+
     <div class="fixed-top bg-secondary">
         <h1 class="text-center  text-white py-3">Order</h1>
     </div>
@@ -18,81 +19,87 @@
                     <div class="d-none d-lg-block col-lg-1 text-center py-2">
                         <img src="/Public/images/product/@data.Product.Product_image" class="rounded" width="100%" />
                     </div>
-                    <div class="col-12 my-auto col-lg-6 pt-md-3">
+                    <div class="col-12 my-auto col-lg-4 pt-md-3">
                         <h6 class="text-uppercase text-dark product-title col-12 text-truncate">
                             <strong>@data.Product.Name</strong>
                         </h6>
                         @* <p><small>@Html.Raw(data.Product.Description.Substring(0, 250) + "...")</small></p> *@
                     </div>
-                    <div class="col-12  col-lg-5 text-center row mx-auto my-auto">
-                        <div class="col-3 my-auto text-center ">
-                            <h6 class="fw-semibold my-auto">
-                                @data.Product.Price
-                                <span class="text-muted my-auto">&nbsp;x&nbsp;</span>@data.Quantity
-                            </h6>
-                        </div>
-                        <div class="col-6 col-sm-4 my-auto col-lg-3 ">
-                            <div class="w-75 btn-group" role="group">
-                                <strong>@data.Order_status</strong>
+                        @* <div class="col-12  col-lg-5 text-center mx-auto my-auto"> *@
+                            <div class="col-2 my-auto text-center ">
+                                <h6 class="fw-semibold my-auto">
+                                    @data.Product.Price
+                                    <span class="text-muted my-auto">&nbsp;x&nbsp;</span>@data.Quantity
+                                </h6>
                             </div>
-                        </div>
-                        @if (@data.Order_status != "Approved")
-                        {
-                            <div class="col-3 col-sm-4 col-lg-5 offset-lg-1 text-right  mx-auto my-auto">
-                                <button class="btn btn-primary" asp-action="Delete" asp-route-id="@data.id">
-                                    @* <i class="bi bi-trash-fill"></i> *@
-                                    <h6>Manage order<h6>
-                                </button>
+                            <div class="col-6 col-sm-4 my-auto mx-auto col-lg-2 ">
+                                @* <div class="w-75 btn-group" role="group"> *@
+                                    <strong>@data.Order_status</strong>
+                                @* </div> *@
                             </div>
-                        }
-                        else
-                        {
-                            <div class="col-3 col-sm-4 col-lg-4 offset-lg-1 text-right pt-2 mx-auto my-auto">
-@* 
-                                <button class="btn btn-danger" asp-action="CancelOrder" asp-controller="Cart"
-                                    asp-route-orderId="@data.Order_id" asp-route-orderItemId="@data.id">
-                                    <i class="bi bi-trash-fill"></i>
-                                    <h6>Cancel Order</h6>
-                                </button> *@
-                                <button class="btn btn-danger" type="button" data-bs-toggle="modal"
-                                    data-bs-target="#exampleModal-@data.Order_id,@data.id">
-                                    <i class="bi bi-trash"></i>&nbsp Delete
-                                </button>
-                                <!-- Modal -->
-                                <div class="modal fade" id="exampleModal-@data.Order_id,@data.id" tabindex="-1"
-                                    aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                    <div class="modal-dialog">
-                                        <div class="modal-content">
-                                            <div class="modal-header">
-                                                <h1 class="modal-title fs-5" id="exampleModalLabel">Warning!!!</h1>
-                                                <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                                    aria-label="Close"></button>
-                                            </div>
-                                            <div class="modal-body">
-                                                Are you sure you want to delete?
-                                            </div>
-                                            <div class="modal-footer">
-                                                <button type="button" class="btn btn-secondary"
-                                                    data-bs-dismiss="modal">Close</button>
-                                                <button asp-action="CancelOrder" class="btn btn-danger" asp-controller="Cart"
-                                                    asp-route-orderId="@data.Order_id" asp-route-orderItemId="@data.id" class="dropdown-item">
-                                                    Delete
-                                                </button>
+                            <div class="col-3 my-auto mx-auto">
+
+                            @if (@data.Order_status != "Approved")
+                            {
+                                @* <form method="post" asp-action="Delete" asp-route-id="@data.id" >
+                                        <button class="btn btn-primary my-auto btn-sm" style="width: 180px;" >
+                                            Manage order
+                                        </button>
+                                </form> *@
+                            }
+                            else
+                            {
+                                @* <div class="col-1 text-right mx-auto my-auto"> *@
+    @* 
+                                    <button class="btn btn-danger" asp-action="CancelOrder" asp-controller="Cart"
+                                        asp-route-orderId="@data.Order_id" asp-route-orderItemId="@data.id">
+                                        <i class="bi bi-trash-fill"></i>
+                                        <h6>Cancel Order</h6>
+                                    </button> *@
+                                    <button class="btn btn-danger" type="button" data-bs-toggle="modal"
+                                        data-bs-target="#exampleModal-@data.Order_id-@data.id">
+                                        @* <i class="bi bi-trash"></i>&nbsp Delete *@
+                                        cancel
+                                    </button>
+                                    <!-- Modal -->
+                                    <div class="modal fade" id="exampleModal-@data.Order_id-@data.id" tabindex="-1"
+                                        aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h1 class="modal-title fs-5" id="exampleModalLabel">Warning!!!</h1>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                        aria-label="Close"></button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    Are you sure you want to delete?
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary"
+                                                        data-bs-dismiss="modal">Close</button>
+                                                        <form method="post"asp-action="CancelOrder" asp-controller="Cart">
+                                                            <input type="hidden" name="orderId" value="@data.Order_id">
+                                                            <input type="hidden" name="orderItemId" value="@data.id">
+                                                            <button type="button" class="btn btn-danger">
+                                                                Delete
+                                                            </button>
+                                                        </form>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
-                            </div>
-                        }
+                                @* </div> *@
 
-                    </div>
+                            }
+                            </div>
+
+                        @* </div> *@
 
                 </div>
             </div>
-            }
-           
+            }  
         }
 
     </div>
 
-</form>
+</div>

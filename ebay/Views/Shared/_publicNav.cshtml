@@ -101,11 +101,16 @@
 								<div class="mt-1 small text-muted">
 									<img src="/Public/images/user.svg">
 								</div>
-								<a asp-action="Index" asp-controller="Profile" asp-area="Public" class="dropdown-item"><i class="fa-regular fa-user"></i> &nbsp
+								<a asp-action="Index" asp-controller="Profile" asp-area="Public"
+									class="dropdown-item"><i class="fa-regular fa-user"></i> &nbsp
 									My
 									Profile</a>
-								<a asp-action="Myorder" asp-controller="Profile" asp-area="Public" class="dropdown-item"><i class="bi bi-box-seam"></i> &nbsp
+								<a asp-action="Myorder" asp-controller="Profile" asp-area="Public"
+									class="dropdown-item"><i class="bi bi-box-seam"></i> &nbsp
 									Orders</a>
+								<a asp-action="Index" asp-controller="Review" asp-area="Public"
+									class="dropdown-item"><i class="bi bi-star"></i> &nbsp
+									Review</a>
 								<div class="dropdown-divider"></div>
 								@{
 									var currentUser = await _currentUserProvider.GetCurrentUser();
@@ -126,25 +131,37 @@
 						</div>
 					</li>
 					<li>
-						<a class="nav-link position-relative" asp-action="Index" asp-controller="Cart" asp-area="Public"><img
-										src="/Public/images/cart.svg">
-										<span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-secondary">@Model.CartCount</span>
+						<a class="nav-link position-relative" asp-action="Index" asp-controller="Cart"
+							asp-area="Public"><img src="/Public/images/cart.svg">
+							<span
+								class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-secondary">@Model.CartCount</span>
 						</a>
 						@* @{
-							currentUser = await _currentUserProvider.GetCurrentUser();
-							if (currentUser == null)
-							{
-								<a class="nav-link" asp-action="LogIn" asp-controller="Auth" asp-area="Admin"><img
-										src="/Public/images/cart.svg"></a>
+						currentUser = await _currentUserProvider.GetCurrentUser();
+						if (currentUser == null)
+						{
+						<a class="nav-link" asp-action="LogIn" asp-controller="Auth" asp-area="Admin"><img
+						src="/Public/images/cart.svg"></a>
 
-							}
-							else
-							{
+						}
+						else
+						{
 
-								<a class="nav-link" asp-action="Cart" asp-controller="Public" asp-area="Public"><img
-										src="/Public/images/cart.svg"></a>
-							}
+						<a class="nav-link" asp-action="Cart" asp-controller="Public" asp-area="Public"><img
+						src="/Public/images/cart.svg"></a>
+						}
 						} *@
+					</li>
+					<li>
+						@if (currentUser != null)
+						{
+							if (currentUser.UserType == "Admin")
+							{
+								<a class="mx-2 text-white nav-link position-relative" asp-action="Index"
+									asp-controller="Product" asp-area="Admin">Manage</a>
+							}
+						}
+
 					</li>
 				</ul>
 			</div>

@@ -34,7 +34,7 @@ public class PublicController : Controller
         vm.Categories = await _context.Categories.ToListAsync();
         // vm.CategoryName = await _context.ProductCategories.ToListAsync();
         vm.Data = await _context.Products.Where(
-            x => (string.IsNullOrEmpty(vm.Name) || vm.CategoryId == null || x.ProductCategories.Any(i=>i.CategoryId==vm.CategoryId) )
+            x => ( vm.CategoryId == null || x.ProductCategories.Any(i=>i.CategoryId==vm.CategoryId) )
             && (string.IsNullOrEmpty(vm.Name) || x.Name.ToLower().Contains(vm.Name.ToLower()))
             ).ToListAsync();
         if (_currentUserProvder.IsLoggedIn())
