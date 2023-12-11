@@ -71,9 +71,45 @@ public class ProfileController : Controller
     {
         // get current user 
         vm.UserId = _currentUserProvider.GetCurrentUserId();
-        vm.OrderList = _context.Orders.Where(x=>x.User_id==vm.UserId).ToList();
-        vm.OrderItemsList = _context.OrderItems.Include(x=>x.Product).Include(x=>x.Order).ToList();
+        vm.OrderList = _context.Orders.Where(x => x.User_id == vm.UserId).ToList();
+        vm.OrderItemsList = _context.OrderItems.Include(x => x.Product).Include(x => x.Order).ToList();
         return View(vm);
     }
+    // [HttpPost]
+    // [ActionName("Myorder")]
+    // public IActionResult CancelOrder(int orderId, int orderItemId)
+    // {
+    //     try
+    //     {
+    //         using (var tx = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
+    //         {
+    //             var orderFromDb = _context.Orders.FirstOrDefault(x => x.id == orderId);
+    //             var orderItemsFrmDb = _context.OrderItems.Where(x => x.id == orderItemId).FirstOrDefault();
+    //             if (orderItemsFrmDb.PaymentStatus == "Approved")
+    //             {
+    //                 var options = new RefundCreateOptions
+    //                 {
+    //                     PaymentIntent = orderFromDb.PaymentIntentId,
+    //                     Amount = (long?)orderItemsFrmDb.Price * 100 * orderItemsFrmDb.Quantity
+    //                 };
+    //                 var service = new RefundService();
+    //                 service.Create(options);
+    //                 UpdateStatus(orderItemsFrmDb.id, OrderStatusConstants.Cancelled, PaymentStatusConstant.Refund);
+    //             }
+    //             _context.SaveChanges();
+    //             _notifyService.Success("Order cancelLed Sucessfully!!!");
+
+    //             tx.Complete();
+    //             return RedirectToAction("Myorder", "Profile");
+    //         }
+    //     }
+    //     catch (Exception e)
+    //     {
+    //         return Content(e.Message);
+    //     }
+
+    // }
+
+
 
 }

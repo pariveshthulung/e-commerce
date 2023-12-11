@@ -58,11 +58,11 @@
                                             Name
                                         </h3>
                                     </th>
-                                    <th>
+                                    @* <th>
                                         <h3>
                                             Description
                                         </h3>
-                                    </th>
+                                    </th> *@
 
                                     <th>
                                         <h3>
@@ -110,10 +110,11 @@
                                         </td>
 
 
-                                        <td class="w-25">
+                                        @* <td class="w-25">
                                             @product.Description
-                                            @* @Html.Raw(product.Description.Substring(0, 150) + "...") *@
-                                        </td>
+                    
+                                            @Html.Raw(product.Description.Substring(0, 150) + "...")
+                                        </td> *@ 
 
                                         <td>
                                             @product.Price
@@ -156,8 +157,8 @@
                                                     </li>
                                                     <li>
                                                         <!-- Button trigger modal -->
-                                                        <button class="dropdown-item" asp-route-id="@product.id" type="button" data-bs-toggle="modal"
-                                                            data-bs-target="#exampleModal">
+                                                        <button class="dropdown-item"  type="button" data-bs-toggle="modal"
+                                                            data-bs-target="#exampleModal-@product.id" >
                                                             <i class="bi bi-trash"></i>&nbsp Delete
                                                         </button>
                                                     </li>
@@ -167,7 +168,7 @@
 
                                     </tr>
                                     <!-- Modal -->
-                                    <div class="modal fade" id="exampleModal" tabindex="-1"
+                                    <div class="modal fade" id="exampleModal-@product.id" tabindex="-1"
                                         aria-labelledby="exampleModalLabel" aria-hidden="true">
                                         <div class="modal-dialog">
                                             <div class="modal-content">

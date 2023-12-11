@@ -1,4 +1,4 @@
-@* @Model list<Order> *@
+@model List<OrderItems>
 
 <div class="container">
 
@@ -6,57 +6,237 @@
         <div class="card-body">
             <div class="toolbar row mb-3">
                 <div class="col">
-                        <table id="tblData" class="table table-borderless table-hover" >
-                            <thead>
+                    <table id="myDataTable" class="table table-borderless table-hover">
+                        <thead>
 
+                            <tr>
+                                <th>
+                                    <h3>
+                                        Image
+                                    </h3>
+                                </th>
+                                <th>
+                                    <h3>
+                                        Product Name
+                                    </h3>
+                                </th>
+                                <th>
+                                    <h3>
+                                        Order By
+                                    </h3>
+                                </th>
+                                <th>
+                                    <h3>
+                                        Phone No
+                                    </h3>
+                                </th>
+
+                                <th>
+                                    <h3>
+                                        Order date
+                                    </h3>
+                                </th>
+                                <th>
+                                    <h3>
+                                        Amount
+                                    </h3>
+                                </th>
+
+                                <th>
+                                    <h3>
+                                        Payment
+                                    </h3>
+                                </th>
+                                <th>
+                                    <h3>
+                                        Order
+                                    </h3>
+                                </th>
+                                <th>
+                                    <h3>
+                                        Action
+                                    </h3>
+                                </th>
+
+                            </tr>
+                        </thead>
+                        <tbody class=" table-striped">
+                            @foreach (var item in Model)
+                            {
                                 <tr>
-                                    <th>
-                                        <h3>
-                                            Name
-                                        </h3>
-                                    </th>
-                                    <th>
-                                        <h3>
-                                            Phone No
-                                        </h3>
-                                    </th>
-                                    <th>
-                                        <h3>
-                                            Email
-                                        </h3>
-                                    </th>
-                                    <th>
-                                        <h3>
-                                            Order date
-                                        </h3>
-                                    </th>
-                                    <th>
-                                        <h3>
-                                            Order Total
-                                        </h3>
-                                    </th>
+                                    <td>
+                                        <div class="avatar avatar-md border-0">
 
-                                    <th>
-                                        <h3>
-                                            Payment Status
-                                        </h3>
-                                    </th>
-                                    <th>
-                                        <h3>
-                                            Order Status
-                                        </h3>
-                                    </th>
-                                    
+                                            <img src="/Public/images/product/@item.Product.Product_image"
+                                                alt="image of product" class="avatar-img rounded "
+                                                style="height: 75%; object-fit:contain;">
+                                        </div>
+
+                                    </td>
+                                    <td>
+                                        <strong class="d-inline-block text-truncate"
+                                            style="max-width: 120px;">@item.Product.Name</strong>
+                                    </td>
+                                    <td>
+                                        @item.Order.User.FullName
+                                    </td>
+                                    <td>
+                                        @item.Order.User.PhoneNo
+                                    </td>
+                                    @* <td>
+                                @item.Order.User.Email
+                                </td> *@
+                                    <td>
+                                        @item.Order.Order_date
+                                    </td>
+                                    <td>
+                                        @item.Price
+                                    </td>
+                                    <td>
+                                        @item.PaymentStatus
+                                    </td>
+                                    <td>
+                                        @item.Order_status
+                                    </td>
+
+                                    <td>
+                                        @* <form method="post"> *@
+                                        @if (item.Order_status == "Approved")
+                                        {
+                                            <div class="row">
+
+
+                                                <div class="col-6">
+                                                    <form method="post">
+                                                        <button class="btn btn-primary btn-sm" style="width: 75px;"
+                                                            asp-action="Index" asp-route-itemid="@item.id"
+                                                            asp-route-orderStatus="@ebay.Constants.OrderStatusConstants.Processing">
+                                                            Process
+                                                        </button>
+                                                    </form>
+                                                </div>
+                                                <div class="col-3">
+                                                    <button type="button" class="btn btn-danger btn-sm" style="width: 75px;"
+                                                        data-bs-toggle="modal" data-bs-target="#exampleModal-@item.id-@ebay.Constants.OrderStatusConstants.Cancelled">
+                                                        cancel
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        }
+                                        else if (item.Order_status == "Processing")
+                                        {
+                                            <div class="row">
+                                                <div class="col-6">
+                                                    <form method="post">
+                                                        <button class="btn btn-primary btn-sm" style="width: 75px;"
+                                                            asp-action="Index" asp-route-itemid="@item.id"
+                                                            asp-route-orderStatus="@ebay.Constants.OrderStatusConstants.Shipped">
+                                                            Ship
+                                                        </button>
+                                                    </form>
+                                                </div>
+
+                                                <div class="col-3">
+                                                    <button type="button" class="btn btn-danger btn-sm" style="width: 75px;"
+                                                        data-bs-toggle="modal" data-bs-target="#exampleModal-@item.id-@ebay.Constants.OrderStatusConstants.Cancelled">
+                                                        cancel
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        }
+                                        else if (item.Order_status == "Shipped")
+                                        {
+                                            <div class="row">
+                                                <div class="col-6">
+                                                    <form method="post">
+                                                        <button class="btn btn-primary btn-sm" style="width: 75px;"
+                                                            asp-action="Index" asp-route-itemid="@item.id"
+                                                            asp-route-orderStatus="@ebay.Constants.OrderStatusConstants.Delivered">
+
+                                                            Delivered
+                                                        </button>
+                                                    </form>
+                                                </div>
+                                                <div class="col-3">
+                                                    <button type="button" class="btn btn-danger btn-sm" style="width: 75px;"
+                                                        data-bs-toggle="modal" data-bs-target="#exampleModal-@item.id-@ebay.Constants.OrderStatusConstants.Cancelled">
+                                                        cancel
+                                                    </button>
+                                                </div>
+                                            </div>
+
+                                        }
+                                        else if (item.Order_status == "Cancelled")
+                                        {
+                                            <div class="row">
+                                                <div class="col-6">
+
+                                                </div>
+                                                <div class="col-3">
+
+                                                </div>
+                                            </div>
+
+                                        }
+                                        else if (item.Order_status == "Pending")
+                                        {
+                                            <div class="row">
+                                                <div class="col-6">
+                                                    <button class="btn btn-primary btn-sm" style="width: 75px;">
+                                                        Approve
+                                                    </button>
+                                                </div>
+                                                <div class="col-3">
+                                                    <button type="button" class="btn btn-danger btn-sm" style="width: 75px;"
+                                                        data-bs-toggle="modal" data-bs-target="#exampleModal-@item.id-@ebay.Constants.OrderStatusConstants.Cancelled">
+                                                        cancel
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        }
+                                        <!-- Modal -->
+                                        <div class="modal fade" id="exampleModal-@item.id-@ebay.Constants.OrderStatusConstants.Cancelled" tabindex="-1"
+                                            aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                            <div class="modal-dialog">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title" id="exampleModalLabel">Warning</h5>
+                                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                            aria-label="Close"></button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        Are you sure, do want to cancel the order?
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-secondary"
+                                                            data-bs-dismiss="modal">Close</button>
+                                                        <form method="post" asp-action="Index" asp-controller="OrderManagement">
+                                                            <input type="hidden" name="itemid" value="@item.id">
+                                                            <input type="hidden" name="orderstatus"
+                                                                value="@ebay.Constants.OrderStatusConstants.Cancelled">
+                                                            <button type="button" class="btn btn-primary">
+                                                                Yes,Cancel
+                                                            </button>
+                                                        </form>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        @* </form> *@
+                                    </td>
                                 </tr>
-                            </thead>
+                            }
 
-                        </table>
+                        </tbody>
+
+                    </table>
                 </div>
             </div>
 
         </div>
     </div>
 </div>
-@section scripts{
+@section scripts {
     <script src="/js/orderManagement.js"></script>
 }
