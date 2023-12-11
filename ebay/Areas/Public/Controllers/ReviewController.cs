@@ -78,9 +78,6 @@ public class ReviewController : Controller
         Review.Comment = vm.Comment;
         Review.ReviewDate = DateTime.Now;
         _context.SaveChanges();
-
-
-
         return RedirectToAction(nameof(Index));
     }
 

@@ -7,6 +7,7 @@ using ebay.ViewModel;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 
 
 namespace ebay.Areas.Public.Controllers;
@@ -34,7 +35,7 @@ public class PublicController : Controller
         vm.Categories = await _context.Categories.ToListAsync();
         // vm.CategoryName = await _context.ProductCategories.ToListAsync();
         vm.Data = await _context.Products.Where(
-            x => ( vm.CategoryId == null || x.ProductCategories.Any(i=>i.CategoryId==vm.CategoryId) )
+            x => (vm.CategoryId == null || x.ProductCategories.Any(i => i.CategoryId == vm.CategoryId))
             && (string.IsNullOrEmpty(vm.Name) || x.Name.ToLower().Contains(vm.Name.ToLower()))
             ).ToListAsync();
         if (_currentUserProvder.IsLoggedIn())
@@ -57,6 +58,17 @@ public class PublicController : Controller
         vm.ProductImages = _context.ProductImages.Where(x => x.ProductId == id).ToList();
         vm.Quantity = 1;
         vm.Product_id = id;
+        vm.Reviews = _context.Reviews.Where(x => x.Product_id == id).ToList();
+        var list = _context.Reviews.Where(x => x.Product_id == id).Select(x => x.RatingValue).ToList();
+        if (!list.IsNullOrEmpty())
+        {
+
+            vm.AverageReview = list.Average();
+        }
+        else{
+            vm.AverageReview = 0;
+        }
+
         return View(vm);
     }
     [Authorize]
@@ -102,5 +114,13 @@ public class PublicController : Controller
             tx.Complete();
         }
         return RedirectToAction(nameof(Index));
+    }
+
+    [AllowAnonymous]
+    public IActionResult CustomerReview(ReviewVm vm,int ProductId)
+    {
+        vm.Product_id = ProductId;
+        vm.ReviewExist = _context.Reviews.Where(x=>x.Product_id==ProductId).Include(x=>x.User).ToList();
+        return View(vm);
     }
 }

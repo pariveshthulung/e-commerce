@@ -2,6 +2,15 @@
     Layout = "_publicLayout";
 }
 @model ebay.ViewModel.cartVm
+<style>
+    .star-rating {
+        line-height: 32px;
+        font-size: 1.20em;
+    }
+    .star-rating .fa-star {
+        color: rgb(198, 198, 0);
+    }
+</style>
 <form method="post">
     <input hidden asp-for="Product_id" />
     <div class="card shadow border-0 mt-4">
@@ -85,6 +94,22 @@
                         <div class="row ">
                             <span>Brand : @Model.Product.Brand</span>
                         </div>
+                        <div class="row ">
+                            <div class="star-rating">
+                                <a tabindex="0" data-bs-container="body" data-bs-toggle="popover" data-bs-trigger="focus" data-bs-placement="bottom"
+                                    data-bs-content="@Model.AverageReview out of 5">
+                                    <span class="text-muted">@Model.AverageReview &nbsp </span>
+                                    <span class="fa fa-star-o" data-rating="1"></span>
+                                    <span class="fa fa-star-o" data-rating="2"></span>
+                                    <span class="fa fa-star-o" data-rating="3"></span>
+                                    <span class="fa fa-star-o" data-rating="4"></span>
+                                    <span class="fa fa-star-o" data-rating="5"></span>
+                                    <input type="hidden" name="AverageReview" class="rating-value"
+                                        value="@Model.AverageReview">
+                                </a>
+                                <a class="link-primary" asp-route-ProductId="@Model.Product_id" asp-action="CustomerReview" asp-controller="Public" asp-area="Public" style="text-decoration: none;">&nbsp @Model.Reviews.Count() rating</a>
+                            </div>
+                        </div>
                         <hr>
                         <div class="row ">
                             <h4 class="text-dark text-opacity-100 pt-2 pb-2">
@@ -93,34 +118,6 @@
                                 </span>
                             </h4>
                         </div>
-                        @* <div class="row text-center ">
-                        <div class="p-1 col-3 col-lg-2 bg-white border-bottom">
-                        <div class="text-dark text-opacity-50 fw-semibold">Quantity</div>
-                        </div>
-                        <div class="p-1 col-3 col-lg-2 bg-white border-bottom">
-                        <div class="text-dark text-opacity-50 fw-semibold">1-50</div>
-                        </div>
-                        <div class="p-1 col-3 col-lg-2 bg-white border-bottom">
-                        <div class="text-dark text-opacity-50 fw-semibold">51-100</div>
-                        </div>
-                        <div class="p-1 col-3 col-lg-2 bg-white border-bottom">
-                        <div class="text-dark text-opacity-50 fw-semibold">100+</div>
-                        </div>
-                        </div>
-                        <div class="row text-center ">
-                        <div class="p-1 col-3 col-lg-2 bg-white text-warning fw-bold">
-                        <div>Price</div>
-                        </div>
-                        <div class="p-1 col-3 col-lg-2 bg-white text-warning fw-bold">
-                        <div>Price</div>
-                        </div>
-                        <div class="p-1 col-3 col-lg-2 bg-white text-warning fw-bold">
-                        <div>Price50</div>
-                        </div>
-                        <div class="p-1 col-3 col-lg-2 bg-white text-warning fw-bold">
-                        <div>Price100</div>
-                        </div>
-                        </div> *@
                         <div class="row pl-2 my-3">
                             <h5 class="text-dark">About this item</h5>
                             <div class="text-dark mt-0 pt-0">
@@ -268,4 +265,45 @@
             expandImg2.parentElement.style.display = "block";
         }
     </script>
+    <script>
+        var $star_rating = $('.star-rating .fa');
+        @* var total=parseInt($star_rating('input.rating-value').val(); *@
+
+
+
+                                    var SetRatingStar = function () {
+            return $star_rating.each(function () {
+                if (parseInt($star_rating.siblings('input.rating-value').val()) >= parseInt($(this).data('rating'))) {
+                    return $(this).removeClass('fa-star-o').addClass('fa-star');
+                } else {
+                    return $(this).removeClass('fa-star').addClass('fa-star-o');
+                }
+            });
+        };
+
+        @* $star_rating.on('click', function () {
+        $star_rating.siblings('input.rating-value').val($(this).data('rating'));
+        return SetRatingStar();
+
+        }); *@
+        @* $('#c_order_notes').val('@Model.Comment'); *@
+
+            SetRatingStar();
+        $(document).ready(function () {
+
+        });
+    </script>
+    <script>
+        var popoverTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="popover"]'))
+        var popoverList = popoverTriggerList.map(function (popoverTriggerEl) {
+            return new bootstrap.Popover(popoverTriggerEl)
+        })
+        var popover = new bootstrap.Popover(document.querySelector('.example-popover'), {
+            container: 'body'
+        })
+        var popover = new bootstrap.Popover(document.querySelector('.popover-dismiss'), {
+            trigger: 'focus'
+        }) 
+    </script>
+
 }
