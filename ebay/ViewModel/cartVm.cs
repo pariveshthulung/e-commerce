@@ -16,5 +16,7 @@ public class cartVm
     [Column(TypeName = "decimal(18,2)")]
     public decimal Subtotal { get; set; }
     public List<int>? Checked { get; set; }
+    public double AverageReview { get; set; }
+    public List<Review>? Reviews { get; set; }
     public List<ProductImages>? ProductImages { get; set; }
 }

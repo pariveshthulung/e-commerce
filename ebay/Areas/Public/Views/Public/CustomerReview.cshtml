@@ -2,11 +2,86 @@
     Layout = "_publicLayout";
 }
 @model ebay.ViewModel.ReviewVm
+<style>
+    .star-rating {
+        line-height: 32px;
+        font-size: 1.24em;
+    }
 
+    .star-rating .fa-star {
+        color: rgb(198, 198, 0);
+    }
+</style>
 <div class="container">
-    <div class="row">
-        <div class="col">
-            
+    <div class="row mt-5">
+        <div class="col-6 col-md-2 offset-lg-1 pb-1 ">
+            <a class="btn btn-outline-primary bg-gradient mb-5 fw-semibold btn-sm text-uppercase" asp-route-id="@Model.Product_id" asp-action="Detail">
+                <small>Back</small>
+            </a>
         </div>
     </div>
+    <div class="row mt-5 text-center">
+        <div class="col">
+            <h3 class="text-dark">Top Review</h3>
+        </div>
+    </div>
+    <hr class="w-25 mx-auto">
+    @foreach (var review in @Model.ReviewExist)
+    {
+        <div class="row">
+            <div class="col-3"></div>
+            <div class="col-6">
+                <i class="bi bi-person-circle"></i> &nbsp <strong class="text-dark">@review.User.FullName</strong>
+                <div class="row">
+                    <div class="star-rating">
+                        <span class="fa fa-star-o" data-rating="1"></span>
+                        <span class="fa fa-star-o" data-rating="2"></span>
+                        <span class="fa fa-star-o" data-rating="3"></span>
+                        <span class="fa fa-star-o" data-rating="4"></span>
+                        <span class="fa fa-star-o" data-rating="5"></span>
+                        <input type="hidden" name="AverageReview" class="rating-value" value="@review.RatingValue">
+                    </div>
+                </div>
+                <div class="row">
+                    <span class="text-muted"> Reviewed on @review.ReviewDate.ToString("dd/MM/yyyy")</span>
+                </div>
+                <div class="row">
+                    <p class="text-dark">@review.Comment</p>
+                </div>
+            </div>
+            <div class="col-3"></div>
+
+        </div>
+        <hr class="w-50 mx-auto">
+
+    }
 </div>
+@section scripts {
+    <script>
+        var $star_rating = $('.star-rating .fa');
+        @* var total=parseInt($star_rating('input.rating-value').val(); *@
+
+
+
+                        var SetRatingStar = function () {
+            return $star_rating.each(function () {
+                if (parseInt($star_rating.siblings('input.rating-value').val()) >= parseInt($(this).data('rating'))) {
+                    return $(this).removeClass('fa-star-o').addClass('fa-star');
+                } else {
+                    return $(this).removeClass('fa-star').addClass('fa-star-o');
+                }
+            });
+        };
+
+        @* $star_rating.on('click', function () {
+        $star_rating.siblings('input.rating-value').val($(this).data('rating'));
+        return SetRatingStar();
+
+        }); *@
+
+            SetRatingStar();
+        $(document).ready(function () {
+
+        });
+    </script>
+}

@@ -9,19 +9,25 @@
 }
 
 .star-rating {
-  line-height:32px;
-  font-size:1.25em;
+  line-height: 32px;
+  font-size: 1.25em;
 }
 
-.star-rating .fa-star{color: yellow;}
+/* .star-rating .fa-star {
+  color: rgb(233, 233, 10);
+} */
 
-#resize{
-  width : 679 px !important;
+#resize {
+  width: 679 px !important;
   height: 679 !important;
   object-fit: contain !important;
 }
 
-.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
+.btn:focus,
+.btn:active:focus,
+.btn-link.nav-link:focus,
+.form-control:focus,
+.form-check-input:focus {
   box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
 }
 
