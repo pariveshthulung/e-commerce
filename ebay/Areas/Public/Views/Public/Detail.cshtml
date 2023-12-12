@@ -9,6 +9,7 @@
     }
     .star-rating .fa-star {
         color: rgb(198, 198, 0);
+        text-shadow: 0 0 3px #000;
     }
 </style>
 <form method="post">
@@ -162,11 +163,12 @@
                                 </button>
                             </div>
                             <div class="col-12 col-md-6 pb-1">
-                                <button type="submit" asp-action="Checkout" asp-controller="Cart"
+                                
+                                <a type="submit" asp-action="Checkout" asp-route-ProductId="@Model.Product_id" asp-route-Quantity="@Model.Quantity" asp-controller="Cart"
                                     class="btn btn-buy bg-gradient btn-sm  w-80 py-2 text-uppercase fw-semibold"
                                     style="position:relative; right:50%;">
                                     Buy Now
-                                </button>
+                                </a>
                             </div>
                         </div>
                     </div>

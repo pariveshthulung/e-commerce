@@ -3,6 +3,7 @@
 }
 @model ebay.ViewModel.CheckOutVm
 <form method="post">
+    
     <div class="row d-flex align-items-center justify-content-center">
         <div class="col-md-6 mb-5 mb-md-0">
             <h2 class="h3 mb-3 text-black text-center mt-5">Profile Management</h2>
@@ -67,9 +68,18 @@
                         <input type="text" class="form-control" asp-for="PhoneNo" placeholder="Phone Number">
                     </div>
                 </div>
-                <div class="col-12 col-md-4">
-						<button type="submit" value="Place Order" class="btn btn-primary form-control">Update Profile</button>
-					</div>
+                <div class="row">
+                    <div class="col-4">
+                        <button type="submit" asp-action="Index" asp-controller="Public" value="Place Order"
+                            class="btn btn-primary form-control">
+                            Back</button>
+                    </div>
+                    <div class="col-4">
+                        <button type="submit" value="Place Order" class="btn btn-primary form-control">Update
+                            Profile</button>
+                    </div>
+                </div>
+
             </div>
         </div>
     </div>

@@ -39,6 +39,8 @@ public class CheckOutVm
     [Column(TypeName = "decimal(18,2)")]
     public decimal Subtotal { get; set; }
     public int CountryId { get; set; }
+    public int ProductIdBuyNow { get; set; }
+    public int QuantityBuyNow { get; set; }
 
     public SelectList CountryList()
     {

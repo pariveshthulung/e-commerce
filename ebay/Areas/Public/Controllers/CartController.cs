@@ -154,16 +154,19 @@ public class CartController : Controller
             return Content(e.Message);
         }
     }
-    public async Task<IActionResult> CheckOut(CheckOutVm vm)
+    public async Task<IActionResult> CheckOut(CheckOutVm vm, int ProductId = 0, int Quantity = 0)
     {
         try
         {
             using (var tx = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
             {
+
                 vm.User_id = _currentUserProvder.GetCurrentUserId();
                 var cart = await _context.Carts.FirstOrDefaultAsync(x => x.User_id == vm.User_id);
                 vm.Cart_id = cart.id;
                 vm.CartItemList = await _context.CartItems.Where(x => x.Cart_id == vm.Cart_id & x.Checked == true).Include(x => x.Product).ToListAsync();
+
+
                 var address = await _context.Addresses.FirstOrDefaultAsync(x => x.User_id == vm.User_id && x.Is_Default == true);
                 if (address != null)
                 {
@@ -180,10 +183,20 @@ public class CartController : Controller
                 vm.LastName = user.LastName;
                 vm.PhoneNo = user.PhoneNo;
                 vm.Email = user.Email;
-
-                foreach (var cartitem in vm.CartItemList)
+                if (ProductId != 0)
                 {
-                    vm.Subtotal = vm.Subtotal + (cartitem.Quantity * cartitem.Product.Price);
+                    vm.Product = _context.Products.FirstOrDefault(x => x.id == ProductId);
+                    vm.ProductIdBuyNow = ProductId;
+                    vm.QuantityBuyNow = Quantity;
+                    vm.Subtotal = vm.Product.Price * Quantity;
+                }
+                else
+                {
+
+                    foreach (var cartitem in vm.CartItemList)
+                    {
+                        vm.Subtotal = vm.Subtotal + (cartitem.Quantity * cartitem.Product.Price);
+                    }
                 }
                 vm.Countries = await _context.Countries.ToListAsync();
                 tx.Complete();
@@ -201,6 +214,7 @@ public class CartController : Controller
     {
         try
         {
+
             using (var tx = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
             {
                 vm.User_id = _currentUserProvder.GetCurrentUserId();
@@ -231,65 +245,121 @@ public class CartController : Controller
                     addressFrmDb.City = vm.City;
                     addressFrmDb.Country = await _context.Countries.Where(x => x.id == vm.CountryId).FirstOrDefaultAsync();
                 }
-                 vm.CartItemList = await _context.CartItems.Where(x => x.Cart_id == vm.Cart_id & x.Checked==true).Include(x => x.Product).ToListAsync();
+                vm.CartItemList = await _context.CartItems.Where(x => x.Cart_id == vm.Cart_id & x.Checked == true).Include(x => x.Product).ToListAsync();
 
                 // var orderItemsFrmDb = _context.Orders.FirstOrDefault(x => x.User_id == vm.User_id);
-                foreach (var cartitem in vm.CartItemList)
+                if (vm.ProductIdBuyNow != 0)
                 {
-                    vm.Subtotal = vm.Subtotal + (cartitem.Quantity * cartitem.Product.Price);
-                }
-                var order = new Order()
-                {
-                    User_id = vm.User_id,
-                    Order_total = vm.Subtotal
-                };
-                _context.Add(order);
-                await _context.SaveChangesAsync();
-               
-                foreach (var cartList in vm.CartItemList)
-                {
+                    vm.Product = _context.Products.FirstOrDefault(x => x.id == vm.ProductIdBuyNow);
+                    vm.Subtotal = vm.Product.Price * vm.QuantityBuyNow;
+                    var order = new Order()
+                    {
+                        User_id = vm.User_id,
+                        Order_total = vm.Subtotal
+                    };
+                    _context.Add(order);
+                    await _context.SaveChangesAsync();
                     var orderItems = new OrderItems()
                     {
                         Order_id = order.id,
-                        Product_id = cartList.Product_id,
-                        Quantity = cartList.Quantity,
-                        Price = cartList.Product.Price
+                        Product_id = vm.ProductIdBuyNow,
+                        Quantity = vm.QuantityBuyNow,
+                        Price = vm.Product.Price
                     };
                     _context.Add(orderItems);
                     await _context.SaveChangesAsync();
-                }
-                var domain = "http://localhost:5191/";
-                var options = new SessionCreateOptions
-                {
-                    SuccessUrl = domain + $"Public/Cart/Thankyou?orderId={order.id}&cartId={vm.Cart_id}",
-                    CancelUrl = domain + "Public/Cart/Index",
-                    LineItems = new List<SessionLineItemOptions>(),
-                    Mode = "payment",
-                };
-                foreach (var item in vm.CartItemList)
-                {
+                    var domain = "http://localhost:5191/";
+                    var options = new SessionCreateOptions
+                    {
+                        SuccessUrl = domain + $"Public/Cart/Thankyou?orderId={order.id}&cartId={0}",
+                        CancelUrl = domain + "Public/Cart/Index",
+                        LineItems = new List<SessionLineItemOptions>(),
+                        Mode = "payment",
+                    };
+
                     var sessionLineItem = new SessionLineItemOptions
                     {
                         PriceData = new SessionLineItemPriceDataOptions
                         {
-                            UnitAmount = (long)(item.Product.Price * 100),
+                            UnitAmount = (long)(vm.Product.Price * 100),
                             Currency = "usd",
                             ProductData = new SessionLineItemPriceDataProductDataOptions
                             {
-                                Name = item.Product.Name
+                                Name = vm.Product.Name
                             }
                         },
-                        Quantity = item.Quantity
+                        Quantity = vm.QuantityBuyNow
                     };
                     options.LineItems.Add(sessionLineItem);
+                    var service = new SessionService();
+                    Session session = service.Create(options);
+                    UpdateStripePaymentID(order.id, session.Id, session.PaymentIntentId);
+                    _context.SaveChanges();
+                    Response.Headers.Add("Location", session.Url);
+                    tx.Complete();
+                    return new StatusCodeResult(303);
+
                 }
-                var service = new SessionService();
-                Session session = service.Create(options);
-                UpdateStripePaymentID(order.id, session.Id, session.PaymentIntentId);
-                _context.SaveChanges();
-                Response.Headers.Add("Location", session.Url);
-                tx.Complete();
-                return new StatusCodeResult(303);
+                else
+                {
+                    foreach (var cartitem in vm.CartItemList)
+                    {
+                        vm.Subtotal = vm.Subtotal + (cartitem.Quantity * cartitem.Product.Price);
+                    }
+                    var order = new Order()
+                    {
+                        User_id = vm.User_id,
+                        Order_total = vm.Subtotal
+                    };
+                    _context.Add(order);
+                    await _context.SaveChangesAsync();
+
+                    foreach (var cartList in vm.CartItemList)
+                    {
+                        var orderItems = new OrderItems()
+                        {
+                            Order_id = order.id,
+                            Product_id = cartList.Product_id,
+                            Quantity = cartList.Quantity,
+                            Price = cartList.Product.Price
+                        };
+                        _context.Add(orderItems);
+                        await _context.SaveChangesAsync();
+                    }
+                    var domain = "http://localhost:5191/";
+                    var options = new SessionCreateOptions
+                    {
+                        SuccessUrl = domain + $"Public/Cart/Thankyou?orderId={order.id}&cartId={vm.Cart_id}",
+                        CancelUrl = domain + "Public/Cart/Index",
+                        LineItems = new List<SessionLineItemOptions>(),
+                        Mode = "payment",
+                    };
+                    foreach (var item in vm.CartItemList)
+                    {
+                        var sessionLineItem = new SessionLineItemOptions
+                        {
+                            PriceData = new SessionLineItemPriceDataOptions
+                            {
+                                UnitAmount = (long)(item.Product.Price * 100),
+                                Currency = "usd",
+                                ProductData = new SessionLineItemPriceDataProductDataOptions
+                                {
+                                    Name = item.Product.Name
+                                }
+                            },
+                            Quantity = item.Quantity
+                        };
+                        options.LineItems.Add(sessionLineItem);
+                    }
+                    var service = new SessionService();
+                    Session session = service.Create(options);
+                    UpdateStripePaymentID(order.id, session.Id, session.PaymentIntentId);
+                    _context.SaveChanges();
+                    Response.Headers.Add("Location", session.Url);
+                    tx.Complete();
+                    return new StatusCodeResult(303);
+                }
+
             }
         }
         catch (Exception e)
@@ -297,7 +367,7 @@ public class CartController : Controller
             return Content(e.Message);
         }
     }
-    
+
     public IActionResult Thankyou(int orderId, int cartId)
     {
         try
@@ -320,8 +390,11 @@ public class CartController : Controller
                         }
                     }
                 }
-                List<CartItem> cartItems = _context.CartItems.Where(x => x.Cart_id == cartId & x.Checked==true).ToList();
-                _context.RemoveRange(cartItems);
+                if (cartId != 0)
+                {
+                    List<CartItem> cartItems = _context.CartItems.Where(x => x.Cart_id == cartId & x.Checked == true).ToList();
+                    _context.RemoveRange(cartItems);
+                }
                 _context.SaveChanges();
                 tx.Complete();
                 return View();
@@ -354,7 +427,7 @@ public class CartController : Controller
                     UpdateStatus(orderItemsFrmDb.id, OrderStatusConstants.Cancelled, PaymentStatusConstant.Refund);
                 }
                 _context.SaveChanges();
-                _notifyService.Success("Order cancelLed Sucessfully!!!");
+                _notifyService.Success("Order cancelled Sucessfully!!!");
 
                 tx.Complete();
                 return RedirectToAction("Myorder", "Profile");
