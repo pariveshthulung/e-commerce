@@ -4,8 +4,8 @@
 @model ebay.ViewModel.CheckOutVm
 <form method="post">
 	<br />
-	<input asp-for="Subtotal" hidden/>
-	<input asp-for="Cart_id" hidden/>
+	<input asp-for="Subtotal" hidden />
+	<input asp-for="Cart_id" hidden />
 	<div class="container">
 		<div class="card shadow border-0">
 			<div class="card-body">
@@ -17,7 +17,8 @@
 								<div class="form-group">
 									<label for="c_country" class="text-black">Country <span
 											class="text-danger">*</span></label>
-									<select asp-for="CountryId" asp-items="@Model.CountryList()" class="form-control" required>
+									<select asp-for="CountryId" asp-items="@Model.CountryList()" class="form-control"
+										required>
 										<option selected disabled>Select a country</option>
 									</select>
 								</div>
@@ -44,7 +45,7 @@
 
 								<div class="form-group mt-1">
 									<label asp-for="Landmark" class="text-black">Landmark</label>
-									<input type="text" asp-for="Landmark" class="form-control" 
+									<input type="text" asp-for="Landmark" class="form-control"
 										placeholder="Apartment, suite, unit etc. (optional)">
 								</div>
 
@@ -80,9 +81,9 @@
 									</div>
 								</div>
 								@* <div class="form-group">
-									<label for="c_order_notes" class="text-black">Order Notes</label>
-									<textarea name="c_order_notes" id="c_order_notes" cols="30" rows="5"
-										class="form-control" placeholder="Write your notes here..."></textarea>
+								<label for="c_order_notes" class="text-black">Order Notes</label>
+								<textarea name="c_order_notes" id="c_order_notes" cols="30" rows="5"
+								class="form-control" placeholder="Write your notes here..."></textarea>
 								</div> *@
 
 							</div>
@@ -99,12 +100,26 @@
 												<th>Total</th>
 											</thead>
 											<tbody>
-												@foreach (var data in Model.CartItemList)
-                								{
-												<tr>
-													<td>@data.Product.Name.Substring(0,36)... <strong class="mx-2">x</strong>@data.Quantity</td>
-													<td>@data.Product.Price</td>
-												</tr>
+												@if (@Model.ProductIdBuyNow != 0)
+												{
+													<tr>
+															<td>@Model.Product.Name.Substring(0, 36)... <strong
+																	class="mx-2">x</strong>@Model.QuantityBuyNow</td>
+															<td>@Model.Product.Price</td>
+														</tr>
+												}
+												else
+												{
+
+
+													@foreach (var data in Model.CartItemList)
+													{
+														<tr>
+															<td>@data.Product.Name.Substring(0, 36)... <strong
+																	class="mx-2">x</strong>@data.Quantity</td>
+															<td>@data.Product.Price</td>
+														</tr>
+													}
 												}
 												<tr>
 													<td class="text-black font-weight-bold"><strong>Cart
@@ -114,7 +129,8 @@
 												<tr>
 													<td class="text-black font-weight-bold"><strong>Order Total</strong>
 													</td>
-													<td class="text-black font-weight-bold"><strong>@Model.Subtotal.ToString("c")</strong>
+													<td class="text-black font-weight-bold">
+														<strong>@Model.Subtotal.ToString("c")</strong>
 													</td>
 												</tr>
 											</tbody>
@@ -166,8 +182,8 @@
 										</div>
 
 										@* <div class="form-group">
-											<button class="btn btn-black btn-lg py-3 btn-block"
-												onclick="window.location='thankyou.html'">Place Order</button>
+										<button class="btn btn-black btn-lg py-3 btn-block"
+										onclick="window.location='thankyou.html'">Place Order</button>
 										</div> *@
 
 									</div>
@@ -180,13 +196,23 @@
 			</div>
 			<div class="card-footer">
 				<div class="row">
-					<div class="col-12 col-md-8 pt-2">
+					<div class="col-12 col-md-7 pt-2">
 						<p style="color:maroon; font-size:14px;">Estimate Arrival Date:
 							@DateTime.Now.AddDays(2).ToShortDateString()-@DateTime.Now.AddDays(5).ToShortDateString()
 
 						</p>
 					</div>
-					<div class="col-12 col-md-4">
+					<div class="col-12 col-md-2">
+
+
+						<button type="submit" asp-action="Index" asp-controller="Public"
+							class="btn btn-primary form-control">Back
+						</button>
+
+					</div>
+					<div class="col-12 col-md-3">
+						<input type="hidden" asp-for="@Model.ProductIdBuyNow">
+						<input type="hidden" asp-for="@Model.QuantityBuyNow">
 						<button type="submit" value="Place Order" class="btn btn-primary form-control">Place
 							Order</button>
 					</div>

@@ -4,6 +4,15 @@
 @model ebay.ViewModel.ReviewVm
 
 <div class="container">
+    <div class="row mt-5">
+        <div class="col-1 fixed-top" style=" position: fixed; top:40px; left:30px;">
+            <form>
+                <button type="submit" asp-action="Index" asp-controller="Public" value="Place Order"
+                    class="btn btn-outline-primary bg-gradient mb-5 fw-semibold btn-sm text-uppercase">
+                    Back</button>
+            </form>
+        </div>
+    </div>
     @foreach (var data in Model.OrderItemFrmDb.OrderByDescending(x => x.Order.Order_date))
     {
         @if (data.Order_status.Equals("Delivered"))
