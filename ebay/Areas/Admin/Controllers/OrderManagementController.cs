@@ -1,4 +1,5 @@
 ﻿using AspNetCoreHero.ToastNotification.Abstractions;
+using ebay.Constants;
 using ebay.Data;
 using ebay.Models;
 using ebay.Provider.Interface;
@@ -6,6 +7,7 @@ using ebay.ViewModel;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Stripe;
 
 namespace ebay.Areas.Admin.Controllers;
 [Area("Admin")]
@@ -57,7 +59,21 @@ public class OrderManagementController : Controller
             {
                 orderItemFromDb.PaymentStatus = paymentStatus;
             }
+            if(orderStatus==OrderStatusConstants.Shipped)
+            {
+                var Product = _context.Products.FirstOrDefault(x=>x.id ==orderItemFromDb.Product_id);
+                Product.Stock = Product.Stock - orderItemFromDb.Quantity;
+            }
+            if(orderItemFromDb.Order_status==(OrderStatusConstants.Shipped) || orderItemFromDb.Order_status==(OrderStatusConstants.Delivered))
+            {
+                if(orderStatus==OrderStatusConstants.Cancelled)
+                {
+                    var Product = _context.Products.FirstOrDefault(x=>x.id ==orderItemFromDb.Product_id);
+                    Product.Stock = Product.Stock - orderItemFromDb.Quantity;
+                }
+            }
         }
+        
         _context.SaveChanges();
     }
 
