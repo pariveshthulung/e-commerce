@@ -45,7 +45,15 @@ public class CartController : Controller
         // get user's id
         vm.User_id = _currentUserProvder.GetCurrentUserId();
         var cart = await _context.Carts.FirstOrDefaultAsync(x => x.User_id == vm.User_id);
-        vm.Cart_id = cart.id;
+        if (cart == null)
+        {
+            var NewCart = new Cart();
+            NewCart.User_id = vm.User_id;
+            _context.Add(NewCart);
+            _context.SaveChanges();
+        }
+        cart = await _context.Carts.FirstOrDefaultAsync(x => x.User_id == vm.User_id);
+            vm.Cart_id = cart.id;
         vm.CartItemList = await _context.CartItems.Where(x => x.Cart_id == vm.Cart_id).Include(x => x.Product).ToListAsync();
 
         foreach (var cartitem in vm.CartItemList)

@@ -13,6 +13,7 @@ public class ReviewVm
     public List<Review>? ReviewExist { get; set; }
     public Review? Review { get; set; }
     public int? UserID { get; set; }
+    public List<int>? OrderIdList { get; set; }
 
 
     public int? User_id { get; set; }

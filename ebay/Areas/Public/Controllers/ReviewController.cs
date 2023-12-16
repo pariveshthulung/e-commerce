@@ -29,7 +29,8 @@ public class ReviewController : Controller
         vm.User_id = _currentUserProvder.GetCurrentUserId();
         vm.ReviewExist = _context.Reviews.Where(x => x.User_id == vm.User_id).ToList();
         vm.OrderFrmDb = _context.Orders.Where(x => x.User_id == vm.User_id).ToList();
-        vm.OrderItemFrmDb = _context.OrderItems.Include(x => x.Product).Include(x => x.Order).ToList();
+        vm.OrderIdList = _context.Orders.Where(x => x.User_id == vm.User_id).Select(x=>x.id).ToList();
+        vm.OrderItemFrmDb = _context.OrderItems.Where(x=> vm.OrderIdList.Contains(x.Order_id)).Include(x => x.Product).Include(x => x.Order).ToList();
         return View(vm);
     }
     public IActionResult AddReview(ReviewVm vm, int ProductId)
