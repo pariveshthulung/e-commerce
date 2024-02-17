@@ -26,7 +26,7 @@
 
             <!-- Email input -->
             <div class="form-outline mb-4">
-                <input type="email" asp-for="Email" class="form-control" />
+                <input type="email" id="check" asp-for="Email" class="form-control" />
                 <label class="form-label" asp-for="Email"></label>
             </div>
 
@@ -83,6 +83,7 @@
 </div>
 
 <script>
+    @* document.getElementById('check').innerText().val() *@
     $('#password, #confirm_password').on('keyup', function () {
   if ($('#password').val() == $('#confirm_password').val()) {
     $('#message').html('Matching').css('color', 'green'),

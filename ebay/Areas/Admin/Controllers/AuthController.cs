@@ -51,7 +51,6 @@ public class AuthController : Controller
         {
             vm.ErrorMessage = e.Message;
             return View(vm);
-
         }
     }
     public IActionResult Registration()
